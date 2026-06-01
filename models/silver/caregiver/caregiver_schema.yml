@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: caregiver
+    description: >
+      Silver-layer caregiver master dataset containing standardized caregiver identity
+      and role information.
+
+    config:
+      schema: SILVER
+      materialized: table
+
+    columns:
+      - name: caregiver_id
+        description: Unique identifier for caregiver.
+
+      - name: first_name
+        description: Standardized caregiver first name.
+
+      - name: last_name
+        description: Standardized caregiver last name.
+
+      - name: caregiver_role
+        description: Role or designation of caregiver.
+
+      - name: source_created_ts
+        description: Record creation timestamp in source system.
+
+      - name: load_ts
+        description: Timestamp of ingestion into Silver layer.

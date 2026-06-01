@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: provider
+    description: >
+      Silver-layer provider master dataset containing standardized healthcare provider
+      information and operational status.
+
+    config:
+      schema: SILVER
+      materialized: table
+
+    columns:
+      - name: provider_id
+        description: Unique identifier for provider.
+
+      - name: provider_name
+        description: Standardized provider name.
+
+      - name: specialty
+        description: Medical or service specialty of provider.
+
+      - name: provider_status
+        description: Current operational status of provider.
+
+      - name: source_created_ts
+        description: Source system creation timestamp.
+
+      - name: load_ts
+        description: Silver layer ingestion timestamp.
+
+      - name: active_flag
+        description: Indicates if provider is active.
