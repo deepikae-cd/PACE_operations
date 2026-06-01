@@ -29,13 +29,3 @@ models:
 snapshots:
   PACE_operations:
     +target_schema: SNAPSHOTS
-
-vars:
-  project_name: "PACE Operations Accelerator"
-  domain: "PACE"
-  owner: "Deepika"
-
-quoting:
-  database: false
-  schema: false
-  identifier: false
