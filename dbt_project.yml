@@ -1,8 +1,8 @@
-name: 'pace_accelerator'
+name: 'PACE_operations'
 version: '1.0.0'
 config-version: 2
 
-profile: 'pace_accelerator'
+profile: 'PACE_operations'
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]
@@ -18,32 +18,30 @@ clean-targets:
 
 models:
 
-  pace_accelerator:
-
-    bronze:
-      +materialized: view
-      +schema: bronze
+  PACE_operations:
 
     silver:
       +materialized: table
-      +schema: silver
+      +schema: SILVER
 
     gold:
       +materialized: table
-      +schema: gold
+      +schema: GOLD
 
 snapshots:
-  pace_accelerator:
-    +target_schema: snapshots
+
+  PACE_operations:
+    +target_schema: SNAPSHOTS
 
 seeds:
-  pace_accelerator:
-    +schema: bronze
+
+  PACE_operations:
+    +schema: BRONZE
 
 vars:
-  project_name: "PACE Accelerator"
+  project_name: "PACE Operations Accelerator"
+  domain: "PACE"
   owner: "Deepika"
-  environment: "DEV"
 
 quoting:
   database: false
