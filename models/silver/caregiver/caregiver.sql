@@ -1,20 +1,25 @@
-with src as (
-
-select *
-from {{ source('bronze','caregiver_raw') }}
-
-)
-
 select
     caregiver_id,
-    participant_id,
-    upper(caregiver_name) as caregiver_name,
-    relationship,
+    upper(trim(caregiver_name)) as caregiver_name,
+
     regexp_replace(phone,'[^0-9]','') as phone,
-    current_timestamp() as load_ts
-from src
-qualify row_number()
-over(
-partition by caregiver_id
-order by caregiver_id
-)=1
+
+    upper(trim(specialization)) as specialization,
+
+    upper(trim(status)) as caregiver_status,
+
+    created_ts as source_created_ts,
+
+    current_timestamp() as load_ts,
+
+    case
+        when upper(status) = 'ACTIVE' then 1
+        else 0
+    end as active_flag,
+
+    case
+        when upper(status) = 'INACTIVE' then 1
+        else 0
+    end as inactive_flag
+
+from {{ source('bronze','caregiver_raw') }}
