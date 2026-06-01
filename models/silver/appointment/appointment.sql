@@ -1,27 +1,34 @@
-with src as (
-
-select *
-from {{ source('bronze','appointment_raw') }}
-
-)
-
 select
-
     appointment_id,
-
     participant_id,
-
     provider_id,
-
     appointment_date,
-
-    appointment_type,
+    upper(trim(service_type)) as service_type,
+    upper(trim(status)) as appointment_status,
+    created_ts as source_created_ts,
+    current_timestamp() as load_ts,
+    case
+        when upper(status) = 'COMPLETED' then 1
+        else 0
+    end as completed_flag,
 
     case
-        when status is null then 'SCHEDULED'
-        else upper(status)
-    end as appointment_status,
+        when upper(status) = 'CANCELLED' then 1
+        else 0
+    end as cancelled_flag,
 
-    current_timestamp() as load_ts
+    case
+        when appointment_date < current_date()
+             and upper(status) <> 'COMPLETED'
+        then 'OVERDUE'
 
-from src
+        when appointment_date = current_date()
+        then 'TODAY'
+
+        when appointment_date > current_date()
+        then 'UPCOMING'
+
+        else 'UNKNOWN'
+    end as appointment_category
+
+from {{ source('bronze','appointment_raw') }}
