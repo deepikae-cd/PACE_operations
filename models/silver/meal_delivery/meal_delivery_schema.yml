@@ -3,8 +3,8 @@ version: 2
 models:
   - name: meal_delivery
     description: >
-      Silver-layer cleaned meal delivery dataset used for tracking delivery status,
-      timeliness, and fulfillment outcomes.
+      Silver-layer meal delivery dataset used for monitoring delivery outcomes,
+      timeliness, and operational performance.
 
     config:
       schema: SILVER
@@ -12,36 +12,47 @@ models:
 
     columns:
       - name: meal_delivery_id
-        description: Unique identifier for meal delivery record.
+        description: Unique identifier for meal delivery.
+        tests:
+          - not_null
+          - unique
 
       - name: participant_id
-        description: Identifier for participant receiving the meal.
+        description: Identifier of meal recipient.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('participant')
+              field: participant_id
 
       - name: provider_id
-        description: Identifier for meal service provider.
+        description: Identifier of meal provider.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('provider')
+              field: provider_id
 
       - name: delivery_date
-        description: Date when meal delivery is scheduled or completed.
+        description: Date of meal delivery.
+        tests:
+          - not_null
 
       - name: meal_type
-        description: Standardized meal category (trimmed and uppercased).
+        description: Standardized meal category.
 
       - name: delivery_status
-        description: Normalized delivery status (e.g., DELIVERED, FAILED).
+        description: Status of delivery.
+        tests:
+          - accepted_values:
+              values: ['DELIVERED', 'FAILED', 'PENDING']
 
       - name: source_created_ts
-        description: Source system creation timestamp.
-
       - name: load_ts
-        description: Timestamp when record was loaded into Silver layer.
 
       - name: delivered_flag
-        description: Indicates successful delivery (1 = delivered, 0 otherwise).
-
       - name: failed_flag
-        description: Indicates failed delivery attempts (1 = failed, 0 otherwise).
 
       - name: delivery_category
         description: >
-          Classification of delivery timing:
-          OVERDUE, TODAY, UPCOMING, or UNKNOWN.
+          Categorization of delivery timing: OVERDUE, TODAY, UPCOMING, UNKNOWN.

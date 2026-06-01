@@ -13,24 +13,26 @@ models:
     columns:
       - name: notification_id
         description: Unique identifier for notification.
+        tests:
+          - not_null
+          - unique
 
       - name: participant_id
         description: Recipient participant identifier.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('participant')
+              field: participant_id
 
       - name: notification_type
-        description: Type/category of notification.
-
       - name: notification_status
-        description: Status of notification delivery.
+        tests:
+          - accepted_values:
+              values: ['SENT', 'FAILED', 'PENDING']
 
       - name: source_created_ts
-        description: Source system creation timestamp.
-
       - name: load_ts
-        description: Silver layer ingestion timestamp.
 
       - name: sent_flag
-        description: Indicates successfully sent notifications.
-
       - name: failed_flag
-        description: Indicates failed notifications.

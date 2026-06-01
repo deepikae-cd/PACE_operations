@@ -13,30 +13,39 @@ models:
     columns:
       - name: transportation_id
         description: Unique identifier for transportation record.
+        tests:
+          - not_null
+          - unique
 
       - name: participant_id
-        description: Participant associated with trip.
+        description: Participant identifier.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('participant')
+              field: participant_id
 
       - name: provider_id
         description: Transport provider identifier.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('provider')
+              field: provider_id
 
       - name: trip_date
-        description: Scheduled or completed trip date.
+        description: Date of trip.
+        tests:
+          - not_null
 
       - name: trip_type
-        description: Type of transportation service.
-
       - name: trip_status
-        description: Normalized status of trip.
+        tests:
+          - accepted_values:
+              values: ['COMPLETED', 'CANCELLED', 'SCHEDULED']
 
       - name: source_created_ts
-        description: Source system timestamp.
-
       - name: load_ts
-        description: Silver layer ingestion timestamp.
 
       - name: completed_flag
-        description: Indicates completed trips.
-
       - name: cancelled_flag
-        description: Indicates cancelled trips.

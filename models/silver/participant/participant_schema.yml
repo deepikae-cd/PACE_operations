@@ -4,7 +4,7 @@ models:
   - name: participant
     description: >
       Silver-layer participant master dataset containing demographic and status
-      information for individuals receiving services.
+      information for service recipients.
 
     config:
       schema: SILVER
@@ -13,27 +13,31 @@ models:
     columns:
       - name: participant_id
         description: Unique identifier for participant.
+        tests:
+          - not_null
+          - unique
 
       - name: first_name
-        description: Standardized first name.
+        description: Participant first name.
+        tests:
+          - not_null
 
       - name: last_name
-        description: Standardized last name.
+        description: Participant last name.
 
       - name: gender
-        description: Standardized gender value.
+        description: Gender of participant.
 
       - name: date_of_birth
-        description: Participant date of birth.
+        description: Date of birth.
 
       - name: participant_status
-        description: Current status of participant.
+        description: Status of participant.
+        tests:
+          - accepted_values:
+              values: ['ACTIVE', 'INACTIVE']
 
       - name: source_created_ts
-        description: Source system timestamp.
-
       - name: load_ts
-        description: Silver layer ingestion timestamp.
 
       - name: active_flag
-        description: Indicates active participants.
