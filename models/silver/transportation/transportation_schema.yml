@@ -34,9 +34,15 @@ models:
         tests:
           - not_null
 
-      - name: status
-        description: Standardized trip status.
+      - name: created_ts
+        description: Timestamp when the record was created in the source system.
         tests:
+          - not_null
+
+      - name: trip_status
+        description: Standardized trip status derived from raw status.
+        tests:
+          - not_null
           - accepted_values:
               arguments:
                 values:
@@ -45,7 +51,8 @@ models:
                   - SCHEDULED
                   - UNKNOWN
 
-      - name: created_ts
-        description: Timestamp when the record was created in the source system.
-        tests:
-          - not_null
+      - name: completed_flag
+        description: Indicates whether the trip was completed (1 = yes, 0 = no).
+
+      - name: cancelled_flag
+        description: Indicates whether the trip was cancelled (1 = yes, 0 = no)

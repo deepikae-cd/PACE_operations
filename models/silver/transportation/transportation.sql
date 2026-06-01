@@ -20,16 +20,22 @@ cleaned as (
         participant_id,
         pickup_location,
         destination,
-
-        -- standardize timestamp handling (optional but common in silver layer)
         pickup_time,
         created_ts,
 
-        -- optional derived columns (useful in silver)
+        -- standardized status (DO NOT overwrite raw column)
+        upper(coalesce(status, 'UNKNOWN')) as trip_status,
+
+        -- derived flags (required for Gold)
         case 
-            when status is null then 'UNKNOWN'
-            else upper(status)
-        end as status
+            when upper(status) = 'COMPLETED' then 1 
+            else 0 
+        end as completed_flag,
+
+        case 
+            when upper(status) = 'CANCELLED' then 1 
+            else 0 
+        end as cancelled_flag
 
     from source_data
 
