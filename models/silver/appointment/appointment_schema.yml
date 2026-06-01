@@ -3,8 +3,8 @@ version: 2
 models:
   - name: appointment
     description: >
-      Silver-layer curated appointment dataset containing standardized appointment records
-      enriched with derived flags and business-level categorization.
+      Silver-layer curated appointment dataset with standardized attributes,
+      derived flags, and business-level categorization.
 
     config:
       schema: SILVER
@@ -12,34 +12,36 @@ models:
 
     columns:
       - name: appointment_id
-        description: Unique identifier for each appointment.
+        description: Unique identifier for appointment.
         tests:
           - not_null
           - unique
 
       - name: participant_id
-        description: Identifier for the participant associated with the appointment.
+        description: Participant associated with appointment.
         tests:
           - not_null
           - relationships:
-              to: ref('participant')
-              field: participant_id
+              arguments:
+                to: ref('participant')
+                field: participant_id
 
       - name: provider_id
-        description: Identifier for the provider responsible for the appointment.
+        description: Provider responsible for appointment.
         tests:
           - not_null
           - relationships:
-              to: ref('provider')
-              field: provider_id
+              arguments:
+                to: ref('provider')
+                field: provider_id
 
       - name: appointment_date
-        description: Scheduled date of the appointment.
+        description: Scheduled date of appointment.
         tests:
           - not_null
 
       - name: service_type
-        description: Standardized service type (trimmed and uppercased).
+        description: Standardized service type.
 
       - name: appointment_status
         description: Normalized appointment status.
@@ -48,18 +50,7 @@ models:
               values: ['COMPLETED', 'CANCELLED', 'SCHEDULED', 'IN_PROGRESS']
 
       - name: source_created_ts
-        description: Timestamp when record was created in source system.
-
       - name: load_ts
-        description: Timestamp when record was loaded into Silver layer.
-
       - name: completed_flag
-        description: Flag indicating completed appointments.
-
       - name: cancelled_flag
-        description: Flag indicating cancelled appointments.
-
       - name: appointment_category
-        description: >
-          Business categorization of appointment timing:
-          OVERDUE, TODAY, UPCOMING, or UNKNOWN.
