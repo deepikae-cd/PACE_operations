@@ -1,7 +1,9 @@
+{{ config(materialized='table') }}
+
 with src as (
 
-select *
-from {{ source('bronze','clinical_visit_raw') }}
+    select *
+    from {{ source('bronze','clinical_visit_raw') }}
 
 )
 
@@ -15,12 +17,20 @@ select
 
     visit_date,
 
-    diagnosis_code,
+    upper(trim(service_type)) as service_type,
 
-    procedure_code,
+    upper(trim(diagnosis_code)) as diagnosis_code,
 
-    visit_status,
+    upper(coalesce(status,'COMPLETED')) as visit_status,
+
+    created_ts,
 
     current_timestamp() as load_ts
 
 from src
+
+qualify row_number()
+over (
+    partition by visit_id
+    order by created_ts desc
+) = 1
