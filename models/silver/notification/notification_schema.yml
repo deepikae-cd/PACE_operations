@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: notification
+    description: >
+      Silver-layer notification tracking dataset capturing message delivery status
+      for participants.
+
+    config:
+      schema: SILVER
+      materialized: table
+
+    columns:
+      - name: notification_id
+        description: Unique identifier for notification.
+
+      - name: participant_id
+        description: Recipient participant identifier.
+
+      - name: notification_type
+        description: Type/category of notification.
+
+      - name: notification_status
+        description: Status of notification delivery.
+
+      - name: source_created_ts
+        description: Source system creation timestamp.
+
+      - name: load_ts
+        description: Silver layer ingestion timestamp.
+
+      - name: sent_flag
+        description: Indicates successfully sent notifications.
+
+      - name: failed_flag
+        description: Indicates failed notifications.
