@@ -3,8 +3,7 @@ version: 2
 models:
   - name: governance_rules
     description: >
-      Silver-layer governance rules dataset defining operational control rules,
-      compliance logic, and system-wide configurations.
+      Governance rules dataset used for system-wide compliance and operational controls.
 
     config:
       schema: SILVER
@@ -12,27 +11,23 @@ models:
 
     columns:
       - name: rule_id
-        description: Unique identifier for governance rule.
         tests:
           - not_null
           - unique
 
       - name: rule_name
-        description: Name of governance rule.
         tests:
           - not_null
 
       - name: rule_type
-        description: Type/category of rule.
 
       - name: rule_status
-        description: Status of rule.
         tests:
           - accepted_values:
-              values: ['ACTIVE', 'INACTIVE']
+              arguments:
+                values: ['ACTIVE', 'INACTIVE']
 
       - name: source_created_ts
       - name: load_ts
-
       - name: active_flag
       - name: inactive_flag

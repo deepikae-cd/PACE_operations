@@ -3,8 +3,7 @@ version: 2
 models:
   - name: meal_delivery
     description: >
-      Silver-layer meal delivery dataset used for monitoring delivery outcomes,
-      timeliness, and operational performance.
+      Silver-layer dataset tracking meal delivery outcomes, status, and timeliness.
 
     config:
       schema: SILVER
@@ -12,47 +11,40 @@ models:
 
     columns:
       - name: meal_delivery_id
-        description: Unique identifier for meal delivery.
         tests:
           - not_null
           - unique
 
       - name: participant_id
-        description: Identifier of meal recipient.
         tests:
           - not_null
           - relationships:
-              to: ref('participant')
-              field: participant_id
+              arguments:
+                to: ref('participant')
+                field: participant_id
 
       - name: provider_id
-        description: Identifier of meal provider.
         tests:
           - not_null
           - relationships:
-              to: ref('provider')
-              field: provider_id
+              arguments:
+                to: ref('provider')
+                field: provider_id
 
       - name: delivery_date
-        description: Date of meal delivery.
         tests:
           - not_null
 
       - name: meal_type
-        description: Standardized meal category.
 
       - name: delivery_status
-        description: Status of delivery.
         tests:
           - accepted_values:
-              values: ['DELIVERED', 'FAILED', 'PENDING']
+              arguments:
+                values: ['DELIVERED', 'FAILED', 'PENDING']
 
       - name: source_created_ts
       - name: load_ts
-
       - name: delivered_flag
       - name: failed_flag
-
       - name: delivery_category
-        description: >
-          Categorization of delivery timing: OVERDUE, TODAY, UPCOMING, UNKNOWN.

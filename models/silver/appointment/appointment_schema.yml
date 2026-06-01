@@ -4,7 +4,7 @@ models:
   - name: appointment
     description: >
       Silver-layer curated appointment dataset with standardized attributes,
-      derived flags, and business-level categorization.
+      business flags, and appointment categorization logic.
 
     config:
       schema: SILVER
@@ -18,7 +18,7 @@ models:
           - unique
 
       - name: participant_id
-        description: Participant associated with appointment.
+        description: Participant linked to appointment.
         tests:
           - not_null
           - relationships:
@@ -27,7 +27,7 @@ models:
                 field: participant_id
 
       - name: provider_id
-        description: Provider responsible for appointment.
+        description: Provider linked to appointment.
         tests:
           - not_null
           - relationships:
@@ -36,7 +36,7 @@ models:
                 field: provider_id
 
       - name: appointment_date
-        description: Scheduled date of appointment.
+        description: Scheduled appointment date.
         tests:
           - not_null
 
@@ -44,10 +44,11 @@ models:
         description: Standardized service type.
 
       - name: appointment_status
-        description: Normalized appointment status.
+        description: Appointment status.
         tests:
           - accepted_values:
-              values: ['COMPLETED', 'CANCELLED', 'SCHEDULED', 'IN_PROGRESS']
+              arguments:
+                values: ['COMPLETED', 'CANCELLED', 'SCHEDULED', 'IN_PROGRESS']
 
       - name: source_created_ts
       - name: load_ts

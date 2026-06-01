@@ -3,8 +3,7 @@ version: 2
 models:
   - name: clinical_visit
     description: >
-      Silver-layer clinical visit dataset capturing patient-provider interactions
-      with standardized visit attributes and status tracking.
+      Clinical visit dataset capturing patient-provider interactions with standardized status tracking.
 
     config:
       schema: SILVER
@@ -12,40 +11,39 @@ models:
 
     columns:
       - name: visit_id
-        description: Unique identifier for clinical visit.
         tests:
           - not_null
           - unique
 
       - name: participant_id
-        description: Patient identifier.
         tests:
           - not_null
           - relationships:
-              to: ref('participant')
-              field: participant_id
+              arguments:
+                to: ref('participant')
+                field: participant_id
 
       - name: provider_id
-        description: Provider identifier.
         tests:
           - not_null
           - relationships:
-              to: ref('provider')
-              field: provider_id
+              arguments:
+                to: ref('provider')
+                field: provider_id
 
       - name: visit_date
-        description: Date of visit.
         tests:
           - not_null
 
       - name: visit_type
+
       - name: visit_status
         tests:
           - accepted_values:
-              values: ['COMPLETED', 'CANCELLED', 'SCHEDULED']
+              arguments:
+                values: ['COMPLETED', 'CANCELLED', 'SCHEDULED']
 
       - name: source_created_ts
       - name: load_ts
-
       - name: completed_flag
       - name: cancelled_flag

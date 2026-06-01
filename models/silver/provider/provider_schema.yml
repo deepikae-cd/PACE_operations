@@ -2,9 +2,7 @@ version: 2
 
 models:
   - name: provider
-    description: >
-      Silver-layer provider master dataset containing standardized provider information,
-      specialty, and operational status.
+    description: Provider master dataset with specialty and operational status.
 
     config:
       schema: SILVER
@@ -12,26 +10,22 @@ models:
 
     columns:
       - name: provider_id
-        description: Unique identifier for provider.
         tests:
           - not_null
           - unique
 
       - name: provider_name
-        description: Name of provider.
         tests:
           - not_null
 
       - name: specialty
-        description: Medical/service specialty.
 
       - name: provider_status
-        description: Operational status of provider.
         tests:
           - accepted_values:
-              values: ['ACTIVE', 'INACTIVE']
+              arguments:
+                values: ['ACTIVE', 'INACTIVE']
 
       - name: source_created_ts
       - name: load_ts
-
       - name: active_flag

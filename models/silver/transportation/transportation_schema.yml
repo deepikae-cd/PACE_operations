@@ -2,9 +2,7 @@ version: 2
 
 models:
   - name: transportation
-    description: >
-      Silver-layer transportation dataset tracking participant trips,
-      statuses, and completion outcomes.
+    description: Transportation dataset tracking trips, status, and outcomes.
 
     config:
       schema: SILVER
@@ -12,40 +10,39 @@ models:
 
     columns:
       - name: transportation_id
-        description: Unique identifier for transportation record.
         tests:
           - not_null
           - unique
 
       - name: participant_id
-        description: Participant identifier.
         tests:
           - not_null
           - relationships:
-              to: ref('participant')
-              field: participant_id
+              arguments:
+                to: ref('participant')
+                field: participant_id
 
       - name: provider_id
-        description: Transport provider identifier.
         tests:
           - not_null
           - relationships:
-              to: ref('provider')
-              field: provider_id
+              arguments:
+                to: ref('provider')
+                field: provider_id
 
       - name: trip_date
-        description: Date of trip.
         tests:
           - not_null
 
       - name: trip_type
+
       - name: trip_status
         tests:
           - accepted_values:
-              values: ['COMPLETED', 'CANCELLED', 'SCHEDULED']
+              arguments:
+                values: ['COMPLETED', 'CANCELLED', 'SCHEDULED']
 
       - name: source_created_ts
       - name: load_ts
-
       - name: completed_flag
       - name: cancelled_flag
