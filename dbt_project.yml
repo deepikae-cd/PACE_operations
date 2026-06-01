@@ -30,9 +30,6 @@ snapshots:
   PACE_operations:
     +target_schema: SNAPSHOTS
 
-seeds:
-  +schema: BRONZE
-
 vars:
   project_name: "PACE Operations Accelerator"
   domain: "PACE"
