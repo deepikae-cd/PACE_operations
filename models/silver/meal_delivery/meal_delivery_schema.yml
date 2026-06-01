@@ -3,7 +3,9 @@ version: 2
 models:
   - name: meal_delivery
     description: >
-      Silver-layer dataset tracking meal delivery outcomes, status, and timeliness.
+      Silver-layer meal delivery dataset containing standardized meal delivery
+      records, delivery status indicators, timeliness metrics, and business
+      categorization for participant meal services.
 
     config:
       schema: SILVER
@@ -11,11 +13,13 @@ models:
 
     columns:
       - name: meal_delivery_id
+        description: Unique identifier for each meal delivery record.
         tests:
           - not_null
           - unique
 
       - name: participant_id
+        description: Unique identifier for the participant receiving the meal.
         tests:
           - not_null
           - relationships:
@@ -23,28 +27,51 @@ models:
                 to: ref('participant')
                 field: participant_id
 
-      - name: provider_id
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('provider')
-                field: provider_id
-
       - name: delivery_date
+        description: Scheduled or actual date of meal delivery.
         tests:
           - not_null
 
       - name: meal_type
+        description: Standardized meal type value after trimming and uppercasing.
 
-      - name: delivery_status
+      - name: meal_status
+        description: Current delivery status of the meal.
         tests:
           - accepted_values:
               arguments:
-                values: ['DELIVERED', 'FAILED', 'PENDING']
+                values:
+                  - DELIVERED
+                  - PENDING
+                  - CANCELLED
 
       - name: source_created_ts
+        description: Timestamp when the record was originally created in the source system.
+
       - name: load_ts
+        description: Timestamp when the record was loaded into the Silver layer.
+
+      - name: days_since_delivery
+        description: Number of days between the delivery date and the current date.
+
       - name: delivered_flag
-      - name: failed_flag
+        description: Indicator showing whether the meal was delivered successfully (1 = delivered, 0 = otherwise).
+
+      - name: pending_flag
+        description: Indicator showing whether the meal delivery is pending (1 = pending, 0 = otherwise).
+
+      - name: cancelled_flag
+        description: Indicator showing whether the meal delivery was cancelled (1 = cancelled, 0 = otherwise).
+
       - name: delivery_category
+        description: >
+          Business classification of meal delivery timing.
+          Values include MISSED, TODAY, UPCOMING, and COMPLETED.
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - MISSED
+                  - TODAY
+                  - UPCOMING
+                  - COMPLETED

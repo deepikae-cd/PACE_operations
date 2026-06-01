@@ -12,6 +12,6 @@ sources:
       - name: caregiver_raw
       - name: appointment_raw
       - name: notification_raw
-      - name: transport_raw
+      - name: transportation_raw
       - name: meal_delivery_raw
       - name: provider_raw

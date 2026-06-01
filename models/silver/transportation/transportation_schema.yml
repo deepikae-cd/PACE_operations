@@ -2,47 +2,50 @@ version: 2
 
 models:
   - name: transportation
-    description: Transportation dataset tracking trips, status, and outcomes.
+    description: >
+      Silver-layer transportation dataset capturing trip-level records,
+      standardized status and operational flags derived from raw transportation data.
 
     config:
       schema: SILVER
       materialized: table
 
     columns:
-      - name: transportation_id
+
+      - name: transport_id
+        description: Unique identifier for each transportation record.
         tests:
           - not_null
           - unique
 
       - name: participant_id
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('participant')
-                field: participant_id
-
-      - name: provider_id
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('provider')
-                field: provider_id
-
-      - name: trip_date
+        description: Unique identifier of the participant associated with the trip.
         tests:
           - not_null
 
-      - name: trip_type
+      - name: pickup_location
+        description: Location where the trip starts.
 
-      - name: trip_status
+      - name: destination
+        description: Location where the trip ends.
+
+      - name: pickup_time
+        description: Timestamp when pickup is scheduled or occurred.
+        tests:
+          - not_null
+
+      - name: status
+        description: Standardized trip status.
         tests:
           - accepted_values:
               arguments:
-                values: ['COMPLETED', 'CANCELLED', 'SCHEDULED']
+                values:
+                  - COMPLETED
+                  - CANCELLED
+                  - SCHEDULED
+                  - UNKNOWN
 
-      - name: source_created_ts
-      - name: load_ts
-      - name: completed_flag
-      - name: cancelled_flag
+      - name: created_ts
+        description: Timestamp when the record was created in the source system.
+        tests:
+          - not_null

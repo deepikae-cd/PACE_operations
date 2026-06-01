@@ -1,45 +1,38 @@
-select
-    transport_id,
-    participant_id,
-    upper(trim(pickup_location)) as pickup_location,
-    upper(trim(destination)) as destination,
-    pickup_time,
-    upper(trim(status)) as transport_status,
-    created_ts as source_created_ts,
-    current_timestamp() as load_ts,
-    datediff(
-        day,
-        cast(pickup_time as date),
-        current_date()
-    ) as days_from_pickup,
+with source_data as (
 
-    case
-        when upper(status) = 'COMPLETED' then 1
-        else 0
-    end as completed_flag,
+    select
+        transport_id,
+        participant_id,
+        pickup_location,
+        destination,
+        pickup_time,
+        status,
+        created_ts
 
-    case
-        when upper(status) = 'SCHEDULED' then 1
-        else 0
-    end as scheduled_flag,
+    from {{ source('bronze', 'transportation_raw') }}
 
-    case
-        when upper(status) = 'CANCELLED' then 1
-        else 0
-    end as cancelled_flag,
+),
 
-    case
-        when cast(pickup_time as date) < current_date()
-             and upper(status) <> 'COMPLETED'
-        then 'MISSED'
+cleaned as (
 
-        when cast(pickup_time as date) = current_date()
-        then 'TODAY'
+    select
+        transport_id,
+        participant_id,
+        pickup_location,
+        destination,
 
-        when cast(pickup_time as date) > current_date()
-        then 'UPCOMING'
+        -- standardize timestamp handling (optional but common in silver layer)
+        pickup_time,
+        created_ts,
 
-        else 'UNKNOWN'
-    end as transport_category
+        -- optional derived columns (useful in silver)
+        case 
+            when status is null then 'UNKNOWN'
+            else upper(status)
+        end as status
 
-from {{ source('bronze','transport_raw') }}
+    from source_data
+
+)
+
+select * from cleaned
