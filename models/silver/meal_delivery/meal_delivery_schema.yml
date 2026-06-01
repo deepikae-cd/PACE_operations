@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: meal_delivery
+    description: >
+      Silver-layer cleaned meal delivery dataset used for tracking delivery status,
+      timeliness, and fulfillment outcomes.
+
+    config:
+      schema: SILVER
+      materialized: table
+
+    columns:
+      - name: meal_delivery_id
+        description: Unique identifier for meal delivery record.
+
+      - name: participant_id
+        description: Identifier for participant receiving the meal.
+
+      - name: provider_id
+        description: Identifier for meal service provider.
+
+      - name: delivery_date
+        description: Date when meal delivery is scheduled or completed.
+
+      - name: meal_type
+        description: Standardized meal category (trimmed and uppercased).
+
+      - name: delivery_status
+        description: Normalized delivery status (e.g., DELIVERED, FAILED).
+
+      - name: source_created_ts
+        description: Source system creation timestamp.
+
+      - name: load_ts
+        description: Timestamp when record was loaded into Silver layer.
+
+      - name: delivered_flag
+        description: Indicates successful delivery (1 = delivered, 0 otherwise).
+
+      - name: failed_flag
+        description: Indicates failed delivery attempts (1 = failed, 0 otherwise).
+
+      - name: delivery_category
+        description: >
+          Classification of delivery timing:
+          OVERDUE, TODAY, UPCOMING, or UNKNOWN.

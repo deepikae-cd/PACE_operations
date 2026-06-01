@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: appointment
+    description: >
+      Silver-layer curated appointment dataset containing cleaned and standardized appointment
+      records with derived flags and categorization for operational analytics.
+
+    config:
+      schema: SILVER
+      materialized: table
+
+    columns:
+      - name: appointment_id
+        description: Unique identifier for each appointment.
+
+      - name: participant_id
+        description: Identifier for the participant associated with the appointment.
+
+      - name: provider_id
+        description: Identifier for the provider responsible for the appointment.
+
+      - name: appointment_date
+        description: Scheduled date of the appointment.
+
+      - name: service_type
+        description: Standardized service type (trimmed and uppercased).
+
+      - name: appointment_status
+        description: Normalized appointment status (trimmed and uppercased).
+
+      - name: source_created_ts
+        description: Original record creation timestamp from source system.
+
+      - name: load_ts
+        description: Timestamp when record was loaded into the Silver layer.
+
+      - name: completed_flag
+        description: Indicates if appointment status is COMPLETED (1 = yes, 0 = no).
+
+      - name: cancelled_flag
+        description: Indicates if appointment status is CANCELLED (1 = yes, 0 = no).
+
+      - name: appointment_category
+        description: >
+          Derived classification of appointment timing:
+          OVERDUE, TODAY, UPCOMING, or UNKNOWN based on appointment date and status.

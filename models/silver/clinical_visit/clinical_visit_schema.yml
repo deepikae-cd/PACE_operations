@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: clinical_visit
+    description: >
+      Silver-layer clinical visit dataset capturing patient-provider interactions
+      with standardized status and visit attributes.
+
+    config:
+      schema: SILVER
+      materialized: table
+
+    columns:
+      - name: visit_id
+        description: Unique identifier for clinical visit.
+
+      - name: participant_id
+        description: Patient or participant identifier.
+
+      - name: provider_id
+        description: Provider responsible for the visit.
+
+      - name: visit_date
+        description: Date of clinical visit.
+
+      - name: visit_type
+        description: Standardized type of visit.
+
+      - name: visit_status
+        description: Normalized visit status.
+
+      - name: source_created_ts
+        description: Source system creation timestamp.
+
+      - name: load_ts
+        description: Silver layer ingestion timestamp.
+
+      - name: completed_flag
+        description: Indicates completed visits.
+
+      - name: cancelled_flag
+        description: Indicates cancelled visits.
