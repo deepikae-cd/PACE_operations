@@ -5,8 +5,6 @@ config-version: 2
 profile: 'PACE_operations'
 
 model-paths: ["models"]
-analysis-paths: ["analyses"]
-test-paths: ["tests"]
 seed-paths: ["seeds"]
 snapshot-paths: ["snapshots"]
 macro-paths: ["macros"]
