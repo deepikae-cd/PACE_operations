@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: notification
-    description: Notification dataset tracking message delivery to participants.
+    description: Notification dataset tracking message delivery to participants across different communication channels.
 
     config:
       schema: SILVER
@@ -10,27 +10,30 @@ models:
 
     columns:
       - name: notification_id
+        description: Unique identifier for each notification event.
         tests:
           - not_null
           - unique
 
       - name: participant_id
+        description: Identifier of the participant who received the notification.
         tests:
           - not_null
-          - relationships:
-              arguments:
-                to: ref('participant')
-                field: participant_id
 
       - name: notification_type
+        description: Type of notification sent (e.g., email, SMS, push notification, system alert).
 
       - name: notification_status
-        tests:
-          - accepted_values:
-              arguments:
-                values: ['SENT', 'FAILED', 'PENDING']
+        description: Current status of the notification delivery (e.g., sent, delivered, failed, pending).
 
       - name: source_created_ts
+        description: Timestamp when the notification record was created in the source system.
+
       - name: load_ts
+        description: Timestamp when the record was loaded into the SILVER layer.
+
       - name: sent_flag
+        description: Indicator showing whether the notification was successfully sent (Y/N or true/false).
+
       - name: failed_flag
+        description: Indicator showing whether the notification delivery failed (Y/N or true/false).

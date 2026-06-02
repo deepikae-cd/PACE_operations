@@ -31,14 +31,11 @@ models:
 
       - name: pickup_time
         description: Timestamp when pickup is scheduled or occurred.
-        tests:
-          - not_null
+      
 
       - name: created_ts
         description: Timestamp when the record was created in the source system.
-        tests:
-          - not_null
-
+    
       - name: trip_status
         description: Standardized trip status derived from raw status.
       

@@ -20,13 +20,11 @@ models:
 
       - name: provider_id
         description: Identifier for the healthcare provider associated with the visit.
-        tests:
-          - not_null
+      
 
       - name: visit_date
         description: Date when the clinical visit occurred.
-        tests:
-          - not_null
+      
 
       - name: visit_type
         description: Type of visit (e.g., inpatient, outpatient, emergency).

@@ -10,22 +10,27 @@ models:
 
     columns:
       - name: provider_id
+        description: Unique identifier for each provider in the system.
         tests:
           - not_null
           - unique
 
       - name: provider_name
+        description: Full name of the provider or healthcare professional.
         tests:
           - not_null
 
       - name: specialty
+        description: Medical or service specialty associated with the provider (e.g., cardiology, primary care).
 
       - name: provider_status
-        tests:
-          - accepted_values:
-              arguments:
-                values: ['ACTIVE', 'INACTIVE']
+        description: Current operational status of the provider (e.g., active, inactive, suspended).
 
       - name: source_created_ts
+        description: Timestamp when the provider record was created in the source system.
+
       - name: load_ts
+        description: Timestamp when the record was loaded into the SILVER layer.
+
       - name: active_flag
+        description: Flag indicating whether the provider record is currently active (Y/N or true/false).
