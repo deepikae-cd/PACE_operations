@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: service_utilization
+    description: >
+      Gold-layer appointment summary aggregated by service type. Provides
+      total usage counts and completion rates per service type for service
+      utilization and operational performance reporting. Business logic is
+      derived directly from Silver-layer status values.
+
+    config:
+      schema: GOLD
+      materialized: table
+
+    columns:
+      - name: service_type
+        description: Standardized service type from the Silver appointment table.
+        tests:
+          - not_null
+          - unique
+
+      - name: total_usage
+        description: Total number of appointments recorded for the service type.
+     
+
+      - name: successful_services
+        description: Number of appointments with a status of COMPLETED for the service type.
+     
+
+      - name: success_rate_pct
+        description: >
+          Percentage of completed appointments out of total appointments
+          for the service type, rounded to two decimal places.
+       
+
+      - name: load_ts
+        description: Timestamp when the record was loaded into the Gold layer.
+      
