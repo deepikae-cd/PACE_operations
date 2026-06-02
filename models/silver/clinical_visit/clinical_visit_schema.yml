@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: clinical_visit
+    description: >
+      Clinical visit dataset capturing patient-provider interactions with standardized status tracking.
+
+    config:
+      schema: SILVER
+      materialized: table
+
+    columns:
+      - name: visit_id
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('participant')
+                field: participant_id
+
+      - name: provider_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('provider')
+                field: provider_id
+
+      - name: visit_date
+        tests:
+          - not_null
+
+      - name: visit_type
+
+      - name: visit_status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['COMPLETED', 'CANCELLED', 'SCHEDULED']
+
+      - name: source_created_ts
+      - name: load_ts
+      - name: completed_flag
+      - name: cancelled_flag

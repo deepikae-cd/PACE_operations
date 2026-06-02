@@ -1,0 +1,31 @@
+name: 'PACE_operations'
+version: '1.0.0'
+config-version: 2
+
+profile: 'PACE_operations'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+snapshot-paths: ["snapshots"]
+macro-paths: ["macros"]
+
+target-path: "target"
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  PACE_operations:
+
+    silver:
+      +materialized: table
+      +schema: SILVER
+
+    gold:
+      +materialized: table
+      +schema: GOLD
+
+snapshots:
+  PACE_operations:
+    +target_schema: SNAPSHOTS
