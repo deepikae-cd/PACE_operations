@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: participant_services_summary
+  - name: participant_dashboard_summary
     description: >
       Gold-layer cross-domain summary aggregating total counts and completion
       metrics across appointments, meal deliveries, and clinical visits.
