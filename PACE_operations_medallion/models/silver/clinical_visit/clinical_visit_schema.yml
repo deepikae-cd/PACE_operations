@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: clinical_visit
+  - name: clinical_visits
     description: >
       Silver layer table containing standardized clinical visit records.
       This model consolidates raw visit data, cleans identifiers,
