@@ -26,4 +26,4 @@ agg as (
     group by participant_id
 )
 
-select * from agg;
+select * from agg
