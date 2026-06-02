@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: appointment_daily_summary
+  - name: appointment_kpis
     description: >
       Gold-layer daily appointment summary aggregated by appointment date.
       Provides completion and cancellation rates alongside overdue counts
