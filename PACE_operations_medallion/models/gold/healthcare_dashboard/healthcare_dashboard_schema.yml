@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: participant_services_summary
+    description: >
+      Gold-layer cross-domain summary aggregating total counts and completion
+      metrics across appointments, meal deliveries, and clinical visits.
+      Intended for executive reporting and high-level service utilization
+      dashboards. Business logic is derived directly from Silver-layer
+      status values.
+
+    config:
+      schema: GOLD
+      materialized: table
+
+    columns:
+      - name: total_appointments
+        description: Total number of appointment records in the Silver appointment table.
+        tests:
+          - not_null
+
+      - name: total_meals
+        description: Total num
