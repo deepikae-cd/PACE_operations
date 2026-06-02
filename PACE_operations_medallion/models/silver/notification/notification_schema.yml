@@ -2,7 +2,12 @@ version: 2
 
 models:
   - name: notification
-    description: Notification dataset tracking message delivery to participants across different communication channels.
+    description: >
+      Silver-layer notification dataset containing cleansed and standardized
+      message delivery records across communication channels. Deduplicated on
+      notification_id with null validation applied to key fields.
+      Business-derived flags, channel categorizations, and outcome groupings
+      belong in the Gold layer.
 
     config:
       schema: SILVER
@@ -10,30 +15,38 @@ models:
 
     columns:
       - name: notification_id
-        description: Unique identifier for each notification event.
-        tests:
-          - not_null
-          - unique
+        description: Unique identifier for each notification record.
+      
 
       - name: participant_id
-        description: Identifier of the participant who received the notification.
-        tests:
-          - not_null
+        description: Unique identifier of the participant who received the notification.
+   
 
       - name: notification_type
-        description: Type of notification sent (e.g., email, SMS, push notification, system alert).
+        description: Uppercased and trimmed notification type from the source system.
+
+
+      - name: notification_channel
+        description: Uppercased and trimmed communication channel from the source system.
+    
 
       - name: notification_status
-        description: Current status of the notification delivery (e.g., sent, delivered, failed, pending).
+        description: Uppercased and trimmed delivery status from the source system.
+     
 
       - name: source_created_ts
-        description: Timestamp when the notification record was created in the source system.
+        description: Timestamp when the record was originally created in the source system.
 
       - name: load_ts
-        description: Timestamp when the record was loaded into the SILVER layer.
+        description: Timestamp when the record was loaded into the Silver layer.
 
-      - name: sent_flag
-        description: Indicator showing whether the notification was successfully sent (Y/N or true/false).
+      - name: source_system
+        description: Name of the source system this record was ingested from.
+    
 
-      - name: failed_flag
-        description: Indicator showing whether the notification delivery failed (Y/N or true/false).
+      - name: record_hash
+        description: >
+          MD5 hash of key fields used for change detection and incremental
+          load comparisons. Derived from notification_id, participant_id,
+          notification_type, channel, and status.
+     

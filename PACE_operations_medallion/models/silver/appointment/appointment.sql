@@ -3,32 +3,31 @@ select
     participant_id,
     provider_id,
     appointment_date,
-    upper(trim(service_type)) as service_type,
-    upper(trim(status)) as appointment_status,
-    created_ts as source_created_ts,
-    current_timestamp() as load_ts,
-    case
-        when upper(status) = 'COMPLETED' then 1
-        else 0
-    end as completed_flag,
+    upper(trim(service_type))                       as service_type,
+    upper(trim(status))                             as appointment_status,
+    created_ts                                      as source_created_ts,
+    current_timestamp()                             as load_ts,
+    'appointments'                                  as source_system,
+    md5(concat(
+        coalesce(cast(appointment_id   as string), ''),
+        coalesce(cast(participant_id   as string), ''),
+        coalesce(cast(provider_id      as string), ''),
+        coalesce(cast(appointment_date as string), ''),
+        coalesce(upper(trim(status)),              ''),
+        coalesce(upper(trim(service_type)),        '')
+    ))                                              as record_hash
 
-    case
-        when upper(status) = 'CANCELLED' then 1
-        else 0
-    end as cancelled_flag,
-
-    case
-        when appointment_date < current_date()
-             and upper(status) <> 'COMPLETED'
-        then 'OVERDUE'
-
-        when appointment_date = current_date()
-        then 'TODAY'
-
-        when appointment_date > current_date()
-        then 'UPCOMING'
-
-        else 'UNKNOWN'
-    end as appointment_category
-
-from {{ source('bronze','appointment_raw') }}
+from (
+    select
+        *,
+        row_number() over (
+            partition by appointment_id
+            order by created_ts desc
+        ) as _rn
+    from {{ source('bronze', 'appointment_raw') }}
+    where appointment_id   is not null
+      and participant_id   is not null
+      and provider_id      is not null
+      and appointment_date is not null
+)
+where _rn = 1

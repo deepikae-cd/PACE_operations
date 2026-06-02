@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: participant_engagement_summary
+    description: >
+      Gold-layer participant engagement summary aggregating service utilization
+      across appointments, meal deliveries, and transportation trips per
+      participant. Provides a composite engagement level classification for
+      care coordination and outreach reporting.
+
+    config:
+      schema: GOLD
+      materialized: table
+
+    columns:
+      - name: participant_id
+        description: Unique identifier of the participant.
+        tests:
+          - not_null
+          - unique
+
+      - name: total_appointments
+        description: Total number of distinct appointments associated with the participant.
+       
+
+      - name: total_transport_trips
+        description: Total number of distinct transportation trips associated with the participant.
+    
+
+      - name: total_meals
+        description: Total number of distinct meal deliveries associated with the participant.
+     
+
+      - name: total_services_used
+        description: >
+          Sum of total appointments, transport trips, and meal deliveries
+          representing overall service utilization for the participant.
+     
+
+      - name: engagement_level
+        description: >
+          Business classification of participant engagement based on total
+          services used. HIGH = 10 or more services, MEDIUM = 5 to 9
+          services, LOW = fewer than 5 services.
+      
+
+      - name: load_ts
+        description: Timestamp when the record was loaded into the Gold layer

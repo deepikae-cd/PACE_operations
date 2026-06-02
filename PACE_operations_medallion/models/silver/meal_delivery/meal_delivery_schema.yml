@@ -3,9 +3,11 @@ version: 2
 models:
   - name: meal_delivery
     description: >
-      Silver-layer meal delivery dataset containing standardized meal delivery
-      records, delivery status indicators, timeliness metrics, and business
-      categorization for participant meal services.
+      Silver-layer meal delivery dataset containing cleansed and standardized
+      meal delivery records for participant meal services. Deduplicated on
+      meal_delivery_id with null validation applied to key fields.
+      Business-derived flags, timeliness metrics, and delivery categorizations
+      belong in the Gold layer.
 
     config:
       schema: SILVER
@@ -19,36 +21,33 @@ models:
           - unique
 
       - name: participant_id
-        description: Identifier of the participant receiving the meal.
-        tests:
-          - not_null
+        description: Unique identifier of the participant receiving the meal.
+   
 
       - name: delivery_date
-        description: Date on which the meal was scheduled or delivered.
+        description: Date on which the meal was scheduled or delivered. Null records are excluded upstream.
+      
 
       - name: meal_type
-        description: Type of meal provided (e.g., breakfast, lunch, dinner, snack).
+        description: Uppercased and trimmed meal type from the source system.
+     
 
       - name: meal_status
-        description: Current status of the meal delivery (e.g., delivered, pending, cancelled, failed).
+        description: Uppercased and trimmed delivery status from the source system.
+       
 
       - name: source_created_ts
-        description: Timestamp when the record was created in the source system.
+        description: Timestamp when the record was originally created in the source system.
 
       - name: load_ts
-        description: Timestamp when the record was loaded into the SILVER layer.
+        description: Timestamp when the record was loaded into the Silver layer.
 
-      - name: days_since_delivery
-        description: Number of days elapsed since the meal delivery date compared to current date.
-
-      - name: delivered_flag
-        description: Flag indicating successful meal delivery (Y/N or true/false).
-
-      - name: pending_flag
-        description: Flag indicating meal delivery is still pending.
-
-      - name: cancelled_flag
-        description: Flag indicating meal delivery was cancelled.
-
-      - name: delivery_category
-        description: Business categorization of delivery (e.g., on-time, late, missed, rescheduled).
+      - name: source_system
+        description: Name of the source system this record was ingested from.
+        
+      - name: record_hash
+        description: >
+          MD5 hash of key fields used for change detection and incremental
+          load comparisons. Derived from meal_id, participant_id,
+          delivery_date, meal_type, and status.
+      

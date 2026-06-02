@@ -16,4 +16,5 @@ select
     current_timestamp() as load_ts
 
 from {{ ref('appointment') }}
-group by appointment_date
+group by appointment_date 
+

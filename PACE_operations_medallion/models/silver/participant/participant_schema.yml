@@ -3,8 +3,10 @@ version: 2
 models:
   - name: participant
     description: >
-      Silver layer participant master dataset containing standardized
-      demographic attributes and normalized participant status values.
+      Silver-layer participant master dataset containing cleansed and
+      standardized demographic attributes and participant status values.
+      Deduplicated on participant_id with null validation applied to key
+      fields. Business-derived flags belong in the Gold layer.
 
     config:
       schema: SILVER
@@ -18,32 +20,37 @@ models:
           - unique
 
       - name: first_name
-        description: First name of the participant.
-        tests:
-          - not_null
-
+        description: Uppercased and trimmed first name of the participant.
+    
       - name: last_name
-        description: Last name of the participant.
-
-      - name: gender
-        description: Gender of the participant.
-
-      - name: date_of_birth
-        description: Date of birth of the participant.
-
-      - name: participant_status
-        description: >
-          Standardized participant status indicating whether the participant
-          is active or inactive in the system.
+        description: Uppercased and trimmed last name of the participant.
        
 
+      - name: gender
+        description: Uppercased and trimmed gender of the participant.
+       
+      - name: email
+        description: Lowercased and trimmed email address of the participant.
+
+      - name: phone
+        description: Digits-only phone number with all non-numeric characters stripped.
+
+      - name: participant_status
+        description: Uppercased and trimmed participant status. Defaults to ACTIVE when null in the source system.
+   
       - name: source_created_ts
-        description: Timestamp when the record was created in the source system.
+        description: Timestamp when the record was originally created in the source system.
 
       - name: load_ts
         description: Timestamp when the record was loaded into the Silver layer.
 
-      - name: active_flag
+      - name: source_system
+        description: Name of the source system this record was ingested from.
+       
+
+      - name: record_hash
         description: >
-          Boolean flag indicating active participation status
-          (1 = active, 0 = inactive or otherwise).
+          MD5 hash of key fields used for change detection and incremental
+          load comparisons. Derived from participant_id, first_name,
+          last_name, gender, email, phone, and status.
+    

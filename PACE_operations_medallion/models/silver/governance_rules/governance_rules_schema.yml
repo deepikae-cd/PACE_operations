@@ -3,8 +3,10 @@ version: 2
 models:
   - name: governance_rules
     description: >
-      Governance rules dataset used for system-wide compliance, operational controls,
-      and enforcement of business policies across domains.
+      Silver-layer governance rules dataset containing cleansed and standardized
+      rule definitions used for system-wide compliance and operational controls.
+      Deduplicated on rule_id with null validation applied to key fields.
+      Business-derived flags and lifecycle statuses belong in the Gold layer.
 
     config:
       schema: SILVER
@@ -12,28 +14,42 @@ models:
 
     columns:
       - name: rule_id
-        description: Unique identifier for each governance rule defined in the system.
+        description: Unique identifier for each governance rule.
         tests:
           - not_null
           - unique
 
       - name: rule_name
-        description: Human-readable name of the governance rule.
+        description: Uppercased and trimmed human-readable name of the governance rule.
+
 
       - name: rule_type
-        description: Category or type of rule (e.g., validation, compliance, operational, security).
+        description: Uppercased and trimmed category or type of the governance rule.
+     
 
+      - name: rule_description
+        description: Trimmed free-text description of the governance rule from the source system.
+
+      - name: effective_date
+        description: Date from which the governance rule is considered in effect.
+    
       - name: rule_status
-        description: Current status of the rule (e.g., active, inactive, deprecated, draft).
+        description: Uppercased and trimmed status of the governance rule from the source system.
+    
 
       - name: source_created_ts
-        description: Timestamp when the rule was created in the source system.
+        description: Timestamp when the rule was originally created in the source system.
 
       - name: load_ts
-        description: Timestamp when the record was loaded into the SILVER layer.
+        description: Timestamp when the record was loaded into the Silver layer.
 
-      - name: active_flag
-        description: Indicator showing whether the rule is currently active (Y/N or true/false).
+      - name: source_system
+        description: Name of the source system this record was ingested from.
+     
 
-      - name: inactive_flag
-        description: Indicator showing whether the rule is marked as inactive (Y/N or true/false).
+      - name: record_hash
+        description: >
+          MD5 hash of key fields used for change detection and incremental
+          load comparisons. Derived from rule_id, rule_name, rule_type,
+          status, and effective_date.
+      

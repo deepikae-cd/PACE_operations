@@ -3,8 +3,9 @@ version: 2
 models:
   - name: caregiver
     description: >
-      Silver layer caregiver master dataset containing caregiver identity,
-      role attributes, and audit timestamps.
+      Silver-layer caregiver master dataset containing cleansed caregiver
+      identity, contact details, and audit metadata. Deduplicated on
+      caregiver_id with null validation applied to key fields.
 
     config:
       schema: SILVER
@@ -17,18 +18,33 @@ models:
           - not_null
           - unique
 
-      - name: first_name
-        description: First name of the caregiver.
-  
+      - name: caregiver_name
+        description: Uppercased and trimmed full name of the caregiver.
+      
 
-      - name: last_name
-        description: Last name of the caregiver.
+      - name: phone
+        description: Digits-only phone number with all non-numeric characters stripped.
 
-      - name: caregiver_role
-        description: Role or designation of the caregiver.
+      - name: specialization
+        description: Uppercased and trimmed caregiver specialization from the source system.
+
+      - name: caregiver_status
+        description: Uppercased and trimmed caregiver status from the source system.
+       
 
       - name: source_created_ts
-        description: Timestamp when record was created in the source system.
+        description: Timestamp when the record was originally created in the source system.
 
       - name: load_ts
-        description: Timestamp when record was loaded into the warehouse.
+        description: Timestamp when the record was loaded into the Silver layer.
+
+      - name: source_system
+        description: Name of the source system this record was ingested from.
+      
+
+      - name: record_hash
+        description: >
+          MD5 hash of key fields used for change detection and incremental
+          load comparisons. Derived from caregiver_id, caregiver_name, phone,
+          specialization, and status.
+ 
