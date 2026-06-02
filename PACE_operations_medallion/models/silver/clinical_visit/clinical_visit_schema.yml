@@ -3,9 +3,14 @@ version: 2
 models:
   - name: clinical_visit
     description: >
-      Silver layer table containing standardized clinical visit records.
-      This model consolidates raw visit data, cleans identifiers,
-      and prepares it for downstream analytics (Gold layer).
+      Silver-layer clinical visit dataset containing cleansed and standardized
+      visit records. Deduplicated on visit_id with null validation applied to
+      key fields. Business-derived metrics and categorizations belong in the
+      Gold layer.
+
+    config:
+      schema: SILVER
+      materialized: table
 
     columns:
       - name: visit_id
@@ -14,36 +19,42 @@ models:
           - not_null
           - unique
 
-      - name: patient_id
-        description: Unique identifier for the patient.
+      - name: participant_id
+        description: Unique identifier of the participant associated with the visit.
      
 
       - name: provider_id
-        description: Identifier for the healthcare provider associated with the visit.
+        description: Unique identifier of the healthcare provider associated with the visit.
+     
       
-
       - name: visit_date
-        description: Date when the clinical visit occurred.
-      
+        description: Date when the clinical visit occurred. Null records are excluded upstream.
+       
 
-      - name: visit_type
-        description: Type of visit (e.g., inpatient, outpatient, emergency).
+      - name: service_type
+        description: Uppercased and trimmed healthcare service type from the source system.
 
       - name: diagnosis_code
-        description: Primary diagnosis code recorded for the visit.
-
-      - name: procedure_code
-        description: Medical procedure code associated with the visit.
-
-      - name: facility_id
-        description: Identifier for the healthcare facility.
+        description: Uppercased and trimmed primary diagnosis code recorded for the visit.
 
       - name: visit_status
-        description: Current status of the visit (completed, cancelled, scheduled).
+        description: >
+          Uppercased and trimmed visit status. Defaults to COMPLETED when
+          null in the source system.
+        
 
-      - name: created_at
-        description: Timestamp when the record was created in the system.
+      - name: source_created_ts
+        description: Timestamp when the record was originally created in the source system.
 
-      - name: updated_at
-        description: Timestamp when the record was last updated.
+      - name: load_ts
+        description: Timestamp when the record was loaded into the Silver layer.
 
+      - name: source_system
+        description: Name of the source system this record was ingested from.
+    
+      - name: record_hash
+        description: >
+          MD5 hash of key fields used for change detection and incremental
+          load comparisons. Derived from visit_id, participant_id, provider_id,
+          visit_date, service_type, diagnosis_code, and status.
+  
