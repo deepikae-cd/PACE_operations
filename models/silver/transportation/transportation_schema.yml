@@ -1,0 +1,58 @@
+version: 2
+
+models:
+  - name: transportation
+    description: >
+      Silver-layer transportation dataset capturing trip-level records,
+      standardized status and operational flags derived from raw transportation data.
+
+    config:
+      schema: SILVER
+      materialized: table
+
+    columns:
+
+      - name: transport_id
+        description: Unique identifier for each transportation record.
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: Unique identifier of the participant associated with the trip.
+        tests:
+          - not_null
+
+      - name: pickup_location
+        description: Location where the trip starts.
+
+      - name: destination
+        description: Location where the trip ends.
+
+      - name: pickup_time
+        description: Timestamp when pickup is scheduled or occurred.
+        tests:
+          - not_null
+
+      - name: created_ts
+        description: Timestamp when the record was created in the source system.
+        tests:
+          - not_null
+
+      - name: trip_status
+        description: Standardized trip status derived from raw status.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - COMPLETED
+                  - CANCELLED
+                  - SCHEDULED
+                  - UNKNOWN
+
+      - name: completed_flag
+        description: Indicates whether the trip was completed (1 = yes, 0 = no).
+
+      - name: cancelled_flag
+        description: Indicates whether the trip was cancelled (1 = yes, 0 = no)
