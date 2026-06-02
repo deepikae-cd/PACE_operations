@@ -1,4 +1,3 @@
--- models/gold/participant_trip_summary.sql
 
 with base as (
 
