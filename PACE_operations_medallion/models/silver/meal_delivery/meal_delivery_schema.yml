@@ -21,8 +21,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('participant')
-              field: participant_id
+              arguments:
+                to: ref('participant')
+                field: participant_id
 
       - name: delivery_date
         tests:
@@ -33,10 +34,11 @@ models:
       - name: meal_status
         tests:
           - accepted_values:
-              values:
-                - DELIVERED
-                - PENDING
-                - CANCELLED
+              arguments:
+                values:
+                  - DELIVERED
+                  - PENDING
+                  - CANCELLED
 
       - name: source_created_ts
       - name: load_ts
@@ -50,8 +52,9 @@ models:
       - name: delivery_category
         tests:
           - accepted_values:
-              values:
-                - MISSED
-                - TODAY
-                - UPCOMING
-                - COMPLETED
+              arguments:
+                values:
+                  - MISSED
+                  - TODAY
+                  - UPCOMING
+                  - COMPLETED
