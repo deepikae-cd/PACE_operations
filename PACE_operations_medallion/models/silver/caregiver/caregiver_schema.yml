@@ -2,7 +2,9 @@ version: 2
 
 models:
   - name: caregiver
-    description: Caregiver master dataset with identity and role attributes.
+    description: >
+      Silver layer caregiver master dataset containing caregiver identity,
+      role attributes, and audit timestamps.
 
     config:
       schema: SILVER
@@ -10,17 +12,24 @@ models:
 
     columns:
       - name: caregiver_id
+        description: Unique identifier for each caregiver.
         tests:
           - not_null
           - unique
 
       - name: first_name
+        description: First name of the caregiver.
         tests:
           - not_null
 
       - name: last_name
+        description: Last name of the caregiver.
 
       - name: caregiver_role
+        description: Role or designation of the caregiver.
 
       - name: source_created_ts
+        description: Timestamp when record was created in the source system.
+
       - name: load_ts
+        description: Timestamp when record was loaded into the warehouse.
