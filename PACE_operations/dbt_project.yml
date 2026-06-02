@@ -14,7 +14,6 @@ target-path: "target"
 clean-targets:
   - "target"
   - "dbt_packages"
-<<<<<<< HEAD
 
 models:
   +materialized: table   # default for all models
@@ -27,5 +26,3 @@ models:
 
 snapshots:
   +target_schema: SNAPSHOTS
-=======
->>>>>>> c927a1bca1f2a513097e5461ec3f866509040752
