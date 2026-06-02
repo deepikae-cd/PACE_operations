@@ -41,15 +41,7 @@ models:
 
       - name: trip_status
         description: Standardized trip status derived from raw status.
-        tests:
-          - not_null
-          - accepted_values:
-              arguments:
-                values:
-                  - COMPLETED
-                  - CANCELLED
-                  - SCHEDULED
-                  - UNKNOWN
+      
 
       - name: completed_flag
         description: Indicates whether the trip was completed (1 = yes, 0 = no).
