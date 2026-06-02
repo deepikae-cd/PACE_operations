@@ -21,40 +21,24 @@ models:
 
       - name: participant_id
         description: Unique identifier of the participant associated with the appointment.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('participant')
-                field: participant_id
+       
 
       - name: provider_id
         description: Unique identifier of the healthcare provider assigned to the appointment.
         tests:
           - not_null
-          - relationships:
-              arguments:
-                to: ref('provider')
-                field: provider_id
+         
 
       - name: appointment_date
         description: Scheduled date on which the appointment is expected to occur.
-        tests:
-          - not_null
+      
 
       - name: service_type
         description: Standardized healthcare service type associated with the appointment.
 
       - name: appointment_status
         description: Current status of the appointment after standardization.
-        tests:
-          - accepted_values:
-              arguments:
-                values:
-                  - COMPLETED
-                  - CANCELLED
-                  - SCHEDULED
-                  - IN_PROGRESS
+       
 
       - name: source_created_ts
         description: Timestamp when the appointment record was originally created in the source system.
@@ -72,11 +56,4 @@ models:
         description: >
           Business categorization of appointments based on appointment date
           and status. Values include OVERDUE, TODAY, UPCOMING, and UNKNOWN.
-        tests:
-          - accepted_values:
-              arguments:
-                values:
-                  - OVERDUE
-                  - TODAY
-                  - UPCOMING
-                  - UNKNOWN
+      

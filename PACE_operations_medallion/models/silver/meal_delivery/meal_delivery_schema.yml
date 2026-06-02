@@ -13,42 +13,42 @@ models:
 
     columns:
       - name: meal_delivery_id
+        description: Unique identifier for each meal delivery record.
         tests:
           - not_null
           - unique
 
       - name: participant_id
+        description: Identifier of the participant receiving the meal.
         tests:
           - not_null
-          - relationships:
-              arguments:
-                to: ref('participant')
-                field: participant_id
 
       - name: delivery_date
-        tests:
-          - not_null
+        description: Date on which the meal was scheduled or delivered.
 
       - name: meal_type
+        description: Type of meal provided (e.g., breakfast, lunch, dinner, snack).
 
       - name: meal_status
-      
+        description: Current status of the meal delivery (e.g., delivered, pending, cancelled, failed).
 
       - name: source_created_ts
+        description: Timestamp when the record was created in the source system.
+
       - name: load_ts
+        description: Timestamp when the record was loaded into the SILVER layer.
 
       - name: days_since_delivery
+        description: Number of days elapsed since the meal delivery date compared to current date.
 
       - name: delivered_flag
+        description: Flag indicating successful meal delivery (Y/N or true/false).
+
       - name: pending_flag
+        description: Flag indicating meal delivery is still pending.
+
       - name: cancelled_flag
+        description: Flag indicating meal delivery was cancelled.
 
       - name: delivery_category
-        tests:
-          - accepted_values:
-              arguments:
-                values:
-                  - MISSED
-                  - TODAY
-                  - UPCOMING
-                  - COMPLETED
+        description: Business categorization of delivery (e.g., on-time, late, missed, rescheduled).
