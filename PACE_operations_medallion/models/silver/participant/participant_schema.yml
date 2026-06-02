@@ -35,12 +35,7 @@ models:
         description: >
           Standardized participant status indicating whether the participant
           is active or inactive in the system.
-        tests:
-          - accepted_values:
-              arguments:
-                values:
-                  - ACTIVE
-                  - INACTIVE
+       
 
       - name: source_created_ts
         description: Timestamp when the record was created in the source system.

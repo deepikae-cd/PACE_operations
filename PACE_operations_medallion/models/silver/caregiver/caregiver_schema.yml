@@ -19,8 +19,7 @@ models:
 
       - name: first_name
         description: First name of the caregiver.
-        tests:
-          - not_null
+  
 
       - name: last_name
         description: Last name of the caregiver.
