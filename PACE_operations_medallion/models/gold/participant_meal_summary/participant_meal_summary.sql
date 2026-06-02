@@ -1,6 +1,11 @@
 with base as (
 
-    select *
+    select
+        *,
+        case when meal_status = 'DELIVERED' then 1 else 0 end as delivered_flag,
+        case when meal_status = 'PENDING' then 1 else 0 end as pending_flag,
+        case when meal_status = 'CANCELLED' then 1 else 0 end as cancelled_flag
+
     from {{ ref('meal_delivery') }}
 
 ),
@@ -8,19 +13,18 @@ with base as (
 agg as (
 
     select
-
         participant_id,
 
         count(*) as total_meals_scheduled,
 
         sum(delivered_flag) as meals_delivered,
-
         sum(pending_flag) as meals_pending,
-
         sum(cancelled_flag) as meals_cancelled,
 
-        sum(case when delivery_category = 'MISSED' then 1 else 0 end) as missed_deliveries,
+        -- ✅ FIX: define missed properly (based on your logic)
+        sum(case when meal_status = 'MISSED' then 1 else 0 end) as missed_deliveries,
 
+        -- ✅ NOT DELIVERED = everything not delivered
         sum(case when delivered_flag = 0 then 1 else 0 end) as not_delivered,
 
         round(
