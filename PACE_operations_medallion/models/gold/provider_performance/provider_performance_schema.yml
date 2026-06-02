@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: provider_performance
+    description: >
+      Gold-layer appointment summary aggregated by provider. Provides
+      per-provider appointment counts, completion and cancellation rates,
+      and overdue appointment tracking for provider performance and
+      operational reporting. Business logic is derived directly from
+      Silver-layer status and date values.
+
+    config:
+      schema: GOLD
+      materialized: table
+
+    columns:
+      - name: provider_id
+        description: Unique identifier of the provider.
+        tests:
+          - not_null
+          - unique
+
+      - name: total_appointments
+        description: Total number of appointments associated with the provider.
+     
+      - name: completed_appointments
+        description: Number of appointments with a status of COMPLETED.
+   
+
+      - name: cancelled_appointments
+        description: Number of appointments with a status of CANCELLED.
+     
+
+      - name: completion_rate_pct
+        description: >
+          Percentage of appointments completed out of total appointments,
+          rounded to two decimal places.
+     
+
+      - name: cancellation_rate_pct
+        description: >
+          Percentage of appointments cancelled out of total appointments,
+          rounded to two decimal places.
+      
+
+      - name: overdue_appointments
+        description: >
+          Number of appointments where the appointment date is in the past
+          and the status is neither COMPLETED nor CANCELLED.
+     
+
+      - name: load_ts
+        description: Timestamp when the record was loaded into the Gold layer.
+   
