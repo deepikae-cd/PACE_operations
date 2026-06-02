@@ -1,5 +1,5 @@
 select
-  meal_id,
+  meal_id AS meal_delivery_id,
   participant_id,
   delivery_date,
  upper(trim(meal_type)) as meal_type,
