@@ -16,16 +16,13 @@ clean-targets:
   - "dbt_packages"
 
 models:
-  PACE_operations:
+  +materialized: table   # default for all models
 
-    silver:
-      +materialized: table
-      +schema: SILVER
+  silver:
+    +schema: SILVER
 
-    gold:
-      +materialized: table
-      +schema: GOLD
+  gold:
+    +schema: GOLD
 
 snapshots:
-  PACE_operations:
-    +target_schema: SNAPSHOTS
+  +target_schema: SNAPSHOTS
