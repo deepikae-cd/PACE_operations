@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: PACE_DW
+    schema: BRONZE
+
+    tables:
+      - name: participant_raw
+      - name: governance_rules_raw
+      - name: clinical_visit_raw
+      - name: caregiver_raw
+      - name: appointment_raw
+      - name: notification_raw
+      - name: transportation_raw
+      - name: meal_delivery_raw
+      - name: provider_raw

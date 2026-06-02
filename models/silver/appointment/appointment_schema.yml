@@ -1,0 +1,82 @@
+version: 2
+
+models:
+  - name: appointment
+    description: >
+      Silver-layer appointment dataset containing standardized appointment
+      information, participant-provider relationships, appointment status
+      indicators, and business-driven categorization used for operational
+      reporting and healthcare service analytics.
+
+    config:
+      schema: SILVER
+      materialized: table
+
+    columns:
+      - name: appointment_id
+        description: Unique identifier for each appointment record.
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: Unique identifier of the participant associated with the appointment.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('participant')
+                field: participant_id
+
+      - name: provider_id
+        description: Unique identifier of the healthcare provider assigned to the appointment.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('provider')
+                field: provider_id
+
+      - name: appointment_date
+        description: Scheduled date on which the appointment is expected to occur.
+        tests:
+          - not_null
+
+      - name: service_type
+        description: Standardized healthcare service type associated with the appointment.
+
+      - name: appointment_status
+        description: Current status of the appointment after standardization.
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - COMPLETED
+                  - CANCELLED
+                  - SCHEDULED
+                  - IN_PROGRESS
+
+      - name: source_created_ts
+        description: Timestamp when the appointment record was originally created in the source system.
+
+      - name: load_ts
+        description: Timestamp when the record was loaded into the Silver layer.
+
+      - name: completed_flag
+        description: Indicator showing whether the appointment was completed (1 = completed, 0 = otherwise).
+
+      - name: cancelled_flag
+        description: Indicator showing whether the appointment was cancelled (1 = cancelled, 0 = otherwise).
+
+      - name: appointment_category
+        description: >
+          Business categorization of appointments based on appointment date
+          and status. Values include OVERDUE, TODAY, UPCOMING, and UNKNOWN.
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - OVERDUE
+                  - TODAY
+                  - UPCOMING
+                  - UNKNOWN

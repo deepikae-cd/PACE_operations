@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
@@ -40,3 +41,33 @@ models:
     # Applies to all files under models/example/
     example:
       +materialized: table
+=======
+name: 'PACE_operations'
+version: '1.0.0'
+config-version: 2
+
+profile: 'PACE_operations'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+snapshot-paths: ["snapshots"]
+macro-paths: ["macros"]
+
+target-path: "target"
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  +materialized: table   # default for all models
+
+  silver:
+    +schema: SILVER
+
+  gold:
+    +schema: GOLD
+
+snapshots:
+  +target_schema: SNAPSHOTS
+>>>>>>> 85746aa4ea0ad8affc6e35f840196a012d2babb0

@@ -1,0 +1,1174 @@
+==================== 2026-06-01T23:50:50.442608Z | 00000000-0000-0000-0000-000000000000 ====================
+==================== 2026-06-01T23:50:50.442707Z | 8a1a3d98-60cb-4f0f-a976-5a2ad544f480 ====================
+23:50:50.442725 [info ]: Starting dbt LSP server
+23:50:50.442742 [info ]: Connecting to LSP client on port 49255
+23:50:50.442978 [info ]: Successfully connected to LSP client
+23:50:50.443000 [info ]: Creating LSP service...
+23:50:50.523176 [info ]: Creating LSP server...
+23:50:50.523206 [info ]: Starting LSP server...
+23:50:50.688186 [info ]: Loading profiles.yml
+23:50:50.851413 [info ]: Waiting for lease on 'target' directory
+23:50:51.387713 [info ]: Started loading project
+23:50:51.388102 [info ]: Loading profiles.yml
+23:50:51.394860 [debug]:    Started loading packages
+23:50:51.395954 [debug]:     Loaded [  0.00s] packages
+23:50:51.396670 [info ]: Finished loading project [  0.01s]
+23:50:51.396983 [info ]: Started parsing
+23:50:51.426326 [debug]: Finished parsing models/silver/appointment/appointment_schema.yml [  0.00s]
+23:50:51.426443 [debug]: Finished parsing models/silver/caregiver/caregiver_schema.yml [  0.00s]
+23:50:51.426597 [debug]: Finished parsing models/silver/clinical_visit/clinical_visit_schema.yml [  0.00s]
+23:50:51.426794 [debug]: Finished parsing models/silver/governance_rules/governance_rules_schema.yml [  0.00s]
+23:50:51.427065 [debug]: Finished parsing models/silver/meal_delivery/meal_delivery_schema.yml [  0.00s]
+23:50:51.427193 [debug]: Finished parsing models/silver/notification/notification_schema.yml [  0.00s]
+23:50:51.427305 [debug]: Finished parsing models/silver/participant/participant_schema.yml [  0.00s]
+23:50:51.427402 [debug]: Finished parsing models/silver/provider/provider_schema.yml [  0.00s]
+23:50:51.427543 [debug]: Finished parsing models/silver/transportation/transportation_schema.yml [  0.00s]
+23:50:51.427679 [debug]: Finished parsing models/sources/sources.yml [  0.00s]
+23:50:51.429744 [debug]: Finished parsing target/snapshots/participant_snapshot.sql [  0.00s]
+23:50:51.430982 [debug]: Finished parsing models/gold/appointment_kpis.sql [  0.00s]
+23:50:51.431303 [debug]: Finished parsing models/gold/healthcare_dashboard.sql [  0.00s]
+23:50:51.431596 [debug]: Finished parsing models/gold/participant_engagement.sql [  0.00s]
+23:50:51.431862 [debug]: Finished parsing models/gold/participant_kpi.sql [  0.00s]
+23:50:51.432157 [debug]: Finished parsing models/gold/participant_trip_summary.sql [  0.00s]
+23:50:51.432419 [debug]: Finished parsing models/gold/provider_performance.sql [  0.00s]
+23:50:51.433133 [debug]: Finished parsing models/gold/service_utilization.sql [  0.00s]
+23:50:51.433557 [debug]: Finished parsing models/silver/appointment/appointment.sql [  0.00s]
+23:50:51.434028 [debug]: Finished parsing models/silver/caregiver/caregiver.sql [  0.00s]
+23:50:51.434407 [debug]: Finished parsing models/silver/clinical_visit/clinical_visit.sql [  0.00s]
+23:50:51.434839 [debug]: Finished parsing models/silver/governance_rules/governance_rules.sql [  0.00s]
+23:50:51.435214 [debug]: Finished parsing models/silver/meal_delivery/meal_delivery.sql [  0.00s]
+23:50:51.435632 [debug]: Finished parsing models/silver/notification/notification.sql [  0.00s]
+23:50:51.436020 [debug]: Finished parsing models/silver/participant/participant.sql [  0.00s]
+23:50:51.436433 [debug]: Finished parsing models/silver/provider/provider.sql [  0.00s]
+23:50:51.436844 [debug]: Finished parsing models/silver/transportation/transportation.sql [  0.00s]
+23:50:51.445117 [info ]: Finished parsing [  0.05s]
+23:50:51.445498 [info ]: Cached model count updated: 16 models (estimate)
+23:50:51.445517 [info ]: Cached model count updated: 16 models (accurate)
+23:50:51.445582 [info ]: Started scheduling
+23:50:51.445664 [info ]: Finished scheduling [  0.00s]
+23:50:51.445677 [debug]: Compilation - 0 nodes selected: {}
+23:50:51.445711 [warn ]: [NoNodesForSelectionCriteria (dbt1092)]: The selection criterion '' does not match any enabled nodes
+23:50:51.445734 [warn ]: [NoNodesSelected (dbt1601)]: Nothing to do. Try checking your model configs and model specification args
+23:50:51.445794 [info ]: Started scheduling
+23:50:51.445926 [info ]: Finished scheduling [  0.00s]
+23:50:51.446053 [debug]: Initializing schema store with entry: Selected("snapshot.PACE_operations.participant_snapshot") and interval: None
+23:50:51.446085 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "MEAL_DELIVERY_RAW" }) and interval: None
+23:50:51.446097 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "CAREGIVER_RAW" }) and interval: None
+23:50:51.446109 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "TRANSPORTATION_RAW" }) and interval: None
+23:50:51.446121 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "NOTIFICATION_RAW" }) and interval: None
+23:50:51.446133 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "APPOINTMENT_RAW" }) and interval: None
+23:50:51.446144 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "PROVIDER_RAW" }) and interval: None
+23:50:51.446156 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "CLINICAL_VISIT_RAW" }) and interval: None
+23:50:51.446167 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "GOVERNANCE_RULES_RAW" }) and interval: None
+23:50:51.446179 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "PARTICIPANT_RAW" }) and interval: None
+23:50:51.453386 [debug]: No platform credentials found, skipping remote license
+23:50:51.454281 [info ]: Started building task graph
+23:50:51.454321 [info ]: Finished building task graph [  0.00s]
+23:50:51.458353 [info ]: Started scheduling
+23:50:51.458422 [info ]: Finished scheduling [  0.00s]
+23:50:51.458715 [info ]: Cached model count updated: 16 models (accurate)
+23:50:54.477834 [info ]: Started loading project
+23:50:54.478124 [info ]: Loading profiles.yml
+23:50:54.500474 [info ]: Cached model count updated: 16 models (estimate)
+23:50:54.500501 [info ]: Cached model count updated: 16 models (accurate)
+23:50:54.500547 [info ]: Started scheduling
+23:50:54.500709 [info ]: Finished scheduling [  0.00s]
+23:50:54.500728 [debug]: Compilation - 17 nodes selected: {"model.PACE_operations.appointment", "model.PACE_operations.appointment_kpis", "model.PACE_operations.caregiver", "model.PACE_operations.clinical_visit", "model.PACE_operations.governance_rules", "model.PACE_operations.healthcare_dashboard", "model.PACE_operations.meal_delivery", "model.PACE_operations.notification", "model.PACE_operations.participant", "model.PACE_operations.participant_engagement", "model.PACE_operations.participant_kpi", "model.PACE_operations.participant_trip_summary", "model.PACE_operations.provider", "model.PACE_operations.provider_performance", "model.PACE_operations.service_utilization", "model.PACE_operations.transportation", "snapshot.PACE_operations.participant_snapshot"}
+23:50:54.502414 [info ]: Started building task graph
+23:50:54.502555 [info ]: Finished building task graph [  0.00s]
+23:50:54.503076 [info ]: Started rendering (17 nodes)
+23:50:54.503099 [info ]: Started snapshot SNAPSHOTS.participant_snapshot
+23:50:54.503112 [debug]: Started rendering snapshot SNAPSHOTS.participant_snapshot
+23:50:54.503141 [info ]: Started model GOLD.service_utilization
+23:50:54.503149 [debug]: Started rendering model GOLD.service_utilization
+23:50:54.503158 [info ]: Started model GOLD.provider_performance
+23:50:54.503165 [debug]: Started rendering model GOLD.provider_performance
+23:50:54.503173 [info ]: Started model SILVER.provider
+23:50:54.503171 [info ]: Finished loading project [  0.03s]
+23:50:54.503180 [debug]: Started rendering model SILVER.provider
+23:50:54.503188 [info ]: Started model GOLD.participant_trip_summary
+23:50:54.503195 [debug]: Started rendering model GOLD.participant_trip_summary
+23:50:54.503204 [info ]: Started model GOLD.participant_kpi
+23:50:54.503211 [debug]: Started rendering model GOLD.participant_kpi
+23:50:54.503218 [info ]: Started model GOLD.participant_engagement
+23:50:54.503227 [debug]: Started rendering model GOLD.participant_engagement
+23:50:54.503236 [info ]: Started model SILVER.transportation
+23:50:54.503246 [debug]: Started rendering model SILVER.transportation
+23:50:54.503257 [info ]: Started model SILVER.participant
+23:50:54.503267 [debug]: Started rendering model SILVER.participant
+23:50:54.503274 [info ]: Started model SILVER.notification
+23:50:54.503281 [debug]: Started rendering model SILVER.notification
+23:50:54.503288 [info ]: Started model GOLD.healthcare_dashboard
+23:50:54.503295 [debug]: Started rendering model GOLD.healthcare_dashboard
+23:50:54.503307 [info ]: Started model SILVER.meal_delivery
+23:50:54.503315 [debug]: Started rendering model SILVER.meal_delivery
+23:50:54.503323 [info ]: Started model SILVER.governance_rules
+23:50:54.503330 [debug]: Started rendering model SILVER.governance_rules
+23:50:54.503337 [info ]: Started model SILVER.clinical_visit
+23:50:54.503345 [debug]: Started rendering model SILVER.clinical_visit
+23:50:54.503351 [info ]: Started model SILVER.caregiver
+23:50:54.503360 [debug]: Started rendering model SILVER.caregiver
+23:50:54.503395 [info ]: Started model GOLD.appointment_kpis
+23:50:54.503403 [debug]: Started rendering model GOLD.appointment_kpis
+23:50:54.503415 [info ]: Started model SILVER.appointment
+23:50:54.503422 [debug]: Started rendering model SILVER.appointment
+23:50:54.503965 [debug]: Compiled SQL for node snapshot.PACE_operations.participant_snapshot at target/.lsp/compiled/PACE_operations/snapshots/participant_snapshot.sql/participant_snapshot.sql
+23:50:54.504026 [debug]: Compiled SQL for node model.PACE_operations.provider_performance at target/.lsp/compiled/PACE_operations/models/gold/provider_performance.sql
+23:50:54.504102 [debug]: Finished rendering [  0.00s] snapshot SNAPSHOTS.participant_snapshot [success]
+23:50:54.504149 [info ]: Started analyzing (17 nodes)
+23:50:54.504163 [debug]: Started analyzing snapshot SNAPSHOTS.participant_snapshot
+23:50:54.504184 [debug]: Finished rendering [  0.00s] model GOLD.provider_performance [success]
+23:50:54.504187 [debug]: Compiled SQL for node model.PACE_operations.service_utilization at target/.lsp/compiled/PACE_operations/models/gold/service_utilization.sql
+23:50:54.504198 [debug]: Started analyzing model GOLD.provider_performance
+23:50:54.504753 [debug]: Compiled SQL for node model.PACE_operations.transportation at target/.lsp/compiled/PACE_operations/models/silver/transportation/transportation.sql
+23:50:54.504815 [debug]: Compiled SQL for node model.PACE_operations.participant at target/.lsp/compiled/PACE_operations/models/silver/participant/participant.sql
+23:50:54.504841 [debug]: Compiled SQL for node model.PACE_operations.provider at target/.lsp/compiled/PACE_operations/models/silver/provider/provider.sql
+23:50:54.504884 [debug]: Compiled SQL for node model.PACE_operations.notification at target/.lsp/compiled/PACE_operations/models/silver/notification/notification.sql
+23:50:54.504929 [debug]: Compiled SQL for node model.PACE_operations.healthcare_dashboard at target/.lsp/compiled/PACE_operations/models/gold/healthcare_dashboard.sql
+23:50:54.504937 [debug]: Compiled SQL for node model.PACE_operations.governance_rules at target/.lsp/compiled/PACE_operations/models/silver/governance_rules/governance_rules.sql
+23:50:54.504958 [debug]: Compiled SQL for node model.PACE_operations.participant_trip_summary at target/.lsp/compiled/PACE_operations/models/gold/participant_trip_summary.sql
+23:50:54.504989 [debug]: Compiled SQL for node model.PACE_operations.participant_engagement at target/.lsp/compiled/PACE_operations/models/gold/participant_engagement.sql
+23:50:54.505003 [debug]: Compiled SQL for node model.PACE_operations.caregiver at target/.lsp/compiled/PACE_operations/models/silver/caregiver/caregiver.sql
+23:50:54.505013 [debug]: Compiled SQL for node model.PACE_operations.appointment_kpis at target/.lsp/compiled/PACE_operations/models/gold/appointment_kpis.sql
+23:50:54.505022 [debug]: Finished rendering [  0.00s] model GOLD.service_utilization [success]
+23:50:54.505025 [debug]: Compiled SQL for node model.PACE_operations.appointment at target/.lsp/compiled/PACE_operations/models/silver/appointment/appointment.sql
+23:50:54.505066 [debug]: Started analyzing model GOLD.service_utilization
+23:50:54.505091 [debug]: Finished rendering [  0.00s] model SILVER.transportation [success]
+23:50:54.505097 [debug]: Compiled SQL for node model.PACE_operations.clinical_visit at target/.lsp/compiled/PACE_operations/models/silver/clinical_visit/clinical_visit.sql
+23:50:54.505107 [debug]: Started analyzing model SILVER.transportation
+23:50:54.505125 [debug]: Finished rendering [  0.00s] model SILVER.participant [success]
+23:50:54.505140 [debug]: Started analyzing model SILVER.participant
+23:50:54.505161 [debug]: Finished rendering [  0.00s] model SILVER.provider [success]
+23:50:54.505163 [debug]: Compiled SQL for node model.PACE_operations.meal_delivery at target/.lsp/compiled/PACE_operations/models/silver/meal_delivery/meal_delivery.sql
+23:50:54.505174 [debug]: Started analyzing model SILVER.provider
+23:50:54.505191 [debug]: Finished rendering [  0.00s] model SILVER.notification [success]
+23:50:54.505202 [debug]: Started analyzing model SILVER.notification
+23:50:54.505235 [debug]: Finished rendering [  0.00s] model GOLD.healthcare_dashboard [success]
+23:50:54.505247 [debug]: Started analyzing model GOLD.healthcare_dashboard
+23:50:54.505261 [debug]: Finished rendering [  0.00s] model SILVER.governance_rules [success]
+23:50:54.505259 [debug]: Compiled SQL for node model.PACE_operations.participant_kpi at target/.lsp/compiled/PACE_operations/models/gold/participant_kpi.sql
+23:50:54.505272 [debug]: Started analyzing model SILVER.governance_rules
+23:50:54.505289 [debug]: Finished rendering [  0.00s] model GOLD.participant_trip_summary [success]
+23:50:54.505297 [debug]: Started analyzing model GOLD.participant_trip_summary
+23:50:54.505307 [debug]: Finished rendering [  0.00s] model GOLD.participant_engagement [success]
+23:50:54.505316 [debug]: Started analyzing model GOLD.participant_engagement
+23:50:54.505322 [debug]: Finished rendering [  0.00s] model SILVER.caregiver [success]
+23:50:54.505332 [debug]: Started analyzing model SILVER.caregiver
+23:50:54.505340 [debug]: Finished rendering [  0.00s] model GOLD.appointment_kpis [success]
+23:50:54.505371 [debug]: Started analyzing model GOLD.appointment_kpis
+23:50:54.505400 [debug]: Finished rendering [  0.00s] model SILVER.appointment [success]
+23:50:54.505410 [debug]: Started analyzing model SILVER.appointment
+23:50:54.505424 [debug]: Finished rendering [  0.00s] model SILVER.clinical_visit [success]
+23:50:54.505454 [debug]: Started analyzing model SILVER.clinical_visit
+23:50:54.505563 [debug]: Finished rendering [  0.00s] model SILVER.meal_delivery [success]
+23:50:54.505584 [debug]: Started analyzing model SILVER.meal_delivery
+23:50:54.505623 [debug]: Finished rendering [  0.00s] model GOLD.participant_kpi [success]
+23:50:54.505634 [info ]: Finished rendering [  0.00s] (17 nodes, 0 skipped, 0 errors)
+23:50:54.505647 [debug]: Started analyzing model GOLD.participant_kpi
+23:50:54.509541 [debug]: Finished analyzing [  0.01s] snapshot SNAPSHOTS.participant_snapshot [success]
+23:50:54.509569 [info ]:  Succeeded [  0.01s] snapshot SNAPSHOTS.participant_snapshot (snapshot)
+23:50:54.512394 [debug]: Finished analyzing [  0.01s] model GOLD.participant_kpi [success]
+23:50:54.512418 [info ]:  Succeeded [  0.01s] model GOLD.participant_kpi (table)
+23:50:54.524803 [debug]: Finished analyzing [  0.02s] model GOLD.service_utilization [success]
+23:50:54.524840 [info ]:  Succeeded [  0.02s] model GOLD.service_utilization (table)
+23:50:54.524867 [debug]: Finished analyzing [  0.02s] model GOLD.participant_trip_summary [success]
+23:50:54.524874 [info ]:  Succeeded [  0.02s] model GOLD.participant_trip_summary (table)
+23:50:54.524888 [debug]: Finished analyzing [  0.02s] model SILVER.participant [success]
+23:50:54.524895 [info ]:  Succeeded [  0.02s] model SILVER.participant (table)
+23:50:54.524920 [debug]: Finished analyzing [  0.02s] model SILVER.clinical_visit [success]
+23:50:54.524982 [info ]:  Succeeded [  0.02s] model SILVER.clinical_visit (table)
+23:50:54.525000 [debug]: Finished analyzing [  0.02s] model GOLD.appointment_kpis [success]
+23:50:54.525007 [info ]:  Succeeded [  0.02s] model GOLD.appointment_kpis (table)
+23:50:54.525120 [debug]: Finished analyzing [  0.02s] model SILVER.provider [success]
+23:50:54.525160 [info ]:  Succeeded [  0.02s] model SILVER.provider (table)
+23:50:54.525187 [debug]: Finished analyzing [  0.02s] model SILVER.transportation [success]
+23:50:54.525200 [info ]:  Succeeded [  0.02s] model SILVER.transportation (table)
+23:50:54.525296 [debug]: Finished analyzing [  0.02s] model SILVER.caregiver [success]
+23:50:54.525322 [info ]:  Succeeded [  0.02s] model SILVER.caregiver (table)
+23:50:54.528259 [debug]: Finished analyzing [  0.02s] model GOLD.provider_performance [success]
+23:50:54.528281 [info ]:  Succeeded [  0.03s] model GOLD.provider_performance (table)
+23:50:54.530033 [debug]: Finished analyzing [  0.02s] model SILVER.governance_rules [success]
+23:50:54.530055 [info ]:  Succeeded [  0.03s] model SILVER.governance_rules (table)
+23:50:54.530183 [debug]: Finished analyzing [  0.02s] model SILVER.appointment [success]
+23:50:54.530203 [info ]:  Succeeded [  0.03s] model SILVER.appointment (table)
+23:50:54.530223 [debug]: Finished analyzing [  0.02s] model SILVER.meal_delivery [success]
+23:50:54.530230 [info ]:  Succeeded [  0.03s] model SILVER.meal_delivery (table)
+23:50:54.530338 [debug]: Finished analyzing [  0.03s] model GOLD.healthcare_dashboard [success]
+23:50:54.530358 [info ]:  Succeeded [  0.03s] model GOLD.healthcare_dashboard (table)
+23:50:54.530431 [debug]: Finished analyzing [  0.03s] model SILVER.notification [success]
+23:50:54.530449 [info ]:  Succeeded [  0.03s] model SILVER.notification (table)
+23:50:54.538083 [debug]: Finished analyzing [  0.03s] model GOLD.participant_engagement [success]
+23:50:54.538111 [info ]: Finished analyzing [  0.03s] (17 nodes, 0 skipped, 0 errors)
+23:50:54.538119 [info ]:  Succeeded [  0.03s] model GOLD.participant_engagement (table)
+23:50:54.541618 [info ]: Started scheduling
+23:50:54.541706 [info ]: Finished scheduling [  0.00s]
+23:50:54.541976 [info ]: Cached model count updated: 16 models (accurate)
+==================== 2026-06-02T00:02:41.235297Z | 00000000-0000-0000-0000-000000000000 ====================
+==================== 2026-06-02T00:02:41.235400Z | 8d3830ee-e96d-45d4-b733-e28dce157e29 ====================
+00:02:41.235419 [info ]: Starting dbt LSP server
+00:02:41.235433 [info ]: Connecting to LSP client on port 52193
+00:02:41.235679 [info ]: Successfully connected to LSP client
+00:02:41.235698 [info ]: Creating LSP service...
+00:02:41.309282 [info ]: Creating LSP server...
+00:02:41.309309 [info ]: Starting LSP server...
+00:02:41.718129 [info ]: Loading profiles.yml
+00:02:41.919400 [info ]: Waiting for lease on 'target' directory
+00:02:42.437743 [info ]: Started loading project
+00:02:42.438147 [info ]: Loading profiles.yml
+00:02:42.444883 [debug]:    Started loading packages
+00:02:42.446033 [debug]:     Loaded [  0.00s] packages
+00:02:42.446679 [info ]: Finished loading project [  0.01s]
+00:02:42.447018 [info ]: Started parsing
+00:02:42.476470 [debug]: Finished parsing models/silver/appointment/appointment_schema.yml [  0.00s]
+00:02:42.476596 [debug]: Finished parsing models/silver/caregiver/caregiver_schema.yml [  0.00s]
+00:02:42.476898 [debug]: Finished parsing models/silver/clinical_visit/clinical_visit_schema.yml [  0.00s]
+00:02:42.477192 [debug]: Finished parsing models/silver/governance_rules/governance_rules_schema.yml [  0.00s]
+00:02:42.477558 [debug]: Finished parsing models/silver/meal_delivery/meal_delivery_schema.yml [  0.00s]
+00:02:42.477765 [debug]: Finished parsing models/silver/notification/notification_schema.yml [  0.00s]
+00:02:42.477955 [debug]: Finished parsing models/silver/participant/participant_schema.yml [  0.00s]
+00:02:42.478137 [debug]: Finished parsing models/silver/provider/provider_schema.yml [  0.00s]
+00:02:42.478393 [debug]: Finished parsing models/silver/transportation/transportation_schema.yml [  0.00s]
+00:02:42.478633 [debug]: Finished parsing models/sources/sources.yml [  0.00s]
+00:02:42.481808 [debug]: Finished parsing target/snapshots/participant_snapshot.sql [  0.00s]
+00:02:42.482988 [debug]: Finished parsing models/gold/appointment_kpis.sql [  0.00s]
+00:02:42.483434 [debug]: Finished parsing models/gold/healthcare_dashboard.sql [  0.00s]
+00:02:42.483957 [debug]: Finished parsing models/gold/participant_engagement.sql [  0.00s]
+00:02:42.484221 [debug]: Finished parsing models/gold/participant_kpi.sql [  0.00s]
+00:02:42.484539 [debug]: Finished parsing models/gold/participant_trip_summary.sql [  0.00s]
+00:02:42.484841 [debug]: Finished parsing models/gold/provider_performance.sql [  0.00s]
+00:02:42.485308 [debug]: Finished parsing models/gold/service_utilization.sql [  0.00s]
+00:02:42.485674 [debug]: Finished parsing models/silver/appointment/appointment.sql [  0.00s]
+00:02:42.486096 [debug]: Finished parsing models/silver/caregiver/caregiver.sql [  0.00s]
+00:02:42.486471 [debug]: Finished parsing models/silver/clinical_visit/clinical_visit.sql [  0.00s]
+00:02:42.486954 [debug]: Finished parsing models/silver/governance_rules/governance_rules.sql [  0.00s]
+00:02:42.487323 [debug]: Finished parsing models/silver/meal_delivery/meal_delivery.sql [  0.00s]
+00:02:42.487673 [debug]: Finished parsing models/silver/notification/notification.sql [  0.00s]
+00:02:42.488019 [debug]: Finished parsing models/silver/participant/participant.sql [  0.00s]
+00:02:42.488371 [debug]: Finished parsing models/silver/provider/provider.sql [  0.00s]
+00:02:42.488727 [debug]: Finished parsing models/silver/transportation/transportation.sql [  0.00s]
+00:02:42.497782 [info ]: Finished parsing [  0.05s]
+00:02:42.498217 [info ]: Cached model count updated: 16 models (estimate)
+00:02:42.498233 [info ]: Cached model count updated: 16 models (accurate)
+00:02:42.498301 [info ]: Started scheduling
+00:02:42.498376 [info ]: Finished scheduling [  0.00s]
+00:02:42.498391 [debug]: Compilation - 0 nodes selected: {}
+00:02:42.498414 [warn ]: [NoNodesForSelectionCriteria (dbt1092)]: The selection criterion '' does not match any enabled nodes
+00:02:42.498431 [warn ]: [NoNodesSelected (dbt1601)]: Nothing to do. Try checking your model configs and model specification args
+00:02:42.498585 [info ]: Started scheduling
+00:02:42.498712 [info ]: Finished scheduling [  0.00s]
+00:02:42.498866 [debug]: Initializing schema store with entry: Selected("snapshot.PACE_operations.participant_snapshot") and interval: None
+00:02:42.498890 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "MEAL_DELIVERY_RAW" }) and interval: None
+00:02:42.498902 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "TRANSPORTATION_RAW" }) and interval: None
+00:02:42.498913 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "CAREGIVER_RAW" }) and interval: None
+00:02:42.498924 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "APPOINTMENT_RAW" }) and interval: None
+00:02:42.498934 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "GOVERNANCE_RULES_RAW" }) and interval: None
+00:02:42.498939 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "PARTICIPANT_RAW" }) and interval: None
+00:02:42.498946 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "CLINICAL_VISIT_RAW" }) and interval: None
+00:02:42.498951 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "PROVIDER_RAW" }) and interval: None
+00:02:42.498956 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "NOTIFICATION_RAW" }) and interval: None
+00:02:42.507270 [debug]: No platform credentials found, skipping remote license
+00:02:42.508325 [info ]: Started building task graph
+00:02:42.508362 [info ]: Finished building task graph [  0.00s]
+00:02:42.512601 [info ]: Started scheduling
+00:02:42.512668 [info ]: Finished scheduling [  0.00s]
+00:02:42.512958 [info ]: Cached model count updated: 16 models (accurate)
+==================== 2026-06-02T00:02:53.993146Z | 00000000-0000-0000-0000-000000000000 ====================
+==================== 2026-06-02T00:02:53.993263Z | 16d26fac-5a05-4f44-89a3-30e95790980f ====================
+00:02:53.993285 [info ]: Starting dbt LSP server
+00:02:53.993302 [info ]: Connecting to LSP client on port 49147
+00:02:53.993540 [info ]: Successfully connected to LSP client
+00:02:53.993563 [info ]: Creating LSP service...
+00:02:54.052934 [info ]: Creating LSP server...
+00:02:54.052962 [info ]: Starting LSP server...
+00:02:54.358216 [info ]: Loading profiles.yml
+00:02:54.499730 [info ]: Waiting for lease on 'target' directory
+00:02:55.027717 [info ]: Started loading project
+00:02:55.028143 [info ]: Loading profiles.yml
+00:02:55.035083 [debug]:    Started loading packages
+00:02:55.036360 [debug]:     Loaded [  0.00s] packages
+00:02:55.037134 [info ]: Finished loading project [  0.01s]
+00:02:55.037418 [info ]: Started parsing
+00:02:55.070594 [debug]: Finished parsing models/silver/appointment/appointment_schema.yml [  0.00s]
+00:02:55.070715 [debug]: Finished parsing models/silver/caregiver/caregiver_schema.yml [  0.00s]
+00:02:55.070966 [debug]: Finished parsing models/silver/clinical_visit/clinical_visit_schema.yml [  0.00s]
+00:02:55.071122 [debug]: Finished parsing models/silver/governance_rules/governance_rules_schema.yml [  0.00s]
+00:02:55.071498 [debug]: Finished parsing models/silver/meal_delivery/meal_delivery_schema.yml [  0.00s]
+00:02:55.071648 [debug]: Finished parsing models/silver/notification/notification_schema.yml [  0.00s]
+00:02:55.071760 [debug]: Finished parsing models/silver/participant/participant_schema.yml [  0.00s]
+00:02:55.071871 [debug]: Finished parsing models/silver/provider/provider_schema.yml [  0.00s]
+00:02:55.072035 [debug]: Finished parsing models/silver/transportation/transportation_schema.yml [  0.00s]
+00:02:55.072174 [debug]: Finished parsing models/sources/sources.yml [  0.00s]
+00:02:55.074445 [debug]: Finished parsing target/snapshots/participant_snapshot.sql [  0.00s]
+00:02:55.075390 [debug]: Finished parsing models/gold/appointment_kpis.sql [  0.00s]
+00:02:55.075831 [debug]: Finished parsing models/gold/healthcare_dashboard.sql [  0.00s]
+00:02:55.076152 [debug]: Finished parsing models/gold/participant_engagement.sql [  0.00s]
+00:02:55.076374 [debug]: Finished parsing models/gold/participant_kpi.sql [  0.00s]
+00:02:55.076649 [debug]: Finished parsing models/gold/participant_trip_summary.sql [  0.00s]
+00:02:55.076903 [debug]: Finished parsing models/gold/provider_performance.sql [  0.00s]
+00:02:55.077331 [debug]: Finished parsing models/gold/service_utilization.sql [  0.00s]
+00:02:55.077669 [debug]: Finished parsing models/silver/appointment/appointment.sql [  0.00s]
+00:02:55.078090 [debug]: Finished parsing models/silver/caregiver/caregiver.sql [  0.00s]
+00:02:55.078432 [debug]: Finished parsing models/silver/clinical_visit/clinical_visit.sql [  0.00s]
+00:02:55.078974 [debug]: Finished parsing models/silver/governance_rules/governance_rules.sql [  0.00s]
+00:02:55.079361 [debug]: Finished parsing models/silver/meal_delivery/meal_delivery.sql [  0.00s]
+00:02:55.079725 [debug]: Finished parsing models/silver/notification/notification.sql [  0.00s]
+00:02:55.080056 [debug]: Finished parsing models/silver/participant/participant.sql [  0.00s]
+00:02:55.080480 [debug]: Finished parsing models/silver/provider/provider.sql [  0.00s]
+00:02:55.080877 [debug]: Finished parsing models/silver/transportation/transportation.sql [  0.00s]
+00:02:55.089946 [info ]: Finished parsing [  0.05s]
+00:02:55.090420 [info ]: Cached model count updated: 16 models (estimate)
+00:02:55.090437 [info ]: Cached model count updated: 16 models (accurate)
+00:02:55.090501 [info ]: Started scheduling
+00:02:55.090584 [info ]: Finished scheduling [  0.00s]
+00:02:55.090597 [debug]: Compilation - 0 nodes selected: {}
+00:02:55.090623 [warn ]: [NoNodesForSelectionCriteria (dbt1092)]: The selection criterion '' does not match any enabled nodes
+00:02:55.090644 [warn ]: [NoNodesSelected (dbt1601)]: Nothing to do. Try checking your model configs and model specification args
+00:02:55.090655 [info ]: Started scheduling
+00:02:55.090794 [info ]: Finished scheduling [  0.00s]
+00:02:55.090949 [debug]: Initializing schema store with entry: Selected("snapshot.PACE_operations.participant_snapshot") and interval: None
+00:02:55.090969 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "PROVIDER_RAW" }) and interval: None
+00:02:55.090979 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "APPOINTMENT_RAW" }) and interval: None
+00:02:55.090985 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "CAREGIVER_RAW" }) and interval: None
+00:02:55.090993 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "TRANSPORTATION_RAW" }) and interval: None
+00:02:55.090998 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "MEAL_DELIVERY_RAW" }) and interval: None
+00:02:55.091005 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "CLINICAL_VISIT_RAW" }) and interval: None
+00:02:55.091010 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "GOVERNANCE_RULES_RAW" }) and interval: None
+00:02:55.091018 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "NOTIFICATION_RAW" }) and interval: None
+00:02:55.091023 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "PARTICIPANT_RAW" }) and interval: None
+00:02:55.100634 [debug]: No platform credentials found, skipping remote license
+00:02:55.101690 [info ]: Started building task graph
+00:02:55.101739 [info ]: Finished building task graph [  0.00s]
+00:02:55.106046 [info ]: Started scheduling
+00:02:55.106123 [info ]: Finished scheduling [  0.00s]
+00:02:55.106453 [info ]: Cached model count updated: 16 models (accurate)
+00:02:58.028220 [info ]: Started loading project
+00:02:58.028520 [info ]: Loading profiles.yml
+00:02:58.050857 [info ]: Cached model count updated: 16 models (estimate)
+00:02:58.050886 [info ]: Cached model count updated: 16 models (accurate)
+00:02:58.050931 [info ]: Started scheduling
+00:02:58.051091 [info ]: Finished scheduling [  0.00s]
+00:02:58.051109 [debug]: Compilation - 17 nodes selected: {"model.PACE_operations.appointment", "model.PACE_operations.appointment_kpis", "model.PACE_operations.caregiver", "model.PACE_operations.clinical_visit", "model.PACE_operations.governance_rules", "model.PACE_operations.healthcare_dashboard", "model.PACE_operations.meal_delivery", "model.PACE_operations.notification", "model.PACE_operations.participant", "model.PACE_operations.participant_engagement", "model.PACE_operations.participant_kpi", "model.PACE_operations.participant_trip_summary", "model.PACE_operations.provider", "model.PACE_operations.provider_performance", "model.PACE_operations.service_utilization", "model.PACE_operations.transportation", "snapshot.PACE_operations.participant_snapshot"}
+00:02:58.052728 [info ]: Started building task graph
+00:02:58.052872 [info ]: Finished building task graph [  0.00s]
+00:02:58.053414 [info ]: Started rendering (17 nodes)
+00:02:58.053439 [info ]: Started snapshot SNAPSHOTS.participant_snapshot
+00:02:58.053452 [debug]: Started rendering snapshot SNAPSHOTS.participant_snapshot
+00:02:58.053483 [info ]: Started model GOLD.service_utilization
+00:02:58.053491 [debug]: Started rendering model GOLD.service_utilization
+00:02:58.053500 [info ]: Started model GOLD.provider_performance
+00:02:58.053507 [debug]: Started rendering model GOLD.provider_performance
+00:02:58.053516 [info ]: Started model SILVER.provider
+00:02:58.053523 [debug]: Started rendering model SILVER.provider
+00:02:58.053522 [info ]: Finished loading project [  0.03s]
+00:02:58.053532 [info ]: Started model GOLD.participant_trip_summary
+00:02:58.053555 [debug]: Started rendering model GOLD.participant_trip_summary
+00:02:58.053566 [info ]: Started model GOLD.participant_kpi
+00:02:58.053573 [debug]: Started rendering model GOLD.participant_kpi
+00:02:58.053581 [info ]: Started model GOLD.participant_engagement
+00:02:58.053588 [debug]: Started rendering model GOLD.participant_engagement
+00:02:58.053596 [info ]: Started model SILVER.transportation
+00:02:58.053604 [debug]: Started rendering model SILVER.transportation
+00:02:58.053613 [info ]: Started model SILVER.participant
+00:02:58.053631 [debug]: Started rendering model SILVER.participant
+00:02:58.053642 [info ]: Started model SILVER.notification
+00:02:58.053651 [debug]: Started rendering model SILVER.notification
+00:02:58.053662 [info ]: Started model GOLD.healthcare_dashboard
+00:02:58.053669 [debug]: Started rendering model GOLD.healthcare_dashboard
+00:02:58.053678 [info ]: Started model SILVER.meal_delivery
+00:02:58.053686 [debug]: Started rendering model SILVER.meal_delivery
+00:02:58.053692 [info ]: Started model SILVER.governance_rules
+00:02:58.053699 [debug]: Started rendering model SILVER.governance_rules
+00:02:58.053706 [info ]: Started model SILVER.clinical_visit
+00:02:58.053714 [debug]: Started rendering model SILVER.clinical_visit
+00:02:58.053721 [info ]: Started model SILVER.caregiver
+00:02:58.053728 [debug]: Started rendering model SILVER.caregiver
+00:02:58.053748 [info ]: Started model GOLD.appointment_kpis
+00:02:58.053756 [debug]: Started rendering model GOLD.appointment_kpis
+00:02:58.053766 [info ]: Started model SILVER.appointment
+00:02:58.053774 [debug]: Started rendering model SILVER.appointment
+00:02:58.054262 [debug]: Compiled SQL for node snapshot.PACE_operations.participant_snapshot at target/.lsp/compiled/PACE_operations/snapshots/participant_snapshot.sql/participant_snapshot.sql
+00:02:58.054354 [debug]: Finished rendering [  0.00s] snapshot SNAPSHOTS.participant_snapshot [success]
+00:02:58.054409 [info ]: Started analyzing (17 nodes)
+00:02:58.054425 [debug]: Started analyzing snapshot SNAPSHOTS.participant_snapshot
+00:02:58.054624 [debug]: Compiled SQL for node model.PACE_operations.service_utilization at target/.lsp/compiled/PACE_operations/models/gold/service_utilization.sql
+00:02:58.054712 [debug]: Compiled SQL for node model.PACE_operations.participant at target/.lsp/compiled/PACE_operations/models/silver/participant/participant.sql
+00:02:58.054774 [debug]: Finished rendering [  0.00s] model GOLD.service_utilization [success]
+00:02:58.054802 [debug]: Started analyzing model GOLD.service_utilization
+00:02:58.054831 [debug]: Finished rendering [  0.00s] model SILVER.participant [success]
+00:02:58.054841 [debug]: Started analyzing model SILVER.participant
+00:02:58.054843 [debug]: Compiled SQL for node model.PACE_operations.provider at target/.lsp/compiled/PACE_operations/models/silver/provider/provider.sql
+00:02:58.054943 [debug]: Finished rendering [  0.00s] model SILVER.provider [success]
+00:02:58.054958 [debug]: Started analyzing model SILVER.provider
+00:02:58.056077 [debug]: Compiled SQL for node model.PACE_operations.governance_rules at target/.lsp/compiled/PACE_operations/models/silver/governance_rules/governance_rules.sql
+00:02:58.056165 [debug]: Finished rendering [  0.00s] model SILVER.governance_rules [success]
+00:02:58.056194 [debug]: Started analyzing model SILVER.governance_rules
+00:02:58.056419 [debug]: Compiled SQL for node model.PACE_operations.appointment_kpis at target/.lsp/compiled/PACE_operations/models/gold/appointment_kpis.sql
+00:02:58.056497 [debug]: Finished rendering [  0.00s] model GOLD.appointment_kpis [success]
+00:02:58.056496 [debug]: Compiled SQL for node model.PACE_operations.provider_performance at target/.lsp/compiled/PACE_operations/models/gold/provider_performance.sql
+00:02:58.056524 [debug]: Started analyzing model GOLD.appointment_kpis
+00:02:58.056586 [debug]: Finished rendering [  0.00s] model GOLD.provider_performance [success]
+00:02:58.056608 [debug]: Started analyzing model GOLD.provider_performance
+00:02:58.056940 [debug]: Compiled SQL for node model.PACE_operations.transportation at target/.lsp/compiled/PACE_operations/models/silver/transportation/transportation.sql
+00:02:58.057071 [debug]: Finished rendering [  0.00s] model SILVER.transportation [success]
+00:02:58.057098 [debug]: Started analyzing model SILVER.transportation
+00:02:58.057294 [debug]: Compiled SQL for node model.PACE_operations.caregiver at target/.lsp/compiled/PACE_operations/models/silver/caregiver/caregiver.sql
+00:02:58.057297 [debug]: Compiled SQL for node model.PACE_operations.participant_engagement at target/.lsp/compiled/PACE_operations/models/gold/participant_engagement.sql
+00:02:58.057295 [debug]: Compiled SQL for node model.PACE_operations.participant_trip_summary at target/.lsp/compiled/PACE_operations/models/gold/participant_trip_summary.sql
+00:02:58.057360 [debug]: Finished rendering [  0.00s] model GOLD.participant_trip_summary [success]
+00:02:58.057382 [debug]: Compiled SQL for node model.PACE_operations.participant_kpi at target/.lsp/compiled/PACE_operations/models/gold/participant_kpi.sql
+00:02:58.057389 [debug]: Started analyzing model GOLD.participant_trip_summary
+00:02:58.057386 [debug]: Compiled SQL for node model.PACE_operations.notification at target/.lsp/compiled/PACE_operations/models/silver/notification/notification.sql
+00:02:58.057392 [debug]: Compiled SQL for node model.PACE_operations.clinical_visit at target/.lsp/compiled/PACE_operations/models/silver/clinical_visit/clinical_visit.sql
+00:02:58.057412 [debug]: Finished rendering [  0.00s] model GOLD.participant_engagement [success]
+00:02:58.057423 [debug]: Started analyzing model GOLD.participant_engagement
+00:02:58.057437 [debug]: Finished rendering [  0.00s] model SILVER.caregiver [success]
+00:02:58.057469 [debug]: Started analyzing model SILVER.caregiver
+00:02:58.057488 [debug]: Finished rendering [  0.00s] model GOLD.participant_kpi [success]
+00:02:58.057499 [debug]: Started analyzing model GOLD.participant_kpi
+00:02:58.057520 [debug]: Finished rendering [  0.00s] model SILVER.notification [success]
+00:02:58.057530 [debug]: Started analyzing model SILVER.notification
+00:02:58.057579 [debug]: Finished rendering [  0.00s] model SILVER.clinical_visit [success]
+00:02:58.057590 [debug]: Started analyzing model SILVER.clinical_visit
+00:02:58.057825 [debug]: Compiled SQL for node model.PACE_operations.appointment at target/.lsp/compiled/PACE_operations/models/silver/appointment/appointment.sql
+00:02:58.057826 [debug]: Compiled SQL for node model.PACE_operations.healthcare_dashboard at target/.lsp/compiled/PACE_operations/models/gold/healthcare_dashboard.sql
+00:02:58.057997 [debug]: Finished rendering [  0.00s] model SILVER.appointment [success]
+00:02:58.058034 [debug]: Started analyzing model SILVER.appointment
+00:02:58.058068 [debug]: Finished rendering [  0.00s] model GOLD.healthcare_dashboard [success]
+00:02:58.058084 [debug]: Started analyzing model GOLD.healthcare_dashboard
+00:02:58.058171 [debug]: Compiled SQL for node model.PACE_operations.meal_delivery at target/.lsp/compiled/PACE_operations/models/silver/meal_delivery/meal_delivery.sql
+00:02:58.059833 [debug]: Finished analyzing [  0.01s] snapshot SNAPSHOTS.participant_snapshot [success]
+00:02:58.059860 [info ]:  Succeeded [  0.01s] snapshot SNAPSHOTS.participant_snapshot (snapshot)
+00:02:58.059932 [debug]: Finished rendering [  0.01s] model SILVER.meal_delivery [success]
+00:02:58.059947 [info ]: Finished rendering [  0.01s] (17 nodes, 0 skipped, 0 errors)
+00:02:58.059965 [debug]: Started analyzing model SILVER.meal_delivery
+00:02:58.061952 [debug]: Finished analyzing [  0.00s] model GOLD.participant_kpi [success]
+00:02:58.061971 [info ]:  Succeeded [  0.01s] model GOLD.participant_kpi (table)
+00:02:58.075456 [debug]: Finished analyzing [  0.02s] model SILVER.participant [success]
+00:02:58.075494 [info ]:  Succeeded [  0.02s] model SILVER.participant (table)
+00:02:58.075554 [debug]: Finished analyzing [  0.02s] model SILVER.provider [success]
+00:02:58.075582 [info ]:  Succeeded [  0.02s] model SILVER.provider (table)
+00:02:58.075613 [debug]: Finished analyzing [  0.02s] model SILVER.clinical_visit [success]
+00:02:58.075626 [info ]:  Succeeded [  0.02s] model SILVER.clinical_visit (table)
+00:02:58.075913 [debug]: Finished analyzing [  0.02s] model SILVER.caregiver [success]
+00:02:58.075934 [info ]:  Succeeded [  0.02s] model SILVER.caregiver (table)
+00:02:58.075955 [debug]: Finished analyzing [  0.02s] model SILVER.transportation [success]
+00:02:58.075965 [info ]:  Succeeded [  0.02s] model SILVER.transportation (table)
+00:02:58.076744 [debug]: Finished analyzing [  0.02s] model GOLD.service_utilization [success]
+00:02:58.076763 [info ]:  Succeeded [  0.02s] model GOLD.service_utilization (table)
+00:02:58.076780 [debug]: Finished analyzing [  0.02s] model GOLD.appointment_kpis [success]
+00:02:58.076789 [info ]:  Succeeded [  0.02s] model GOLD.appointment_kpis (table)
+00:02:58.077053 [debug]: Finished analyzing [  0.02s] model GOLD.participant_trip_summary [success]
+00:02:58.077076 [info ]:  Succeeded [  0.02s] model GOLD.participant_trip_summary (table)
+00:02:58.079520 [debug]: Finished analyzing [  0.02s] model GOLD.provider_performance [success]
+00:02:58.079545 [info ]:  Succeeded [  0.03s] model GOLD.provider_performance (table)
+00:02:58.079998 [debug]: Finished analyzing [  0.02s] model GOLD.healthcare_dashboard [success]
+00:02:58.080017 [info ]:  Succeeded [  0.03s] model GOLD.healthcare_dashboard (table)
+00:02:58.080225 [debug]: Finished analyzing [  0.02s] model SILVER.appointment [success]
+00:02:58.080244 [info ]:  Succeeded [  0.03s] model SILVER.appointment (table)
+00:02:58.080264 [debug]: Finished analyzing [  0.02s] model SILVER.meal_delivery [success]
+00:02:58.080273 [info ]:  Succeeded [  0.03s] model SILVER.meal_delivery (table)
+00:02:58.080297 [debug]: Finished analyzing [  0.02s] model SILVER.governance_rules [success]
+00:02:58.080305 [info ]:  Succeeded [  0.03s] model SILVER.governance_rules (table)
+00:02:58.081512 [debug]: Finished analyzing [  0.02s] model SILVER.notification [success]
+00:02:58.081530 [info ]:  Succeeded [  0.03s] model SILVER.notification (table)
+00:02:58.088444 [debug]: Finished analyzing [  0.03s] model GOLD.participant_engagement [success]
+00:02:58.088475 [info ]: Finished analyzing [  0.03s] (17 nodes, 0 skipped, 0 errors)
+00:02:58.088483 [info ]:  Succeeded [  0.03s] model GOLD.participant_engagement (table)
+00:02:58.092124 [info ]: Started scheduling
+00:02:58.092198 [info ]: Finished scheduling [  0.00s]
+00:02:58.092576 [info ]: Cached model count updated: 16 models (accurate)
+00:02:59.967992 [info ]: Loading profiles.yml
+00:03:00.107675 [info ]: Started loading project
+00:03:00.107974 [info ]: Loading profiles.yml
+00:03:00.132431 [info ]: Finished loading project [  0.02s]
+00:03:00.132661 [info ]: Cached model count updated: 16 models (accurate)
+00:03:01.123084 [info ]: Loading profiles.yml
+00:03:01.317805 [info ]: Started loading project
+00:03:01.318152 [info ]: Loading profiles.yml
+00:03:01.338362 [info ]: Finished loading project [  0.02s]
+00:03:01.338614 [info ]: Cached model count updated: 16 models (accurate)
+00:03:03.077653 [info ]: Started loading project
+00:03:03.077967 [info ]: Loading profiles.yml
+00:03:03.100079 [info ]: Cached model count updated: 16 models (estimate)
+00:03:03.100108 [info ]: Cached model count updated: 16 models (accurate)
+00:03:03.100154 [info ]: Started scheduling
+00:03:03.100320 [info ]: Finished scheduling [  0.00s]
+00:03:03.100339 [debug]: Compilation - 17 nodes selected: {"model.PACE_operations.appointment", "model.PACE_operations.appointment_kpis", "model.PACE_operations.caregiver", "model.PACE_operations.clinical_visit", "model.PACE_operations.governance_rules", "model.PACE_operations.healthcare_dashboard", "model.PACE_operations.meal_delivery", "model.PACE_operations.notification", "model.PACE_operations.participant", "model.PACE_operations.participant_engagement", "model.PACE_operations.participant_kpi", "model.PACE_operations.participant_trip_summary", "model.PACE_operations.provider", "model.PACE_operations.provider_performance", "model.PACE_operations.service_utilization", "model.PACE_operations.transportation", "snapshot.PACE_operations.participant_snapshot"}
+00:03:03.102026 [info ]: Started building task graph
+00:03:03.102155 [info ]: Finished building task graph [  0.00s]
+00:03:03.102665 [info ]: Started rendering (17 nodes)
+00:03:03.102689 [info ]: Started snapshot SNAPSHOTS.participant_snapshot
+00:03:03.102704 [debug]: Started rendering snapshot SNAPSHOTS.participant_snapshot
+00:03:03.102731 [info ]: Started model GOLD.service_utilization
+00:03:03.102740 [debug]: Started rendering model GOLD.service_utilization
+00:03:03.102748 [info ]: Started model GOLD.provider_performance
+00:03:03.102758 [debug]: Started rendering model GOLD.provider_performance
+00:03:03.102767 [info ]: Started model SILVER.provider
+00:03:03.102775 [debug]: Started rendering model SILVER.provider
+00:03:03.102782 [info ]: Started model GOLD.participant_trip_summary
+00:03:03.102788 [debug]: Started rendering model GOLD.participant_trip_summary
+00:03:03.102777 [info ]: Finished loading project [  0.03s]
+00:03:03.102794 [info ]: Started model GOLD.participant_kpi
+00:03:03.102803 [debug]: Started rendering model GOLD.participant_kpi
+00:03:03.102811 [info ]: Started model GOLD.participant_engagement
+00:03:03.102820 [debug]: Started rendering model GOLD.participant_engagement
+00:03:03.102830 [info ]: Started model SILVER.transportation
+00:03:03.102840 [debug]: Started rendering model SILVER.transportation
+00:03:03.102851 [info ]: Started model SILVER.participant
+00:03:03.102862 [debug]: Started rendering model SILVER.participant
+00:03:03.102872 [info ]: Started model SILVER.notification
+00:03:03.102881 [debug]: Started rendering model SILVER.notification
+00:03:03.102891 [info ]: Started model GOLD.healthcare_dashboard
+00:03:03.102901 [debug]: Started rendering model GOLD.healthcare_dashboard
+00:03:03.102919 [info ]: Started model SILVER.meal_delivery
+00:03:03.102925 [debug]: Started rendering model SILVER.meal_delivery
+00:03:03.102937 [info ]: Started model SILVER.governance_rules
+00:03:03.102947 [debug]: Started rendering model SILVER.governance_rules
+00:03:03.102967 [info ]: Started model SILVER.clinical_visit
+00:03:03.102974 [debug]: Started rendering model SILVER.clinical_visit
+00:03:03.102989 [info ]: Started model SILVER.caregiver
+00:03:03.102988 [debug]: Compiled SQL for node snapshot.PACE_operations.participant_snapshot at target/.lsp/compiled/PACE_operations/snapshots/participant_snapshot.sql/participant_snapshot.sql
+00:03:03.103000 [debug]: Started rendering model SILVER.caregiver
+00:03:03.103011 [debug]: Compiled SQL for node model.PACE_operations.participant_kpi at target/.lsp/compiled/PACE_operations/models/gold/participant_kpi.sql
+00:03:03.103016 [debug]: Compiled SQL for node model.PACE_operations.service_utilization at target/.lsp/compiled/PACE_operations/models/gold/service_utilization.sql
+00:03:03.103018 [debug]: Compiled SQL for node model.PACE_operations.provider at target/.lsp/compiled/PACE_operations/models/silver/provider/provider.sql
+00:03:03.103020 [debug]: Compiled SQL for node model.PACE_operations.participant_engagement at target/.lsp/compiled/PACE_operations/models/gold/participant_engagement.sql
+00:03:03.103020 [debug]: Compiled SQL for node model.PACE_operations.provider_performance at target/.lsp/compiled/PACE_operations/models/gold/provider_performance.sql
+00:03:03.103024 [info ]: Started model GOLD.appointment_kpis
+00:03:03.103022 [debug]: Compiled SQL for node model.PACE_operations.participant_trip_summary at target/.lsp/compiled/PACE_operations/models/gold/participant_trip_summary.sql
+00:03:03.103033 [debug]: Started rendering model GOLD.appointment_kpis
+00:03:03.103043 [info ]: Started model SILVER.appointment
+00:03:03.103042 [debug]: Compiled SQL for node model.PACE_operations.notification at target/.lsp/compiled/PACE_operations/models/silver/notification/notification.sql
+00:03:03.103049 [debug]: Started rendering model SILVER.appointment
+00:03:03.103048 [debug]: Compiled SQL for node model.PACE_operations.transportation at target/.lsp/compiled/PACE_operations/models/silver/transportation/transportation.sql
+00:03:03.103074 [debug]: Finished rendering [  0.00s] snapshot SNAPSHOTS.participant_snapshot [success]
+00:03:03.103103 [info ]: Started analyzing (17 nodes)
+00:03:03.103105 [debug]: Compiled SQL for node model.PACE_operations.governance_rules at target/.lsp/compiled/PACE_operations/models/silver/governance_rules/governance_rules.sql
+00:03:03.103112 [debug]: Compiled SQL for node model.PACE_operations.healthcare_dashboard at target/.lsp/compiled/PACE_operations/models/gold/healthcare_dashboard.sql
+00:03:03.103111 [debug]: Compiled SQL for node model.PACE_operations.participant at target/.lsp/compiled/PACE_operations/models/silver/participant/participant.sql
+00:03:03.103126 [debug]: Started analyzing snapshot SNAPSHOTS.participant_snapshot
+00:03:03.103151 [debug]: Compiled SQL for node model.PACE_operations.meal_delivery at target/.lsp/compiled/PACE_operations/models/silver/meal_delivery/meal_delivery.sql
+00:03:03.103156 [debug]: Finished rendering [  0.00s] model GOLD.participant_kpi [success]
+00:03:03.103170 [debug]: Started analyzing model GOLD.participant_kpi
+00:03:03.103183 [debug]: Finished rendering [  0.00s] model GOLD.service_utilization [success]
+00:03:03.103194 [debug]: Started analyzing model GOLD.service_utilization
+00:03:03.103205 [debug]: Finished rendering [  0.00s] model SILVER.provider [success]
+00:03:03.103213 [debug]: Started analyzing model SILVER.provider
+00:03:03.103222 [debug]: Finished rendering [  0.00s] model GOLD.provider_performance [success]
+00:03:03.103232 [debug]: Started analyzing model GOLD.provider_performance
+00:03:03.103241 [debug]: Finished rendering [  0.00s] model GOLD.participant_engagement [success]
+00:03:03.103246 [debug]: Compiled SQL for node model.PACE_operations.appointment_kpis at target/.lsp/compiled/PACE_operations/models/gold/appointment_kpis.sql
+00:03:03.103251 [debug]: Started analyzing model GOLD.participant_engagement
+00:03:03.103260 [debug]: Finished rendering [  0.00s] model GOLD.participant_trip_summary [success]
+00:03:03.103270 [debug]: Started analyzing model GOLD.participant_trip_summary
+00:03:03.103280 [debug]: Finished rendering [  0.00s] model SILVER.notification [success]
+00:03:03.103288 [debug]: Started analyzing model SILVER.notification
+00:03:03.103298 [debug]: Finished rendering [  0.00s] model SILVER.transportation [success]
+00:03:03.103303 [debug]: Compiled SQL for node model.PACE_operations.caregiver at target/.lsp/compiled/PACE_operations/models/silver/caregiver/caregiver.sql
+00:03:03.103308 [debug]: Started analyzing model SILVER.transportation
+00:03:03.103316 [debug]: Finished rendering [  0.00s] model GOLD.healthcare_dashboard [success]
+00:03:03.103329 [debug]: Started analyzing model GOLD.healthcare_dashboard
+00:03:03.103340 [debug]: Finished rendering [  0.00s] model SILVER.governance_rules [success]
+00:03:03.103349 [debug]: Started analyzing model SILVER.governance_rules
+00:03:03.103357 [debug]: Finished rendering [  0.00s] model SILVER.participant [success]
+00:03:03.103361 [debug]: Compiled SQL for node model.PACE_operations.clinical_visit at target/.lsp/compiled/PACE_operations/models/silver/clinical_visit/clinical_visit.sql
+00:03:03.103366 [debug]: Started analyzing model SILVER.participant
+00:03:03.103376 [debug]: Finished rendering [  0.00s] model SILVER.meal_delivery [success]
+00:03:03.103387 [debug]: Started analyzing model SILVER.meal_delivery
+00:03:03.103379 [debug]: Compiled SQL for node model.PACE_operations.appointment at target/.lsp/compiled/PACE_operations/models/silver/appointment/appointment.sql
+00:03:03.103396 [debug]: Finished rendering [  0.00s] model GOLD.appointment_kpis [success]
+00:03:03.103404 [debug]: Started analyzing model GOLD.appointment_kpis
+00:03:03.103421 [debug]: Finished rendering [  0.00s] model SILVER.caregiver [success]
+00:03:03.103430 [debug]: Started analyzing model SILVER.caregiver
+00:03:03.103448 [debug]: Finished analyzing [  0.00s] snapshot SNAPSHOTS.participant_snapshot [success]
+00:03:03.103459 [info ]:  Succeeded [-------] snapshot SNAPSHOTS.participant_snapshot (snapshot)
+00:03:03.103478 [debug]: Finished rendering [  0.00s] model SILVER.clinical_visit [success]
+00:03:03.103486 [debug]: Started analyzing model SILVER.clinical_visit
+00:03:03.103497 [debug]: Finished rendering [  0.00s] model SILVER.appointment [success]
+00:03:03.103506 [info ]: Finished rendering [  0.00s] (17 nodes, 0 skipped, 0 errors)
+00:03:03.103513 [debug]: Started analyzing model SILVER.appointment
+00:03:03.103626 [debug]: Finished analyzing [  0.00s] model GOLD.participant_kpi [success]
+00:03:03.103651 [info ]:  Succeeded [-------] model GOLD.participant_kpi (table)
+00:03:03.103971 [debug]: Finished analyzing [  0.00s] model GOLD.service_utilization [success]
+00:03:03.103999 [info ]:  Succeeded [-------] model GOLD.service_utilization (table)
+00:03:03.104161 [debug]: Finished analyzing [  0.00s] model SILVER.transportation [success]
+00:03:03.104184 [info ]:  Succeeded [-------] model SILVER.transportation (table)
+00:03:03.104200 [debug]: Finished analyzing [  0.00s] model GOLD.participant_trip_summary [success]
+00:03:03.104231 [info ]:  Succeeded [-------] model GOLD.participant_trip_summary (table)
+00:03:03.104251 [debug]: Finished analyzing [  0.00s] model SILVER.provider [success]
+00:03:03.104257 [info ]:  Succeeded [  0.00s] model SILVER.provider (table)
+00:03:03.104321 [debug]: Finished analyzing [  0.00s] model SILVER.participant [success]
+00:03:03.104343 [info ]:  Succeeded [-------] model SILVER.participant (table)
+00:03:03.104376 [debug]: Finished analyzing [  0.00s] model GOLD.healthcare_dashboard [success]
+00:03:03.104398 [info ]:  Succeeded [  0.00s] model GOLD.healthcare_dashboard (table)
+00:03:03.104586 [debug]: Finished analyzing [  0.00s] model GOLD.appointment_kpis [success]
+00:03:03.104601 [info ]:  Succeeded [  0.00s] model GOLD.appointment_kpis (table)
+00:03:03.104760 [debug]: Finished analyzing [  0.00s] model SILVER.clinical_visit [success]
+00:03:03.104776 [info ]:  Succeeded [  0.00s] model SILVER.clinical_visit (table)
+00:03:03.104882 [debug]: Finished analyzing [  0.00s] model GOLD.provider_performance [success]
+00:03:03.104907 [info ]:  Succeeded [  0.00s] model GOLD.provider_performance (table)
+00:03:03.105028 [debug]: Finished analyzing [  0.00s] model SILVER.caregiver [success]
+00:03:03.105046 [info ]:  Succeeded [  0.00s] model SILVER.caregiver (table)
+00:03:03.105282 [debug]: Finished analyzing [  0.00s] model SILVER.meal_delivery [success]
+00:03:03.105305 [info ]:  Succeeded [  0.00s] model SILVER.meal_delivery (table)
+00:03:03.105431 [debug]: Finished analyzing [  0.00s] model SILVER.governance_rules [success]
+00:03:03.105446 [info ]:  Succeeded [  0.00s] model SILVER.governance_rules (table)
+00:03:03.105512 [debug]: Finished analyzing [  0.00s] model SILVER.appointment [success]
+00:03:03.105533 [info ]:  Succeeded [  0.00s] model SILVER.appointment (table)
+00:03:03.105928 [debug]: Finished analyzing [  0.00s] model SILVER.notification [success]
+00:03:03.105945 [info ]:  Succeeded [  0.00s] model SILVER.notification (table)
+00:03:03.106100 [debug]: Finished analyzing [  0.00s] model GOLD.participant_engagement [success]
+00:03:03.106121 [info ]: Finished analyzing [  0.00s] (17 nodes, 0 skipped, 0 errors)
+00:03:03.106131 [info ]:  Succeeded [  0.00s] model GOLD.participant_engagement (table)
+00:03:03.109645 [info ]: Started scheduling
+00:03:03.109713 [info ]: Finished scheduling [  0.00s]
+00:03:03.110068 [info ]: Cached model count updated: 16 models (accurate)
+00:03:12.808045 [info ]: Loading profiles.yml
+00:03:13.078129 [info ]: Started loading project
+00:03:13.078456 [info ]: Loading profiles.yml
+00:03:13.102310 [info ]: Finished loading project [  0.02s]
+00:03:13.102550 [info ]: Cached model count updated: 16 models (accurate)
+00:03:14.978055 [info ]: Started loading project
+00:03:14.978332 [info ]: Loading profiles.yml
+00:03:14.998115 [info ]: Cached model count updated: 16 models (estimate)
+00:03:14.998143 [info ]: Cached model count updated: 16 models (accurate)
+00:03:14.998189 [info ]: Started scheduling
+00:03:14.998345 [info ]: Finished scheduling [  0.00s]
+00:03:14.998364 [debug]: Compilation - 17 nodes selected: {"model.PACE_operations.appointment", "model.PACE_operations.appointment_kpis", "model.PACE_operations.caregiver", "model.PACE_operations.clinical_visit", "model.PACE_operations.governance_rules", "model.PACE_operations.healthcare_dashboard", "model.PACE_operations.meal_delivery", "model.PACE_operations.notification", "model.PACE_operations.participant", "model.PACE_operations.participant_engagement", "model.PACE_operations.participant_kpi", "model.PACE_operations.participant_trip_summary", "model.PACE_operations.provider", "model.PACE_operations.provider_performance", "model.PACE_operations.service_utilization", "model.PACE_operations.transportation", "snapshot.PACE_operations.participant_snapshot"}
+00:03:15.000175 [info ]: Started building task graph
+00:03:15.000319 [info ]: Finished building task graph [  0.00s]
+00:03:15.000909 [info ]: Started rendering (17 nodes)
+00:03:15.000938 [info ]: Started snapshot SNAPSHOTS.participant_snapshot
+00:03:15.000952 [debug]: Started rendering snapshot SNAPSHOTS.participant_snapshot
+00:03:15.000983 [info ]: Started model GOLD.service_utilization
+00:03:15.000995 [debug]: Started rendering model GOLD.service_utilization
+00:03:15.001009 [info ]: Started model GOLD.provider_performance
+00:03:15.001018 [debug]: Started rendering model GOLD.provider_performance
+00:03:15.001026 [info ]: Started model SILVER.provider
+00:03:15.001022 [info ]: Finished loading project [  0.02s]
+00:03:15.001034 [debug]: Started rendering model SILVER.provider
+00:03:15.001045 [info ]: Started model GOLD.participant_trip_summary
+00:03:15.001054 [debug]: Started rendering model GOLD.participant_trip_summary
+00:03:15.001063 [info ]: Started model GOLD.participant_kpi
+00:03:15.001075 [debug]: Started rendering model GOLD.participant_kpi
+00:03:15.001087 [info ]: Started model GOLD.participant_engagement
+00:03:15.001096 [debug]: Started rendering model GOLD.participant_engagement
+00:03:15.001109 [info ]: Started model SILVER.transportation
+00:03:15.001120 [debug]: Started rendering model SILVER.transportation
+00:03:15.001133 [info ]: Started model SILVER.participant
+00:03:15.001141 [debug]: Started rendering model SILVER.participant
+00:03:15.001147 [info ]: Started model SILVER.notification
+00:03:15.001165 [debug]: Started rendering model SILVER.notification
+00:03:15.001172 [info ]: Started model GOLD.healthcare_dashboard
+00:03:15.001178 [debug]: Started rendering model GOLD.healthcare_dashboard
+00:03:15.001186 [info ]: Started model SILVER.meal_delivery
+00:03:15.001191 [debug]: Started rendering model SILVER.meal_delivery
+00:03:15.001200 [info ]: Started model SILVER.governance_rules
+00:03:15.001195 [debug]: Compiled SQL for node snapshot.PACE_operations.participant_snapshot at target/.lsp/compiled/PACE_operations/snapshots/participant_snapshot.sql/participant_snapshot.sql
+00:03:15.001210 [debug]: Started rendering model SILVER.governance_rules
+00:03:15.001220 [info ]: Started model SILVER.clinical_visit
+00:03:15.001230 [debug]: Started rendering model SILVER.clinical_visit
+00:03:15.001241 [info ]: Started model SILVER.caregiver
+00:03:15.001250 [debug]: Started rendering model SILVER.caregiver
+00:03:15.001270 [info ]: Started model GOLD.appointment_kpis
+00:03:15.001278 [debug]: Started rendering model GOLD.appointment_kpis
+00:03:15.001289 [info ]: Started model SILVER.appointment
+00:03:15.001294 [debug]: Started rendering model SILVER.appointment
+00:03:15.001311 [debug]: Finished rendering [  0.00s] snapshot SNAPSHOTS.participant_snapshot [success]
+00:03:15.001331 [info ]: Started analyzing (17 nodes)
+00:03:15.001341 [debug]: Started analyzing snapshot SNAPSHOTS.participant_snapshot
+00:03:15.001433 [debug]: Compiled SQL for node model.PACE_operations.provider_performance at target/.lsp/compiled/PACE_operations/models/gold/provider_performance.sql
+00:03:15.001496 [debug]: Finished rendering [  0.00s] model GOLD.provider_performance [success]
+00:03:15.001528 [debug]: Started analyzing model GOLD.provider_performance
+00:03:15.001557 [debug]: Finished analyzing [  0.00s] snapshot SNAPSHOTS.participant_snapshot [success]
+00:03:15.001560 [debug]: Compiled SQL for node model.PACE_operations.service_utilization at target/.lsp/compiled/PACE_operations/models/gold/service_utilization.sql
+00:03:15.001574 [info ]:  Succeeded [-------] snapshot SNAPSHOTS.participant_snapshot (snapshot)
+00:03:15.001594 [debug]: Finished rendering [  0.00s] model GOLD.service_utilization [success]
+00:03:15.001604 [debug]: Started analyzing model GOLD.service_utilization
+00:03:15.001608 [debug]: Compiled SQL for node model.PACE_operations.transportation at target/.lsp/compiled/PACE_operations/models/silver/transportation/transportation.sql
+00:03:15.001616 [debug]: Compiled SQL for node model.PACE_operations.governance_rules at target/.lsp/compiled/PACE_operations/models/silver/governance_rules/governance_rules.sql
+00:03:15.001633 [debug]: Compiled SQL for node model.PACE_operations.participant at target/.lsp/compiled/PACE_operations/models/silver/participant/participant.sql
+00:03:15.001635 [debug]: Compiled SQL for node model.PACE_operations.participant_kpi at target/.lsp/compiled/PACE_operations/models/gold/participant_kpi.sql
+00:03:15.001678 [debug]: Finished rendering [  0.00s] model SILVER.transportation [success]
+00:03:15.001702 [debug]: Started analyzing model SILVER.transportation
+00:03:15.001726 [debug]: Finished rendering [  0.00s] model SILVER.governance_rules [success]
+00:03:15.001738 [debug]: Started analyzing model SILVER.governance_rules
+00:03:15.001765 [debug]: Finished rendering [  0.00s] model GOLD.participant_kpi [success]
+00:03:15.001777 [debug]: Started analyzing model GOLD.participant_kpi
+00:03:15.001800 [debug]: Finished rendering [  0.00s] model SILVER.participant [success]
+00:03:15.001813 [debug]: Started analyzing model SILVER.participant
+00:03:15.002007 [debug]: Compiled SQL for node model.PACE_operations.provider at target/.lsp/compiled/PACE_operations/models/silver/provider/provider.sql
+00:03:15.002050 [debug]: Compiled SQL for node model.PACE_operations.healthcare_dashboard at target/.lsp/compiled/PACE_operations/models/gold/healthcare_dashboard.sql
+00:03:15.002058 [debug]: Finished rendering [  0.00s] model SILVER.provider [success]
+00:03:15.002074 [debug]: Compiled SQL for node model.PACE_operations.notification at target/.lsp/compiled/PACE_operations/models/silver/notification/notification.sql
+00:03:15.002078 [debug]: Started analyzing model SILVER.provider
+00:03:15.002078 [debug]: Compiled SQL for node model.PACE_operations.clinical_visit at target/.lsp/compiled/PACE_operations/models/silver/clinical_visit/clinical_visit.sql
+00:03:15.002101 [debug]: Finished rendering [  0.00s] model GOLD.healthcare_dashboard [success]
+00:03:15.002103 [debug]: Compiled SQL for node model.PACE_operations.participant_trip_summary at target/.lsp/compiled/PACE_operations/models/gold/participant_trip_summary.sql
+00:03:15.002112 [debug]: Started analyzing model GOLD.healthcare_dashboard
+00:03:15.002119 [debug]: Compiled SQL for node model.PACE_operations.caregiver at target/.lsp/compiled/PACE_operations/models/silver/caregiver/caregiver.sql
+00:03:15.002150 [debug]: Finished analyzing [  0.00s] model GOLD.participant_kpi [success]
+00:03:15.002155 [debug]: Compiled SQL for node model.PACE_operations.participant_engagement at target/.lsp/compiled/PACE_operations/models/gold/participant_engagement.sql
+00:03:15.002198 [info ]:  Succeeded [-------] model GOLD.participant_kpi (table)
+00:03:15.002205 [debug]: Compiled SQL for node model.PACE_operations.appointment_kpis at target/.lsp/compiled/PACE_operations/models/gold/appointment_kpis.sql
+00:03:15.002220 [debug]: Finished rendering [  0.00s] model SILVER.notification [success]
+00:03:15.002234 [debug]: Started analyzing model SILVER.notification
+00:03:15.002251 [debug]: Compiled SQL for node model.PACE_operations.meal_delivery at target/.lsp/compiled/PACE_operations/models/silver/meal_delivery/meal_delivery.sql
+00:03:15.002258 [debug]: Finished rendering [  0.00s] model SILVER.clinical_visit [success]
+00:03:15.002268 [debug]: Started analyzing model SILVER.clinical_visit
+00:03:15.002289 [debug]: Finished rendering [  0.00s] model SILVER.caregiver [success]
+00:03:15.002303 [debug]: Started analyzing model SILVER.caregiver
+00:03:15.002319 [debug]: Finished rendering [  0.00s] model GOLD.participant_trip_summary [success]
+00:03:15.002346 [debug]: Started analyzing model GOLD.participant_trip_summary
+00:03:15.002345 [debug]: Compiled SQL for node model.PACE_operations.appointment at target/.lsp/compiled/PACE_operations/models/silver/appointment/appointment.sql
+00:03:15.002361 [debug]: Finished rendering [  0.00s] model GOLD.participant_engagement [success]
+00:03:15.002370 [debug]: Started analyzing model GOLD.participant_engagement
+00:03:15.002386 [debug]: Finished rendering [  0.00s] model GOLD.appointment_kpis [success]
+00:03:15.002398 [debug]: Started analyzing model GOLD.appointment_kpis
+00:03:15.002410 [debug]: Finished rendering [  0.00s] model SILVER.meal_delivery [success]
+00:03:15.002417 [debug]: Started analyzing model SILVER.meal_delivery
+00:03:15.002430 [debug]: Finished analyzing [  0.00s] model GOLD.service_utilization [success]
+00:03:15.002451 [info ]:  Succeeded [-------] model GOLD.service_utilization (table)
+00:03:15.002472 [debug]: Finished rendering [  0.00s] model SILVER.appointment [success]
+00:03:15.002479 [info ]: Finished rendering [  0.00s] (17 nodes, 0 skipped, 0 errors)
+00:03:15.002492 [debug]: Started analyzing model SILVER.appointment
+00:03:15.002671 [debug]: Finished analyzing [  0.00s] model SILVER.transportation [success]
+00:03:15.002697 [info ]:  Succeeded [-------] model SILVER.transportation (table)
+00:03:15.002742 [debug]: Finished analyzing [  0.00s] model SILVER.participant [success]
+00:03:15.002767 [info ]:  Succeeded [-------] model SILVER.participant (table)
+00:03:15.002985 [debug]: Finished analyzing [  0.00s] model SILVER.provider [success]
+00:03:15.003010 [info ]:  Succeeded [  0.00s] model SILVER.provider (table)
+00:03:15.003272 [debug]: Finished analyzing [  0.00s] model GOLD.provider_performance [success]
+00:03:15.003294 [info ]:  Succeeded [  0.00s] model GOLD.provider_performance (table)
+00:03:15.003316 [debug]: Finished analyzing [  0.00s] model GOLD.healthcare_dashboard [success]
+00:03:15.003327 [info ]:  Succeeded [  0.00s] model GOLD.healthcare_dashboard (table)
+00:03:15.003345 [debug]: Finished analyzing [  0.00s] model GOLD.participant_trip_summary [success]
+00:03:15.003359 [info ]:  Succeeded [  0.00s] model GOLD.participant_trip_summary (table)
+00:03:15.003557 [debug]: Finished analyzing [  0.00s] model SILVER.clinical_visit [success]
+00:03:15.003579 [info ]:  Succeeded [  0.00s] model SILVER.clinical_visit (table)
+00:03:15.003621 [debug]: Finished analyzing [  0.00s] model GOLD.appointment_kpis [success]
+00:03:15.003639 [info ]:  Succeeded [  0.00s] model GOLD.appointment_kpis (table)
+00:03:15.003866 [debug]: Finished analyzing [  0.00s] model SILVER.caregiver [success]
+00:03:15.003886 [info ]:  Succeeded [  0.00s] model SILVER.caregiver (table)
+00:03:15.003908 [debug]: Finished analyzing [  0.00s] model SILVER.governance_rules [success]
+00:03:15.003918 [info ]:  Succeeded [  0.00s] model SILVER.governance_rules (table)
+00:03:15.004549 [debug]: Finished analyzing [  0.00s] model SILVER.appointment [success]
+00:03:15.004568 [info ]:  Succeeded [  0.00s] model SILVER.appointment (table)
+00:03:15.004598 [debug]: Finished analyzing [  0.00s] model SILVER.meal_delivery [success]
+00:03:15.004618 [info ]:  Succeeded [  0.00s] model SILVER.meal_delivery (table)
+00:03:15.005359 [debug]: Finished analyzing [  0.00s] model SILVER.notification [success]
+00:03:15.005386 [info ]:  Succeeded [  0.00s] model SILVER.notification (table)
+00:03:15.005648 [debug]: Finished analyzing [  0.00s] model GOLD.participant_engagement [success]
+00:03:15.005665 [info ]: Finished analyzing [  0.00s] (17 nodes, 0 skipped, 0 errors)
+00:03:15.005679 [info ]:  Succeeded [  0.00s] model GOLD.participant_engagement (table)
+00:03:15.009588 [info ]: Started scheduling
+00:03:15.009653 [info ]: Finished scheduling [  0.00s]
+00:03:15.009988 [info ]: Cached model count updated: 16 models (accurate)
+00:03:35.567914 [info ]: Started loading project
+00:03:35.568191 [info ]: Loading profiles.yml
+00:03:35.573580 [info ]: Started parsing
+00:03:35.607945 [info ]: Finished loading project [  0.04s]
+00:03:35.608845 [debug]: Finished parsing models/silver/meal_delivery/meal_delivery_schema.yml [  0.00s]
+00:03:35.609959 [debug]: Finished parsing target/snapshots/participant_snapshot.sql [  0.00s]
+00:03:35.610833 [debug]: Finished parsing models/silver/meal_delivery/meal_delivery.sql [  0.00s]
+00:03:35.613446 [info ]: Finished parsing [  0.04s]
+00:03:35.614887 [info ]: Cached model count updated: 16 models (estimate)
+00:03:35.614905 [info ]: Cached model count updated: 16 models (accurate)
+00:03:35.615007 [info ]: Started scheduling
+00:03:35.615106 [info ]: Finished scheduling [  0.00s]
+00:03:35.615118 [debug]: Compilation - 1 nodes selected: {"model.PACE_operations.meal_delivery"}
+00:03:35.616566 [info ]: Started building task graph
+00:03:35.616610 [info ]: Finished building task graph [  0.00s]
+00:03:35.617109 [info ]: Started rendering (1 nodes)
+00:03:35.617131 [info ]: Started model SILVER.meal_delivery
+00:03:35.617143 [debug]: Started rendering model SILVER.meal_delivery
+00:03:35.617867 [debug]: Compiled SQL for node model.PACE_operations.meal_delivery at target/.lsp/compiled/PACE_operations/models/silver/meal_delivery/meal_delivery.sql
+00:03:35.617963 [debug]: Finished rendering [  0.00s] model SILVER.meal_delivery [success]
+00:03:35.617982 [info ]: Finished rendering [  0.00s] (1 nodes, 0 skipped, 0 errors)
+00:03:35.617997 [info ]: Started analyzing (1 nodes)
+00:03:35.618007 [debug]: Started analyzing model SILVER.meal_delivery
+00:03:35.619476 [debug]: Finished analyzing [  0.00s] model SILVER.meal_delivery [success]
+00:03:35.619494 [info ]: Finished analyzing [  0.00s] (1 nodes, 0 skipped, 0 errors)
+00:03:35.619505 [info ]:  Succeeded [  0.00s] model SILVER.meal_delivery (table)
+00:03:35.622446 [info ]: Started scheduling
+00:03:35.622569 [info ]: Finished scheduling [  0.00s]
+00:03:35.623107 [info ]: Cached model count updated: 16 models (accurate)
+00:03:37.718159 [info ]: Started loading project
+00:03:37.718492 [info ]: Loading profiles.yml
+00:03:37.740645 [info ]: Cached model count updated: 16 models (estimate)
+00:03:37.740675 [info ]: Cached model count updated: 16 models (accurate)
+00:03:37.740722 [info ]: Started scheduling
+00:03:37.740851 [info ]: Finished scheduling [  0.00s]
+00:03:37.740868 [debug]: Compilation - 3 nodes selected: {"model.PACE_operations.healthcare_dashboard", "model.PACE_operations.meal_delivery", "model.PACE_operations.participant_engagement"}
+00:03:37.742326 [info ]: Started building task graph
+00:03:37.742382 [info ]: Finished building task graph [  0.00s]
+00:03:37.742830 [info ]: Started rendering (3 nodes)
+00:03:37.742853 [info ]: Started model GOLD.participant_engagement
+00:03:37.742867 [debug]: Started rendering model GOLD.participant_engagement
+00:03:37.742899 [info ]: Started model GOLD.healthcare_dashboard
+00:03:37.742908 [debug]: Started rendering model GOLD.healthcare_dashboard
+00:03:37.742918 [info ]: Started model SILVER.meal_delivery
+00:03:37.742928 [debug]: Started rendering model SILVER.meal_delivery
+00:03:37.742934 [info ]: Finished loading project [  0.02s]
+00:03:37.743204 [debug]: Compiled SQL for node model.PACE_operations.meal_delivery at target/.lsp/compiled/PACE_operations/models/silver/meal_delivery/meal_delivery.sql
+00:03:37.743224 [debug]: Compiled SQL for node model.PACE_operations.participant_engagement at target/.lsp/compiled/PACE_operations/models/gold/participant_engagement.sql
+00:03:37.743222 [debug]: Compiled SQL for node model.PACE_operations.healthcare_dashboard at target/.lsp/compiled/PACE_operations/models/gold/healthcare_dashboard.sql
+00:03:37.743266 [debug]: Finished rendering [  0.00s] model SILVER.meal_delivery [success]
+00:03:37.743294 [info ]: Started analyzing (3 nodes)
+00:03:37.743305 [debug]: Started analyzing model SILVER.meal_delivery
+00:03:37.743328 [debug]: Finished rendering [  0.00s] model GOLD.participant_engagement [success]
+00:03:37.743339 [debug]: Started analyzing model GOLD.participant_engagement
+00:03:37.743357 [debug]: Finished rendering [  0.00s] model GOLD.healthcare_dashboard [success]
+00:03:37.743377 [info ]: Finished rendering [  0.00s] (3 nodes, 0 skipped, 0 errors)
+00:03:37.743388 [debug]: Started analyzing model GOLD.healthcare_dashboard
+00:03:37.744262 [debug]: Finished analyzing [  0.00s] model GOLD.healthcare_dashboard [success]
+00:03:37.744285 [info ]:  Succeeded [-------] model GOLD.healthcare_dashboard (table)
+00:03:37.744761 [debug]: Finished analyzing [  0.00s] model SILVER.meal_delivery [success]
+00:03:37.744783 [info ]:  Succeeded [  0.00s] model SILVER.meal_delivery (table)
+00:03:37.746048 [debug]: Finished analyzing [  0.00s] model GOLD.participant_engagement [success]
+00:03:37.746066 [info ]: Finished analyzing [  0.00s] (3 nodes, 0 skipped, 0 errors)
+00:03:37.746077 [info ]:  Succeeded [  0.00s] model GOLD.participant_engagement (table)
+00:03:37.748964 [info ]: Started scheduling
+00:03:37.749080 [info ]: Finished scheduling [  0.00s]
+00:03:37.749451 [info ]: Cached model count updated: 16 models (accurate)
+00:03:39.307670 [info ]: Started loading project
+00:03:39.307945 [info ]: Loading profiles.yml
+00:03:39.325791 [info ]: Cached model count updated: 16 models (estimate)
+00:03:39.325818 [info ]: Cached model count updated: 16 models (accurate)
+00:03:39.325861 [info ]: Started scheduling
+00:03:39.326017 [info ]: Finished scheduling [  0.00s]
+00:03:39.326035 [debug]: Compilation - 17 nodes selected: {"model.PACE_operations.appointment", "model.PACE_operations.appointment_kpis", "model.PACE_operations.caregiver", "model.PACE_operations.clinical_visit", "model.PACE_operations.governance_rules", "model.PACE_operations.healthcare_dashboard", "model.PACE_operations.meal_delivery", "model.PACE_operations.notification", "model.PACE_operations.participant", "model.PACE_operations.participant_engagement", "model.PACE_operations.participant_kpi", "model.PACE_operations.participant_trip_summary", "model.PACE_operations.provider", "model.PACE_operations.provider_performance", "model.PACE_operations.service_utilization", "model.PACE_operations.transportation", "snapshot.PACE_operations.participant_snapshot"}
+00:03:39.327800 [info ]: Started building task graph
+00:03:39.327935 [info ]: Finished building task graph [  0.00s]
+00:03:39.328436 [info ]: Started rendering (17 nodes)
+00:03:39.328461 [info ]: Started snapshot SNAPSHOTS.participant_snapshot
+00:03:39.328473 [debug]: Started rendering snapshot SNAPSHOTS.participant_snapshot
+00:03:39.328510 [info ]: Started model GOLD.service_utilization
+00:03:39.328518 [debug]: Started rendering model GOLD.service_utilization
+00:03:39.328526 [info ]: Started model GOLD.provider_performance
+00:03:39.328533 [debug]: Started rendering model GOLD.provider_performance
+00:03:39.328541 [info ]: Started model SILVER.provider
+00:03:39.328548 [debug]: Started rendering model SILVER.provider
+00:03:39.328556 [info ]: Started model GOLD.participant_trip_summary
+00:03:39.328547 [info ]: Finished loading project [  0.02s]
+00:03:39.328561 [debug]: Started rendering model GOLD.participant_trip_summary
+00:03:39.328572 [info ]: Started model GOLD.participant_kpi
+00:03:39.328583 [debug]: Started rendering model GOLD.participant_kpi
+00:03:39.328593 [info ]: Started model GOLD.participant_engagement
+00:03:39.328598 [debug]: Started rendering model GOLD.participant_engagement
+00:03:39.328609 [info ]: Started model SILVER.transportation
+00:03:39.328619 [debug]: Started rendering model SILVER.transportation
+00:03:39.328630 [info ]: Started model SILVER.participant
+00:03:39.328639 [debug]: Started rendering model SILVER.participant
+00:03:39.328651 [info ]: Started model SILVER.notification
+00:03:39.328661 [debug]: Started rendering model SILVER.notification
+00:03:39.328671 [info ]: Started model GOLD.healthcare_dashboard
+00:03:39.328677 [debug]: Started rendering model GOLD.healthcare_dashboard
+00:03:39.328690 [info ]: Started model SILVER.meal_delivery
+00:03:39.328700 [debug]: Started rendering model SILVER.meal_delivery
+00:03:39.328715 [info ]: Started model SILVER.governance_rules
+00:03:39.328724 [debug]: Started rendering model SILVER.governance_rules
+00:03:39.328726 [debug]: Compiled SQL for node snapshot.PACE_operations.participant_snapshot at target/.lsp/compiled/PACE_operations/snapshots/participant_snapshot.sql/participant_snapshot.sql
+00:03:39.328736 [info ]: Started model SILVER.clinical_visit
+00:03:39.328742 [debug]: Started rendering model SILVER.clinical_visit
+00:03:39.328755 [info ]: Started model SILVER.caregiver
+00:03:39.328766 [debug]: Started rendering model SILVER.caregiver
+00:03:39.328787 [info ]: Started model GOLD.appointment_kpis
+00:03:39.328795 [debug]: Started rendering model GOLD.appointment_kpis
+00:03:39.328804 [info ]: Started model SILVER.appointment
+00:03:39.328813 [debug]: Started rendering model SILVER.appointment
+00:03:39.328830 [debug]: Finished rendering [  0.00s] snapshot SNAPSHOTS.participant_snapshot [success]
+00:03:39.328850 [info ]: Started analyzing (17 nodes)
+00:03:39.328857 [debug]: Started analyzing snapshot SNAPSHOTS.participant_snapshot
+00:03:39.329080 [debug]: Finished analyzing [  0.00s] snapshot SNAPSHOTS.participant_snapshot [success]
+00:03:39.329097 [info ]:  Succeeded [-------] snapshot SNAPSHOTS.participant_snapshot (snapshot)
+00:03:39.329355 [debug]: Compiled SQL for node model.PACE_operations.provider at target/.lsp/compiled/PACE_operations/models/silver/provider/provider.sql
+00:03:39.329388 [debug]: Compiled SQL for node model.PACE_operations.service_utilization at target/.lsp/compiled/PACE_operations/models/gold/service_utilization.sql
+00:03:39.329402 [debug]: Compiled SQL for node model.PACE_operations.provider_performance at target/.lsp/compiled/PACE_operations/models/gold/provider_performance.sql
+00:03:39.329425 [debug]: Compiled SQL for node model.PACE_operations.appointment_kpis at target/.lsp/compiled/PACE_operations/models/gold/appointment_kpis.sql
+00:03:39.329433 [debug]: Compiled SQL for node model.PACE_operations.notification at target/.lsp/compiled/PACE_operations/models/silver/notification/notification.sql
+00:03:39.329446 [debug]: Finished rendering [  0.00s] model SILVER.provider [success]
+00:03:39.329447 [debug]: Compiled SQL for node model.PACE_operations.participant at target/.lsp/compiled/PACE_operations/models/silver/participant/participant.sql
+00:03:39.329467 [debug]: Started analyzing model SILVER.provider
+00:03:39.329471 [debug]: Compiled SQL for node model.PACE_operations.participant_engagement at target/.lsp/compiled/PACE_operations/models/gold/participant_engagement.sql
+00:03:39.329485 [debug]: Finished rendering [  0.00s] model GOLD.service_utilization [success]
+00:03:39.329495 [debug]: Started analyzing model GOLD.service_utilization
+00:03:39.329508 [debug]: Finished rendering [  0.00s] model GOLD.appointment_kpis [success]
+00:03:39.329518 [debug]: Started analyzing model GOLD.appointment_kpis
+00:03:39.329515 [debug]: Compiled SQL for node model.PACE_operations.transportation at target/.lsp/compiled/PACE_operations/models/silver/transportation/transportation.sql
+00:03:39.329540 [debug]: Finished rendering [  0.00s] model GOLD.provider_performance [success]
+00:03:39.329546 [debug]: Compiled SQL for node model.PACE_operations.healthcare_dashboard at target/.lsp/compiled/PACE_operations/models/gold/healthcare_dashboard.sql
+00:03:39.329553 [debug]: Started analyzing model GOLD.provider_performance
+00:03:39.329565 [debug]: Finished rendering [  0.00s] model SILVER.notification [success]
+00:03:39.329567 [debug]: Compiled SQL for node model.PACE_operations.appointment at target/.lsp/compiled/PACE_operations/models/silver/appointment/appointment.sql
+00:03:39.329577 [debug]: Started analyzing model SILVER.notification
+00:03:39.329585 [debug]: Compiled SQL for node model.PACE_operations.clinical_visit at target/.lsp/compiled/PACE_operations/models/silver/clinical_visit/clinical_visit.sql
+00:03:39.329593 [debug]: Finished rendering [  0.00s] model SILVER.participant [success]
+00:03:39.329593 [debug]: Compiled SQL for node model.PACE_operations.participant_trip_summary at target/.lsp/compiled/PACE_operations/models/gold/participant_trip_summary.sql
+00:03:39.329600 [debug]: Started analyzing model SILVER.participant
+00:03:39.329617 [debug]: Finished rendering [  0.00s] model GOLD.participant_engagement [success]
+00:03:39.329628 [debug]: Started analyzing model GOLD.participant_engagement
+00:03:39.329645 [debug]: Finished rendering [  0.00s] model SILVER.transportation [success]
+00:03:39.329644 [debug]: Compiled SQL for node model.PACE_operations.governance_rules at target/.lsp/compiled/PACE_operations/models/silver/governance_rules/governance_rules.sql
+00:03:39.329654 [debug]: Started analyzing model SILVER.transportation
+00:03:39.329663 [debug]: Finished rendering [  0.00s] model GOLD.healthcare_dashboard [success]
+00:03:39.329661 [debug]: Compiled SQL for node model.PACE_operations.participant_kpi at target/.lsp/compiled/PACE_operations/models/gold/participant_kpi.sql
+00:03:39.329671 [debug]: Started analyzing model GOLD.healthcare_dashboard
+00:03:39.329679 [debug]: Finished rendering [  0.00s] model SILVER.appointment [success]
+00:03:39.329686 [debug]: Started analyzing model SILVER.appointment
+00:03:39.329693 [debug]: Finished rendering [  0.00s] model SILVER.clinical_visit [success]
+00:03:39.329700 [debug]: Started analyzing model SILVER.clinical_visit
+00:03:39.329694 [debug]: Compiled SQL for node model.PACE_operations.caregiver at target/.lsp/compiled/PACE_operations/models/silver/caregiver/caregiver.sql
+00:03:39.329708 [debug]: Finished rendering [  0.00s] model GOLD.participant_trip_summary [success]
+00:03:39.329717 [debug]: Started analyzing model GOLD.participant_trip_summary
+00:03:39.329729 [debug]: Finished rendering [  0.00s] model SILVER.governance_rules [success]
+00:03:39.329736 [debug]: Started analyzing model SILVER.governance_rules
+00:03:39.329745 [debug]: Finished rendering [  0.00s] model GOLD.participant_kpi [success]
+00:03:39.329752 [debug]: Started analyzing model GOLD.participant_kpi
+00:03:39.329760 [debug]: Finished rendering [  0.00s] model SILVER.caregiver [success]
+00:03:39.329767 [debug]: Started analyzing model SILVER.caregiver
+00:03:39.329769 [debug]: Compiled SQL for node model.PACE_operations.meal_delivery at target/.lsp/compiled/PACE_operations/models/silver/meal_delivery/meal_delivery.sql
+00:03:39.329829 [debug]: Finished rendering [  0.00s] model SILVER.meal_delivery [success]
+00:03:39.329851 [info ]: Finished rendering [  0.00s] (17 nodes, 0 skipped, 0 errors)
+00:03:39.329869 [debug]: Started analyzing model SILVER.meal_delivery
+00:03:39.330207 [debug]: Finished analyzing [  0.00s] model GOLD.service_utilization [success]
+00:03:39.330230 [info ]:  Succeeded [-------] model GOLD.service_utilization (table)
+00:03:39.330453 [debug]: Finished analyzing [  0.00s] model SILVER.provider [success]
+00:03:39.330503 [info ]:  Succeeded [-------] model SILVER.provider (table)
+00:03:39.330680 [debug]: Finished analyzing [  0.00s] model SILVER.transportation [success]
+00:03:39.330700 [info ]:  Succeeded [  0.00s] model SILVER.transportation (table)
+00:03:39.330716 [debug]: Finished analyzing [  0.00s] model GOLD.appointment_kpis [success]
+00:03:39.330723 [info ]:  Succeeded [  0.00s] model GOLD.appointment_kpis (table)
+00:03:39.330735 [debug]: Finished analyzing [  0.00s] model GOLD.participant_trip_summary [success]
+00:03:39.330744 [info ]:  Succeeded [  0.00s] model GOLD.participant_trip_summary (table)
+00:03:39.330755 [debug]: Finished analyzing [  0.00s] model GOLD.participant_kpi [success]
+00:03:39.330786 [info ]:  Succeeded [  0.00s] model GOLD.participant_kpi (table)
+00:03:39.330801 [debug]: Finished analyzing [  0.00s] model SILVER.participant [success]
+00:03:39.330811 [info ]:  Succeeded [  0.00s] model SILVER.participant (table)
+00:03:39.330887 [debug]: Finished analyzing [  0.00s] model GOLD.healthcare_dashboard [success]
+00:03:39.330913 [info ]:  Succeeded [  0.00s] model GOLD.healthcare_dashboard (table)
+00:03:39.331087 [debug]: Finished analyzing [  0.00s] model SILVER.clinical_visit [success]
+00:03:39.331108 [info ]:  Succeeded [  0.00s] model SILVER.clinical_visit (table)
+00:03:39.331340 [debug]: Finished analyzing [  0.00s] model GOLD.provider_performance [success]
+00:03:39.331358 [info ]:  Succeeded [  0.00s] model GOLD.provider_performance (table)
+00:03:39.331428 [debug]: Finished analyzing [  0.00s] model SILVER.appointment [success]
+00:03:39.331444 [info ]:  Succeeded [  0.00s] model SILVER.appointment (table)
+00:03:39.331643 [debug]: Finished analyzing [  0.00s] model SILVER.caregiver [success]
+00:03:39.331669 [info ]:  Succeeded [  0.00s] model SILVER.caregiver (table)
+00:03:39.331734 [debug]: Finished analyzing [  0.00s] model SILVER.meal_delivery [success]
+00:03:39.331758 [info ]:  Succeeded [  0.00s] model SILVER.meal_delivery (table)
+00:03:39.331779 [debug]: Finished analyzing [  0.00s] model SILVER.governance_rules [success]
+00:03:39.331789 [info ]:  Succeeded [  0.00s] model SILVER.governance_rules (table)
+00:03:39.332663 [debug]: Finished analyzing [  0.00s] model SILVER.notification [success]
+00:03:39.332685 [info ]:  Succeeded [  0.00s] model SILVER.notification (table)
+00:03:39.333303 [debug]: Finished analyzing [  0.00s] model GOLD.participant_engagement [success]
+00:03:39.333323 [info ]: Finished analyzing [  0.00s] (17 nodes, 0 skipped, 0 errors)
+00:03:39.333338 [info ]:  Succeeded [  0.00s] model GOLD.participant_engagement (table)
+00:03:39.337132 [info ]: Started scheduling
+00:03:39.337220 [info ]: Finished scheduling [  0.00s]
+00:03:39.337580 [info ]: Cached model count updated: 16 models (accurate)
+==================== 2026-06-02T00:09:12.293900Z | 00000000-0000-0000-0000-000000000000 ====================
+==================== 2026-06-02T00:09:12.293999Z | 1239f874-286c-47e1-b2dc-665ec94a919c ====================
+00:09:12.294019 [info ]: Starting dbt LSP server
+00:09:12.294033 [info ]: Connecting to LSP client on port 58325
+00:09:12.294275 [info ]: Successfully connected to LSP client
+00:09:12.294293 [info ]: Creating LSP service...
+00:09:12.354429 [info ]: Creating LSP server...
+00:09:12.354458 [info ]: Starting LSP server...
+00:09:16.298082 [info ]: Loading profiles.yml
+00:09:16.557761 [info ]: Waiting for lease on 'target' directory
+00:09:28.537685 [info ]: Started loading project
+00:09:28.538101 [info ]: Loading profiles.yml
+00:09:28.544767 [debug]:    Started loading packages
+00:09:28.545919 [debug]:     Loaded [  0.00s] packages
+00:09:28.546691 [info ]: Finished loading project [  0.01s]
+00:09:28.547011 [info ]: Started parsing
+00:09:28.576218 [debug]: Finished parsing models/silver/appointment/appointment_schema.yml [  0.00s]
+00:09:28.576344 [debug]: Finished parsing models/silver/caregiver/caregiver_schema.yml [  0.00s]
+00:09:28.576520 [debug]: Finished parsing models/silver/clinical_visit/clinical_visit_schema.yml [  0.00s]
+00:09:28.576651 [debug]: Finished parsing models/silver/governance_rules/governance_rules_schema.yml [  0.00s]
+00:09:28.576899 [debug]: Finished parsing models/silver/meal_delivery/meal_delivery_schema.yml [  0.00s]
+00:09:28.577052 [debug]: Finished parsing models/silver/notification/notification_schema.yml [  0.00s]
+00:09:28.577227 [debug]: Finished parsing models/silver/participant/participant_schema.yml [  0.00s]
+00:09:28.577356 [debug]: Finished parsing models/silver/provider/provider_schema.yml [  0.00s]
+00:09:28.577518 [debug]: Finished parsing models/silver/transportation/transportation_schema.yml [  0.00s]
+00:09:28.577669 [debug]: Finished parsing models/sources/sources.yml [  0.00s]
+00:09:28.579713 [debug]: Finished parsing target/snapshots/participant_snapshot.sql [  0.00s]
+00:09:28.581278 [debug]: Finished parsing models/gold/appointment_kpis.sql [  0.00s]
+00:09:28.581662 [debug]: Finished parsing models/gold/healthcare_dashboard.sql [  0.00s]
+00:09:28.582020 [debug]: Finished parsing models/gold/participant_engagement.sql [  0.00s]
+00:09:28.582293 [debug]: Finished parsing models/gold/participant_kpi.sql [  0.00s]
+00:09:28.582549 [debug]: Finished parsing models/gold/participant_trip_summary.sql [  0.00s]
+00:09:28.582787 [debug]: Finished parsing models/gold/provider_performance.sql [  0.00s]
+00:09:28.583198 [debug]: Finished parsing models/gold/service_utilization.sql [  0.00s]
+00:09:28.583522 [debug]: Finished parsing models/silver/appointment/appointment.sql [  0.00s]
+00:09:28.584046 [debug]: Finished parsing models/silver/caregiver/caregiver.sql [  0.00s]
+00:09:28.584413 [debug]: Finished parsing models/silver/clinical_visit/clinical_visit.sql [  0.00s]
+00:09:28.584909 [debug]: Finished parsing models/silver/governance_rules/governance_rules.sql [  0.00s]
+00:09:28.585338 [debug]: Finished parsing models/silver/meal_delivery/meal_delivery.sql [  0.00s]
+00:09:28.585766 [debug]: Finished parsing models/silver/notification/notification.sql [  0.00s]
+00:09:28.586182 [debug]: Finished parsing models/silver/participant/participant.sql [  0.00s]
+00:09:28.586585 [debug]: Finished parsing models/silver/provider/provider.sql [  0.00s]
+00:09:28.587005 [debug]: Finished parsing models/silver/transportation/transportation.sql [  0.00s]
+00:09:28.595823 [info ]: Finished parsing [  0.05s]
+00:09:28.596142 [info ]: Cached model count updated: 16 models (estimate)
+00:09:28.596155 [info ]: Cached model count updated: 16 models (accurate)
+00:09:28.596224 [info ]: Started scheduling
+00:09:28.596312 [info ]: Finished scheduling [  0.00s]
+00:09:28.596328 [debug]: Compilation - 0 nodes selected: {}
+00:09:28.596349 [warn ]: [NoNodesForSelectionCriteria (dbt1092)]: The selection criterion '' does not match any enabled nodes
+00:09:28.596363 [warn ]: [NoNodesSelected (dbt1601)]: Nothing to do. Try checking your model configs and model specification args
+00:09:28.596369 [info ]: Started scheduling
+00:09:28.596504 [info ]: Finished scheduling [  0.00s]
+00:09:28.596643 [debug]: Initializing schema store with entry: Selected("snapshot.PACE_operations.participant_snapshot") and interval: None
+00:09:28.596662 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "GOVERNANCE_RULES_RAW" }) and interval: None
+00:09:28.596673 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "MEAL_DELIVERY_RAW" }) and interval: None
+00:09:28.596678 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "PROVIDER_RAW" }) and interval: None
+00:09:28.596684 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "CLINICAL_VISIT_RAW" }) and interval: None
+00:09:28.596689 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "NOTIFICATION_RAW" }) and interval: None
+00:09:28.596694 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "CAREGIVER_RAW" }) and interval: None
+00:09:28.596699 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "PARTICIPANT_RAW" }) and interval: None
+00:09:28.596705 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "TRANSPORTATION_RAW" }) and interval: None
+00:09:28.596709 [debug]: Initializing schema store with entry: Frontier(CanonicalFqn { catalog: "PACE_DW", schema: "BRONZE", table: "APPOINTMENT_RAW" }) and interval: None
+00:09:28.603688 [debug]: No platform credentials found, skipping remote license
+00:09:28.604723 [info ]: Started building task graph
+00:09:28.604760 [info ]: Finished building task graph [  0.00s]
+00:09:28.608977 [info ]: Started scheduling
+00:09:28.609164 [info ]: Finished scheduling [  0.00s]
+00:09:28.609568 [info ]: Cached model count updated: 16 models (accurate)
+00:12:26.787833 [info ]: Started loading project
+00:12:26.788129 [info ]: Loading profiles.yml
+00:12:26.810478 [info ]: Cached model count updated: 16 models (estimate)
+00:12:26.810505 [info ]: Cached model count updated: 16 models (accurate)
+00:12:26.810548 [info ]: Started scheduling
+00:12:26.810708 [info ]: Finished scheduling [  0.00s]
+00:12:26.810727 [debug]: Compilation - 17 nodes selected: {"model.PACE_operations.appointment", "model.PACE_operations.appointment_kpis", "model.PACE_operations.caregiver", "model.PACE_operations.clinical_visit", "model.PACE_operations.governance_rules", "model.PACE_operations.healthcare_dashboard", "model.PACE_operations.meal_delivery", "model.PACE_operations.notification", "model.PACE_operations.participant", "model.PACE_operations.participant_engagement", "model.PACE_operations.participant_kpi", "model.PACE_operations.participant_trip_summary", "model.PACE_operations.provider", "model.PACE_operations.provider_performance", "model.PACE_operations.service_utilization", "model.PACE_operations.transportation", "snapshot.PACE_operations.participant_snapshot"}
+00:12:26.812442 [info ]: Started building task graph
+00:12:26.812598 [info ]: Finished building task graph [  0.00s]
+00:12:26.813130 [info ]: Started rendering (17 nodes)
+00:12:26.813168 [info ]: Started snapshot SNAPSHOTS.participant_snapshot
+00:12:26.813182 [debug]: Started rendering snapshot SNAPSHOTS.participant_snapshot
+00:12:26.813209 [info ]: Started model GOLD.service_utilization
+00:12:26.813218 [debug]: Started rendering model GOLD.service_utilization
+00:12:26.813228 [info ]: Started model GOLD.provider_performance
+00:12:26.813236 [debug]: Started rendering model GOLD.provider_performance
+00:12:26.813243 [info ]: Started model SILVER.provider
+00:12:26.813252 [debug]: Started rendering model SILVER.provider
+00:12:26.813249 [info ]: Finished loading project [  0.03s]
+00:12:26.813261 [info ]: Started model GOLD.participant_trip_summary
+00:12:26.813284 [debug]: Started rendering model GOLD.participant_trip_summary
+00:12:26.813296 [info ]: Started model GOLD.participant_kpi
+00:12:26.813304 [debug]: Started rendering model GOLD.participant_kpi
+00:12:26.813311 [info ]: Started model GOLD.participant_engagement
+00:12:26.813320 [debug]: Started rendering model GOLD.participant_engagement
+00:12:26.813327 [info ]: Started model SILVER.transportation
+00:12:26.813335 [debug]: Started rendering model SILVER.transportation
+00:12:26.813342 [info ]: Started model SILVER.participant
+00:12:26.813349 [debug]: Started rendering model SILVER.participant
+00:12:26.813356 [info ]: Started model SILVER.notification
+00:12:26.813362 [debug]: Started rendering model SILVER.notification
+00:12:26.813368 [info ]: Started model GOLD.healthcare_dashboard
+00:12:26.813375 [debug]: Started rendering model GOLD.healthcare_dashboard
+00:12:26.813383 [info ]: Started model SILVER.meal_delivery
+00:12:26.813391 [debug]: Started rendering model SILVER.meal_delivery
+00:12:26.813397 [info ]: Started model SILVER.governance_rules
+00:12:26.813404 [debug]: Started rendering model SILVER.governance_rules
+00:12:26.813411 [info ]: Started model SILVER.clinical_visit
+00:12:26.813417 [debug]: Started rendering model SILVER.clinical_visit
+00:12:26.813424 [info ]: Started model SILVER.caregiver
+00:12:26.813431 [debug]: Started rendering model SILVER.caregiver
+00:12:26.813453 [info ]: Started model GOLD.appointment_kpis
+00:12:26.813463 [debug]: Started rendering model GOLD.appointment_kpis
+00:12:26.813473 [info ]: Started model SILVER.appointment
+00:12:26.813483 [debug]: Started rendering model SILVER.appointment
+00:12:26.814448 [debug]: Compiled SQL for node snapshot.PACE_operations.participant_snapshot at target/.lsp/compiled/PACE_operations/snapshots/participant_snapshot.sql/participant_snapshot.sql
+00:12:26.814625 [debug]: Finished rendering [  0.00s] snapshot SNAPSHOTS.participant_snapshot [success]
+00:12:26.814686 [info ]: Started analyzing (17 nodes)
+00:12:26.814706 [debug]: Started analyzing snapshot SNAPSHOTS.participant_snapshot
+00:12:26.814885 [debug]: Compiled SQL for node model.PACE_operations.provider_performance at target/.lsp/compiled/PACE_operations/models/gold/provider_performance.sql
+00:12:26.814968 [debug]: Finished rendering [  0.00s] model GOLD.provider_performance [success]
+00:12:26.814994 [debug]: Started analyzing model GOLD.provider_performance
+00:12:26.815673 [debug]: Compiled SQL for node model.PACE_operations.meal_delivery at target/.lsp/compiled/PACE_operations/models/silver/meal_delivery/meal_delivery.sql
+00:12:26.815679 [debug]: Compiled SQL for node model.PACE_operations.participant_kpi at target/.lsp/compiled/PACE_operations/models/gold/participant_kpi.sql
+00:12:26.815754 [debug]: Finished rendering [  0.00s] model GOLD.participant_kpi [success]
+00:12:26.815761 [debug]: Compiled SQL for node model.PACE_operations.appointment at target/.lsp/compiled/PACE_operations/models/silver/appointment/appointment.sql
+00:12:26.815779 [debug]: Started analyzing model GOLD.participant_kpi
+00:12:26.815801 [debug]: Finished rendering [  0.00s] model SILVER.meal_delivery [success]
+00:12:26.815811 [debug]: Started analyzing model SILVER.meal_delivery
+00:12:26.815840 [debug]: Finished rendering [  0.00s] model SILVER.appointment [success]
+00:12:26.815844 [debug]: Compiled SQL for node model.PACE_operations.participant_trip_summary at target/.lsp/compiled/PACE_operations/models/gold/participant_trip_summary.sql
+00:12:26.815850 [debug]: Started analyzing model SILVER.appointment
+00:12:26.815931 [debug]: Finished rendering [  0.00s] model GOLD.participant_trip_summary [success]
+00:12:26.815961 [debug]: Started analyzing model GOLD.participant_trip_summary
+00:12:26.816639 [debug]: Compiled SQL for node model.PACE_operations.transportation at target/.lsp/compiled/PACE_operations/models/silver/transportation/transportation.sql
+00:12:26.816642 [debug]: Compiled SQL for node model.PACE_operations.participant at target/.lsp/compiled/PACE_operations/models/silver/participant/participant.sql
+00:12:26.816730 [debug]: Finished rendering [  0.00s] model SILVER.transportation [success]
+00:12:26.816756 [debug]: Started analyzing model SILVER.transportation
+00:12:26.816786 [debug]: Finished rendering [  0.00s] model SILVER.participant [success]
+00:12:26.816797 [debug]: Started analyzing model SILVER.participant
+00:12:26.817192 [debug]: Compiled SQL for node model.PACE_operations.healthcare_dashboard at target/.lsp/compiled/PACE_operations/models/gold/healthcare_dashboard.sql
+00:12:26.817265 [debug]: Finished rendering [  0.00s] model GOLD.healthcare_dashboard [success]
+00:12:26.817289 [debug]: Started analyzing model GOLD.healthcare_dashboard
+00:12:26.817441 [debug]: Compiled SQL for node model.PACE_operations.appointment_kpis at target/.lsp/compiled/PACE_operations/models/gold/appointment_kpis.sql
+00:12:26.817446 [debug]: Compiled SQL for node model.PACE_operations.clinical_visit at target/.lsp/compiled/PACE_operations/models/silver/clinical_visit/clinical_visit.sql
+00:12:26.817518 [debug]: Finished rendering [  0.00s] model GOLD.appointment_kpis [success]
+00:12:26.817531 [debug]: Compiled SQL for node model.PACE_operations.service_utilization at target/.lsp/compiled/PACE_operations/models/gold/service_utilization.sql
+00:12:26.817536 [debug]: Compiled SQL for node model.PACE_operations.provider at target/.lsp/compiled/PACE_operations/models/silver/provider/provider.sql
+00:12:26.817553 [debug]: Started analyzing model GOLD.appointment_kpis
+00:12:26.817578 [debug]: Finished rendering [  0.00s] model SILVER.clinical_visit [success]
+00:12:26.817593 [debug]: Started analyzing model SILVER.clinical_visit
+00:12:26.817614 [debug]: Finished rendering [  0.00s] model GOLD.service_utilization [success]
+00:12:26.817624 [debug]: Started analyzing model GOLD.service_utilization
+00:12:26.817664 [debug]: Finished rendering [  0.00s] model SILVER.provider [success]
+00:12:26.817696 [debug]: Started analyzing model SILVER.provider
+00:12:26.817783 [debug]: Compiled SQL for node model.PACE_operations.caregiver at target/.lsp/compiled/PACE_operations/models/silver/caregiver/caregiver.sql
+00:12:26.817789 [debug]: Compiled SQL for node model.PACE_operations.governance_rules at target/.lsp/compiled/PACE_operations/models/silver/governance_rules/governance_rules.sql
+00:12:26.817845 [debug]: Finished rendering [  0.00s] model SILVER.caregiver [success]
+00:12:26.817869 [debug]: Started analyzing model SILVER.caregiver
+00:12:26.817905 [debug]: Finished rendering [  0.00s] model SILVER.governance_rules [success]
+00:12:26.817917 [debug]: Started analyzing model SILVER.governance_rules
+00:12:26.818078 [debug]: Compiled SQL for node model.PACE_operations.notification at target/.lsp/compiled/PACE_operations/models/silver/notification/notification.sql
+00:12:26.818081 [debug]: Compiled SQL for node model.PACE_operations.participant_engagement at target/.lsp/compiled/PACE_operations/models/gold/participant_engagement.sql
+00:12:26.818168 [debug]: Finished rendering [  0.00s] model GOLD.participant_engagement [success]
+00:12:26.818200 [debug]: Started analyzing model GOLD.participant_engagement
+00:12:26.819897 [debug]: Finished analyzing [  0.01s] snapshot SNAPSHOTS.participant_snapshot [success]
+00:12:26.819923 [info ]:  Succeeded [  0.01s] snapshot SNAPSHOTS.participant_snapshot (snapshot)
+00:12:26.819959 [debug]: Finished rendering [  0.01s] model SILVER.notification [success]
+00:12:26.819974 [info ]: Finished rendering [  0.01s] (17 nodes, 0 skipped, 0 errors)
+00:12:26.819986 [debug]: Started analyzing model SILVER.notification
+00:12:26.821698 [debug]: Finished analyzing [  0.01s] model GOLD.participant_kpi [success]
+00:12:26.821741 [info ]:  Succeeded [  0.01s] model GOLD.participant_kpi (table)
+00:12:26.835710 [debug]: Finished analyzing [  0.02s] model SILVER.provider [success]
+00:12:26.835750 [info ]:  Succeeded [  0.02s] model SILVER.provider (table)
+00:12:26.835775 [debug]: Finished analyzing [  0.02s] model SILVER.clinical_visit [success]
+00:12:26.835783 [info ]:  Succeeded [  0.02s] model SILVER.clinical_visit (table)
+00:12:26.836277 [debug]: Finished analyzing [  0.02s] model SILVER.transportation [success]
+00:12:26.836306 [info ]:  Succeeded [  0.02s] model SILVER.transportation (table)
+00:12:26.836325 [debug]: Finished analyzing [  0.02s] model GOLD.appointment_kpis [success]
+00:12:26.836336 [info ]:  Succeeded [  0.02s] model GOLD.appointment_kpis (table)
+00:12:26.836347 [debug]: Finished analyzing [  0.02s] model GOLD.service_utilization [success]
+00:12:26.836355 [info ]:  Succeeded [  0.02s] model GOLD.service_utilization (table)
+00:12:26.836387 [debug]: Finished analyzing [  0.02s] model GOLD.participant_trip_summary [success]
+00:12:26.836410 [info ]:  Succeeded [  0.02s] model GOLD.participant_trip_summary (table)
+00:12:26.836434 [debug]: Finished analyzing [  0.02s] model SILVER.caregiver [success]
+00:12:26.836446 [info ]:  Succeeded [  0.02s] model SILVER.caregiver (table)
+00:12:26.836500 [debug]: Finished analyzing [  0.02s] model SILVER.participant [success]
+00:12:26.836514 [info ]:  Succeeded [  0.02s] model SILVER.participant (table)
+00:12:26.839822 [debug]: Finished analyzing [  0.02s] model GOLD.provider_performance [success]
+00:12:26.839855 [info ]:  Succeeded [  0.03s] model GOLD.provider_performance (table)
+00:12:26.840936 [debug]: Finished analyzing [  0.02s] model SILVER.governance_rules [success]
+00:12:26.840955 [info ]:  Succeeded [  0.03s] model SILVER.governance_rules (table)
+00:12:26.841027 [debug]: Finished analyzing [  0.03s] model SILVER.meal_delivery [success]
+00:12:26.841053 [info ]:  Succeeded [  0.03s] model SILVER.meal_delivery (table)
+00:12:26.841075 [debug]: Finished analyzing [  0.03s] model SILVER.appointment [success]
+00:12:26.841085 [info ]:  Succeeded [  0.03s] model SILVER.appointment (table)
+00:12:26.841104 [debug]: Finished analyzing [  0.02s] model GOLD.healthcare_dashboard [success]
+00:12:26.841117 [info ]:  Succeeded [  0.03s] model GOLD.healthcare_dashboard (table)
+00:12:26.841541 [debug]: Finished analyzing [  0.02s] model SILVER.notification [success]
+00:12:26.841560 [info ]:  Succeeded [  0.03s] model SILVER.notification (table)
+00:12:26.847309 [debug]: Finished analyzing [  0.03s] model GOLD.participant_engagement [success]
+00:12:26.847332 [info ]: Finished analyzing [  0.03s] (17 nodes, 0 skipped, 0 errors)
+00:12:26.847340 [info ]:  Succeeded [  0.03s] model GOLD.participant_engagement (table)
+00:12:26.850842 [info ]: Started scheduling
+00:12:26.850915 [info ]: Finished scheduling [  0.00s]
+00:12:26.851203 [info ]: Cached model count updated: 16 models (accurate)
