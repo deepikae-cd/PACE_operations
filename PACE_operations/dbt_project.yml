@@ -15,14 +15,3 @@ clean-targets:
   - "target"
   - "dbt_packages"
 
-models:
-  +materialized: table   # default for all models
-
-  silver:
-    +schema: SILVER
-
-  gold:
-    +schema: GOLD
-
-snapshots:
-  +target_schema: SNAPSHOTS
