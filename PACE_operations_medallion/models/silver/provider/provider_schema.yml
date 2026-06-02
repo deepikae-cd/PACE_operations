@@ -2,7 +2,11 @@ version: 2
 
 models:
   - name: provider
-    description: Provider master dataset with specialty and operational status.
+    description: >
+      Silver-layer provider master dataset containing cleansed and standardized
+      provider identity, specialty, and operational status. Deduplicated on
+      provider_id with null validation applied to key fields. Business-derived
+      flags belong in the Gold layer.
 
     config:
       schema: SILVER
@@ -10,27 +14,42 @@ models:
 
     columns:
       - name: provider_id
-        description: Unique identifier for each provider in the system.
+        description: Unique identifier for each provider.
         tests:
           - not_null
           - unique
 
       - name: provider_name
-        description: Full name of the provider or healthcare professional.
-        tests:
-          - not_null
+        description: Uppercased and trimmed full name of the provider.
+  
 
       - name: specialty
-        description: Medical or service specialty associated with the provider (e.g., cardiology, primary care).
+        description: Uppercased and trimmed medical or service specialty of the provider.
+     
+
+      - name: license_number
+        description: Uppercased and trimmed professional license number of the provider.
+
+      - name: phone
+        description: Digits-only phone number with all non-numeric characters stripped.
 
       - name: provider_status
-        description: Current operational status of the provider (e.g., active, inactive, suspended).
+        description: Uppercased and trimmed operational status of the provider. Defaults to ACTIVE when null in the source system.
+      
 
       - name: source_created_ts
-        description: Timestamp when the provider record was created in the source system.
+        description: Timestamp when the record was originally created in the source system.
 
       - name: load_ts
-        description: Timestamp when the record was loaded into the SILVER layer.
+        description: Timestamp when the record was loaded into the Silver layer.
 
-      - name: active_flag
-        description: Flag indicating whether the provider record is currently active (Y/N or true/false).
+      - name: source_system
+        description: Name of the source system this record was ingested from.
+     
+
+      - name: record_hash
+        description: >
+          MD5 hash of key fields used for change detection and incremental
+          load comparisons. Derived from provider_id, provider_name,
+          specialty, license_number, phone, and status.
+     

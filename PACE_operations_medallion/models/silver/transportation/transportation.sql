@@ -1,44 +1,37 @@
-with source_data as (
+with src as (
 
-    select
-        transport_id,
-        participant_id,
-        pickup_location,
-        destination,
-        pickup_time,
-        status,
-        created_ts
-
+    select *
     from {{ source('bronze', 'transportation_raw') }}
-
-),
-
-cleaned as (
-
-    select
-        transport_id,
-        participant_id,
-        pickup_location,
-        destination,
-        pickup_time,
-        created_ts,
-
-        -- standardized status (DO NOT overwrite raw column)
-        upper(coalesce(status, 'UNKNOWN')) as trip_status,
-
-        -- derived flags (required for Gold)
-        case 
-            when upper(status) = 'COMPLETED' then 1 
-            else 0 
-        end as completed_flag,
-
-        case 
-            when upper(status) = 'CANCELLED' then 1 
-            else 0 
-        end as cancelled_flag
-
-    from source_data
+    where transport_id     is not null
+      and participant_id   is not null
+      and pickup_location  is not null
+      and destination      is not null
+      and pickup_time      is not null
 
 )
 
-select * from cleaned
+select
+    transport_id                              as transportation_id,
+    participant_id,
+    upper(trim(pickup_location))              as pickup_location,
+    upper(trim(destination))                  as destination,
+    pickup_time,
+    upper(coalesce(trim(status), 'UNKNOWN'))  as trip_status,
+    created_ts                                as source_created_ts,
+    current_timestamp()                       as load_ts,
+    'transportation'                          as source_system,
+    md5(concat(
+        coalesce(cast(transport_id   as string),   ''),
+        coalesce(cast(participant_id as string),   ''),
+        coalesce(upper(trim(pickup_location)),     ''),
+        coalesce(upper(trim(destination)),         ''),
+        coalesce(cast(pickup_time    as string),   ''),
+        coalesce(upper(trim(status)),              '')
+    ))                                        as record_hash
+
+from src
+
+qualify row_number() over (
+    partition by transport_id
+    order by created_ts desc
+) = 1
