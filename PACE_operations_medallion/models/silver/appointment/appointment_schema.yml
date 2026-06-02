@@ -3,10 +3,10 @@ version: 2
 models:
   - name: appointment
     description: >
-      Silver-layer appointment dataset containing standardized appointment
-      information, participant-provider relationships, appointment status
-      indicators, and business-driven categorization used for operational
-      reporting and healthcare service analytics.
+      Silver-layer appointment dataset containing cleansed and standardized
+      appointment records. Includes deduplication, null validation, and audit
+      metadata. Business-derived flags and categorizations are intentionally
+      excluded and belong in the Gold layer.
 
     config:
       schema: SILVER
@@ -25,20 +25,21 @@ models:
 
       - name: provider_id
         description: Unique identifier of the healthcare provider assigned to the appointment.
-        tests:
-          - not_null
-         
+       
+       
 
       - name: appointment_date
-        description: Scheduled date on which the appointment is expected to occur.
+        description: Scheduled date of the appointment. Null records are excluded upstream.
       
 
       - name: service_type
-        description: Standardized healthcare service type associated with the appointment.
+        description: Uppercased and trimmed healthcare service type from the source system.
 
       - name: appointment_status
-        description: Current status of the appointment after standardization.
-       
+        description: Uppercased and trimmed appointment status from the source system.
+        tests:
+          - not_null
+         
 
       - name: source_created_ts
         description: Timestamp when the appointment record was originally created in the source system.
@@ -46,14 +47,13 @@ models:
       - name: load_ts
         description: Timestamp when the record was loaded into the Silver layer.
 
-      - name: completed_flag
-        description: Indicator showing whether the appointment was completed (1 = completed, 0 = otherwise).
+      - name: source_system
+        description: Name of the source system this record was ingested from.
+       
 
-      - name: cancelled_flag
-        description: Indicator showing whether the appointment was cancelled (1 = cancelled, 0 = otherwise).
-
-      - name: appointment_category
+      - name: record_hash
         description: >
-          Business categorization of appointments based on appointment date
-          and status. Values include OVERDUE, TODAY, UPCOMING, and UNKNOWN.
+          MD5 hash of key fields used for change detection and incremental
+          load comparisons. Derived from appointment_id, participant_id,
+          provider_id, appointment_date, status, and service_type.
       
