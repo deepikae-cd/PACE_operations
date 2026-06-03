@@ -1,12 +1,24 @@
 name: PACE_operations_medallion
+version: '1.0.0'
+config-version: 2
+
+profile: DBT_PROD
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
 
 models:
   PACE_operations_medallion:
-
     silver:
       +schema: SILVER
       +materialized: view
-
     gold:
       +schema: GOLD
       +materialized: table
