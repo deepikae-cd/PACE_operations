@@ -6,14 +6,6 @@ snapshots:
     description: >
       SCD Type 2 snapshot tracking historical participant changes.
 
-    relation: ref('participant')
-
-    config:
-      strategy: timestamp
-      unique_key: participant_id
-      updated_at: source_created_ts
-      target_schema: SNAPSHOTS
-
     columns:
 
       - name: participant_id
@@ -32,9 +24,13 @@ snapshots:
 
       - name: dbt_valid_from
         description: Snapshot effective start timestamp.
+        tests:
+          - not_null
 
       - name: dbt_valid_to
         description: Snapshot effective end timestamp.
 
       - name: dbt_updated_at
         description: Timestamp used by dbt snapshot logic.
+
+ 
