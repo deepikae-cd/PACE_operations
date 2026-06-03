@@ -18,12 +18,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: sudo apt-get install -y jq
+
       - name: Trigger dbt Cloud CI Job
         id: trigger_ci
         run: |
           RESPONSE=$(curl -s -X POST \
             "${{ env.DBT_CLOUD_HOST }}/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/jobs/${{ secrets.DBT_CLOUD_PR_JOB_ID }}/run/" \
-            -H "Authorization: Token ${{ secrets.DBT_API_KEY }}" \
+            -H "Authorization: Token ${{ secrets.DBT_CLOUD_SERVICE_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
               "cause": "GitHub Actions PR #${{ github.event.pull_request.number }}",
@@ -45,7 +48,7 @@ jobs:
             sleep 30
             STATUS_RESPONSE=$(curl -s \
               "${{ env.DBT_CLOUD_HOST }}/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/runs/$RUN_ID/" \
-              -H "Authorization: Token ${{ secrets.DBT_API_KEY }}")
+              -H "Authorization: Token ${{ secrets.DBT_CLOUD_SERVICE_TOKEN }}")
 
             STATUS=$(echo $STATUS_RESPONSE | jq -r '.data.status')
             STATUS_MESSAGE=$(echo $STATUS_RESPONSE | jq -r '.data.status_message')
@@ -55,15 +58,15 @@ jobs:
 
             # dbt Cloud status codes: 1=Queued, 2=Starting, 3=Running, 10=Success, 20=Error, 30=Cancelled
             if [ "$STATUS" = "10" ]; then
-              echo "CI job succeeded"
+              echo "✅ CI job succeeded"
               exit 0
             elif [ "$STATUS" = "20" ] || [ "$STATUS" = "30" ]; then
-              echo "CI job failed. See: $RUN_URL"
+              echo "❌ CI job failed. See: $RUN_URL"
               exit 1
             fi
           done
 
-          echo "Timed out waiting for CI job"
+          echo "⏱️ Timed out waiting for CI job"
           exit 1
 
       - name: Post CI summary
