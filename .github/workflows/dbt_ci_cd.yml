@@ -3,6 +3,7 @@ name: dbt Cloud CI (Slim CI on PR)
 on:
   pull_request:
     branches: [main]
+    types: [closed]        # Only fires when PR is closed (merged or declined)
     paths:
       - 'models/**'
       - 'macros/**'
@@ -17,6 +18,7 @@ jobs:
   dbt-ci:
     name: dbt Cloud CI (Slim CI on PR)
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true  # Only run if PR was actually merged, not just closed
 
     steps:
       - name: Checkout code
@@ -79,4 +81,3 @@ jobs:
           echo "- **Commit:** ${{ github.event.pull_request.head.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "- **dbt Cloud Run:** ${{ steps.trigger_ci.outputs.run_id }}" >> $GITHUB_STEP_SUMMARY
-          
