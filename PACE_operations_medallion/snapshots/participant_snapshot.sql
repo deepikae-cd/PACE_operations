@@ -2,10 +2,11 @@
 
 {{
     config(
-        schema='SNAPSHOTS',
-        strategy='timestamp',
+        target_schema='SNAPSHOTS',
+        strategy='check',
         unique_key='participant_id',
-        updated_at='source_created_ts'
+        check_cols=['record_hash'],
+        invalidate_hard_deletes=True
     )
 }}
 
@@ -14,8 +15,13 @@ select
     first_name,
     last_name,
     gender,
+    email,
+    phone,
     participant_status,
-    source_created_ts
+    source_created_ts,
+    load_ts,
+    source_system,
+    record_hash
 from {{ ref('participant') }}
 
 {% endsnapshot %}
