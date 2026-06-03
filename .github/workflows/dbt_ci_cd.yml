@@ -79,3 +79,4 @@ jobs:
           echo "- **Commit:** ${{ github.event.pull_request.head.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "- **dbt Cloud Run:** ${{ steps.trigger_ci.outputs.run_id }}" >> $GITHUB_STEP_SUMMARY
+          
