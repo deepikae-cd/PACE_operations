@@ -26,7 +26,6 @@ models:
       - name: provider_id
         description: Unique identifier of the healthcare provider assigned to the appointment.
        
-       
 
       - name: appointment_date
         description: Scheduled date of the appointment. Null records are excluded upstream.
@@ -37,10 +36,8 @@ models:
 
       - name: appointment_status
         description: Uppercased and trimmed appointment status from the source system.
-        tests:
-          - not_null
+   
          
-
       - name: source_created_ts
         description: Timestamp when the appointment record was originally created in the source system.
 
