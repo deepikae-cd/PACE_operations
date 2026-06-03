@@ -53,4 +53,5 @@ models:
           MD5 hash of key fields used for change detection and incremental
           load comparisons. Derived from transport_id, participant_id,
           pickup_location, destination, pickup_time, and status.
+          
      
