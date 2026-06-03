@@ -16,6 +16,7 @@ models:
         metrics:
           total_appointments:
             type: count
+            sql: "appointment_id"
             label: "Total Appointments"
             description: "Total number of appointment records"
           unique_participants:

@@ -1,12 +1,9 @@
 name: dbt Cloud CI/CD Pipeline
 
 on:
-  # Trigger CI job when a PR is opened, updated, or reopened against main
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
-
-  # Trigger Production job when a PR is merged into main
   push:
     branches: [main]
 
