@@ -22,7 +22,7 @@ models:
 
       - name: organization_id
         description: Natural identifier of the organization.
-        tests: [not_null, unique]
+        tests: [not_null]
 
       - name: organization_name
         description: Name of the organization.
