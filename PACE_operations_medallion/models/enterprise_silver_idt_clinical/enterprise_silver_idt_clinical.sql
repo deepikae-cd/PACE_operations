@@ -1,7 +1,7 @@
 /*
   ENTERPRISE_SILVER_IDT_CLINICAL
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_clinical_visit', 'raw_clinical_visit') }}
+  Source  : {{ source('bronze_clinical_visit', 'RAW_CLINICAL_VISIT') }}
   Purpose : Cleanse, cast, deduplicate clinical encounter records.
             Parses BP string into systolic / diastolic numerics.
             Normalises visit type, location type, follow-up flags.
