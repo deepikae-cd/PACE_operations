@@ -1,0 +1,157 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_medication
+    description: >
+      Cleaned and deduplicated medication records from
+      BRONZE_MEDICATION.RAW_MEDICATION.
+      Normalises drug attributes, pharmacy details, and prescription lifecycle.
+      Supports medication adherence, refill tracking, and cost analytics.
+
+    config:
+      schema: enterprise_silver_medication
+      alias : medication
+      materialized: table
+      tags: ["silver", "medication"]
+
+    columns:
+      - name: medication_sk
+        description: Surrogate key.
+        tests: [not_null, unique]
+
+      - name: medication_id
+        description: Natural key.
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: Participant identifier.
+
+      - name: provider_id
+        description: Prescribing provider identifier.
+
+      - name: visit_id
+        description: Associated clinical visit.
+
+      - name: medication_name
+        description: Medication name.
+
+      - name: generic_name
+        description: Generic drug name.
+
+      - name: brand_name
+        description: Brand name.
+
+      - name: ndc_code
+        description: National Drug Code.
+
+      - name: drug_class
+        description: Drug classification category.
+
+      - name: dosage
+        description: Dosage value.
+
+      - name: dosage_unit
+        description: Unit of dosage (mg, ml, etc.).
+
+      - name: frequency
+        description: Frequency of administration.
+
+      - name: route
+        description: Route of administration.
+
+      - name: prescribed_date
+        description: Date medication was prescribed.
+
+      - name: start_date
+        description: Medication start date.
+
+      - name: end_date
+        description: Medication end date.
+
+      - name: medication_status
+        description: Normalised medication status.
+
+      - name: refills_authorized
+        description: Number of refills authorized.
+
+      - name: refills_remaining
+        description: Remaining refills.
+
+      - name: last_refill_date
+        description: Last refill timestamp.
+
+      - name: pharmacy_name
+        description: Pharmacy name.
+
+      - name: pharmacy_id
+        description: Pharmacy identifier.
+
+      - name: pharmacy_npi
+        description: Pharmacy NPI.
+
+      - name: pharmacy_phone
+        description: Pharmacy phone number.
+
+      - name: pharmacy_address
+        description: Pharmacy address.
+
+      - name: dispensed_quantity
+        description: Quantity dispensed.
+
+      - name: days_supply
+        description: Days of supply.
+
+      - name: is_controlled_substance
+        description: TRUE if medication is controlled substance.
+
+      - name: dea_schedule
+        description: DEA schedule classification.
+
+      - name: prior_auth_required_flag
+        description: TRUE if prior authorization required.
+
+      - name: prior_authorization_status
+        description: Prior authorization status.
+
+      - name: adverse_reactions
+        description: Known adverse reactions.
+
+      - name: contraindications
+        description: Contraindications.
+
+      - name: interaction_alerts
+        description: Drug interaction alerts.
+
+      - name: administration_instructions
+        description: Instructions for medication administration.
+
+      - name: special_handling_notes
+        description: Special handling requirements.
+
+      - name: is_pace_formulary
+        description: TRUE if part of PACE formulary.
+
+      - name: formulary_tier
+        description: Formulary tier classification.
+
+      - name: cost_per_unit
+        description: Cost per unit.
+
+      - name: total_cost
+        description: Total medication cost.
+
+      - name: coverage_type
+        description: Insurance coverage type.
+
+      - name: center_id
+        description: PACE center identifier.
+
+      - name: source_system
+        description: Source system name.
+
+      - name: loaded_timestamp
+        description: Bronze load timestamp.
+
+      - name: dbt_updated_timestamp
+        description: DBT model update timestamp.
