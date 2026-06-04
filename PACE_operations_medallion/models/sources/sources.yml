@@ -5,52 +5,54 @@ sources:
   - name: bronze_participant
     description: "Raw Participant domain"
     schema: BRONZE_PARTICIPANT
-
     tables:
       - name: RAW_PARTICIPANT
         description: "Core participant records"
 
 
   - name: bronze_appointment
-    description: "Raw Appointment source tables (Domain 3)"
+    description: "Raw Appointment domain"
     schema: BRONZE_APPOINTMENT
-
     tables:
       - name: RAW_APPOINTMENT
         description: "Scheduled care event records"
 
 
   - name: bronze_caregiver
-    description: "Raw Caregiver domain including staff and assignments"
+    description: "Raw Caregiver domain"
     schema: BRONZE_CAREGIVER
-
     tables:
       - name: RAW_CAREGIVER
         description: "Core caregiver (care staff) records"
 
 
   - name: bronze_clinical_visit
-    description: "Raw Clinical Visit source tables"
+    description: "Raw Clinical Visit domain"
     schema: BRONZE_CLINICAL_VISIT
-
     tables:
       - name: RAW_CLINICAL_VISIT
         description: "Medical and clinical encounter records"
 
 
   - name: bronze_meal_delivery
-    description: "Raw Meal Delivery source tables"
+    description: "Raw Meal Delivery domain"
     schema: BRONZE_MEAL_DELIVERY
-
     tables:
       - name: RAW_MEAL_DELIVERY
         description: "Meal delivery and nutrition service records"
 
 
   - name: bronze_transportation
-    description: "Raw Transportation source tables"
+    description: "Raw Transportation domain"
     schema: BRONZE_TRANSPORTATION
-
     tables:
       - name: RAW_TRANSPORTATION
         description: "Transportation and trip service records"
+
+
+  - name: bronze_governance
+    description: "Raw Governance and regulatory rules domain"
+    schema: BRONZE_GOVERNANCE
+    tables:
+      - name: RAW_GOVERNANCE_RULES
+        description: "Governance rules, compliance logic, and regulatory metadata"
