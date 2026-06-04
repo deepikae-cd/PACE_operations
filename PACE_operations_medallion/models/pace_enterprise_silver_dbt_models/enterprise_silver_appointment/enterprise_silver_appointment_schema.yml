@@ -4,16 +4,18 @@ models:
 
   - name: enterprise_silver_appointment
     description: >
-      Cleaned and deduplicated appointment records from
-      BRONZE_APPOINTMENT.RAW_APPOINTMENT. Normalises appointment type,
-      status, and location type. Computes duration, punctuality flags,
-      and an is_completed boolean for downstream aggregation.
+      Cleaned, deduplicated, and enriched appointment records sourced from
+      STG_APPOINTMENT. Normalises appointment type, status, and location type.
+      Computes duration, punctuality metrics, and boolean flags for analytics.
 
     config:
       schema: enterprise_silver_appointment
       alias: appointment
-      materialized: table
+      materialized: incremental
+      unique_key: appointment_sk
+      incremental_strategy: merge
       tags: ["silver", "appointment"]
+      on_schema_change: sync_all_columns
 
     columns:
       - name: appointment_sk
@@ -21,17 +23,23 @@ models:
         tests: [not_null, unique]
 
       - name: appointment_id
-        description: Natural key.
-        tests: [not_null, unique]
+        description: Natural identifier of the appointment.
+        tests: [not_null]
 
       - name: participant_id
-        description: FK to stg_participant.
+        description: Participant receiving care.
 
       - name: caregiver_id
-        description: FK to stg_caregiver (nullable – some appointments have no assigned caregiver).
+        description: Assigned caregiver (nullable).
 
       - name: provider_id
-        description: FK to stg_provider (nullable).
+        description: Associated provider.
+
+      - name: center_id
+        description: PACE center identifier.
+
+      - name: parent_appointment_id
+        description: Parent appointment for recurring series.
 
       - name: appointment_type
         description: Normalised appointment type.
@@ -39,49 +47,59 @@ models:
       - name: appointment_status
         description: Normalised appointment status.
 
-      - name: scheduled_date
-        description: Scheduled appointment date/time (TIMESTAMP_NTZ).
-
-      - name: actual_start_time
-        description: Actual appointment start time.
-
-      - name: actual_end_time
-        description: Actual appointment end time.
-
-      - name: duration_minutes_actual
-        description: Actual duration in minutes (null if not completed).
-
       - name: is_completed_flag
-        description: TRUE if status = COMPLETED.
+        description: TRUE if appointment status is COMPLETED.
 
       - name: is_cancelled_flag
-        description: TRUE if status = CANCELLED.
+        description: TRUE if appointment status is CANCELLED.
 
       - name: is_no_show_flag
-        description: TRUE if status = NO_SHOW.
+        description: TRUE if appointment status is NO_SHOW.
+
+      - name: cancellation_reason
+        description: Reason for cancellation.
+
+      - name: scheduled_date
+        description: Scheduled date and time of appointment.
+
+      - name: actual_start_time
+        description: Actual start timestamp.
+
+      - name: actual_end_time
+        description: Actual end timestamp.
+
+      - name: duration_minutes_actual
+        description: Duration in minutes between start and end.
 
       - name: late_start_minutes
-        description: >
-          Minutes between scheduled_date and actual_start_time (positive = late,
-          negative = early). NULL if appointment not completed.
+        description: Minutes difference between scheduled and actual start.
+
+      - name: is_late_start_flag
+        description: TRUE if appointment started more than 15 minutes late.
 
       - name: location_type
-        description: Normalised location type.
+        description: Normalised location type (CENTER, HOME, etc.).
 
-      - name: center_id
-        description: PACE center associated with the appointment.
-
-      - name: parent_appointment_id
-        description: Links to a recurring appointment series parent.
+      - name: location_address
+        description: Address where appointment occurred.
 
       - name: recurrence_pattern
-        description: Recurrence cadence (WEEKLY / BIWEEKLY / MONTHLY / NULL).
+        description: Recurrence cadence.
+
+      - name: is_recurring_flag
+        description: TRUE if appointment is part of recurring series.
+
+      - name: notes
+        description: Free text notes.
 
       - name: source_system
-        description: Origin system name.
+        description: Origin system.
 
       - name: loaded_timestamp
-        description: Bronze pipeline load timestamp.
+        description: Bronze load timestamp.
+
+      - name: source_file
+        description: Source file name.
 
       - name: dbt_updated_timestamp
-        description: DBT model write timestamp.
+        description: DBT model update timestamp.

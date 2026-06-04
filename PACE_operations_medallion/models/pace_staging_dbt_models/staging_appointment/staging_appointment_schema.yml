@@ -1,0 +1,77 @@
+version: 2
+
+models:
+
+  - name: staging_appointment
+    description: >
+      Thin staging layer for appointment data sourced from
+      BRONZE_APPOINTMENT.RAW_APPOINTMENT.
+      Performs basic column selection, renaming, and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
+
+    config:
+      schema: staging_appointment
+      alias: appointment
+      materialized: view
+      tags: ["staging", "appointment"]
+
+    columns:
+      - name: appointment_id
+        description: Unique identifier for the appointment.
+        tests: [not_null]
+
+      - name: participant_id
+        description: Identifier of the participant.
+        tests: [not_null]
+
+      - name: caregiver_id
+        description: Identifier of the assigned caregiver.
+
+      - name: provider_id
+        description: Identifier of the provider.
+
+      - name: center_id
+        description: PACE center identifier.
+
+      - name: parent_appointment_id
+        description: Identifier linking to recurring appointment series.
+
+      - name: appointment_type
+        description: Raw appointment type from source.
+
+      - name: appointment_status
+        description: Raw status of the appointment.
+
+      - name: cancellation_reason
+        description: Reason provided for cancellation.
+
+      - name: location_type
+        description: Type of appointment location.
+
+      - name: location_address
+        description: Address/location details.
+
+      - name: recurrence_pattern
+        description: Recurrence pattern (if applicable).
+
+      - name: notes
+        description: Free-text notes associated with the appointment.
+
+      - name: scheduled_date
+        description: Scheduled date and time of appointment.
+        tests: [not_null]
+
+      - name: actual_start_time
+        description: Actual start timestamp.
+
+      - name: actual_end_time
+        description: Actual end timestamp.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: _loaded_at
+        description: Raw ingestion timestamp from bronze layer.
+
+      - name: _source_file
+        description: Source file name from ingestion.
