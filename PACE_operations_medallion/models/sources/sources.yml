@@ -59,3 +59,11 @@ sources:
 
       - name: RAW_COMPLIANCE_VIOLATIONS
         description: "Compliance violations and rule breach events"
+
+
+  - name: bronze_notification
+    description: "Raw Notification domain"
+    schema: BRONZE_NOTIFICATION
+    tables:
+      - name: RAW_NOTIFICATION
+        description: "Notification delivery, messaging, and communication records"
