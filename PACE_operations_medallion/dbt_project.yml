@@ -27,38 +27,38 @@ models:
 
     # ================= SILVER LAYER =================
 
-    silver:
+    pace_enterprise_silver_dbt_models:
 
       +materialized: table
 
-      participant:
+      enterprise_silver_participant:
         +schema: SILVER_PARTICIPANT
 
-      provider:
+      enterprise_silver_provider:
         +schema: SILVER_PROVIDER
 
-      appointment:
+      enterprise_silver_appointment:
         +schema: SILVER_APPOINTMENT
 
-      caregiver:
+      enterprise_silver_caregiver:
         +schema: SILVER_CAREGIVER
 
-      clinical_visit:
+      enterprise_silver_clinical_visit:
         +schema: SILVER_CLINICAL_VISIT
 
-      combined:
+      enterprise_silver_combined:
         +schema: SILVER_COMBINED
 
-      governance:
+      enterprise_silver_governance:
         +schema: SILVER_GOVERNANCE
 
-      meal_delivery:
+      enterprise_silver_meal_delivery:
         +schema: SILVER_MEAL_DELIVERY
 
-      notification:
+      enterprise_silver_notification:
         +schema: SILVER_NOTIFICATION
 
-      transportation:
+      enterprise_silver_transportation:
         +schema: SILVER_TRANSPORTATION
 
 
