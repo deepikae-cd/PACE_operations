@@ -4,7 +4,6 @@ config-version: 2
 
 profile: DBT_PROD
 
-
 model-paths: ["models"]
 snapshot-paths: ["snapshots"]
 test-paths: ["tests"]
@@ -28,38 +27,38 @@ models:
 
     # ================= SILVER LAYER =================
 
-    pace_dbt_silver:
+    pace_enterprise_silver_dbt_models:
 
-      +materialized: table   # default for all silver models
+      +materialized: table
 
-      pace_participant_silver:
+      enterprise_silver_participant:
         +schema: SILVER_PARTICIPANT
 
-      pace_provider_silver:
+      enterprise_silver_provider:
         +schema: SILVER_PROVIDER
 
-      pace_appointment_silver:
+      enterprise_silver_appointment:
         +schema: SILVER_APPOINTMENT
 
-      pace_caregiver_silver:
+      enterprise_silver_caregiver:
         +schema: SILVER_CAREGIVER
 
-      pace_clinical_visit_silver:
+      enterprise_silver_clinical_visit:
         +schema: SILVER_CLINICAL_VISIT
 
-      pace_combined_silver:
+      enterprise_silver_combined:
         +schema: SILVER_COMBINED
 
-      pace_governance_silver:
+      enterprise_silver_governance:
         +schema: SILVER_GOVERNANCE
 
-      pace_meal_delivery_silver:
+      enterprise_silver_meal_delivery:
         +schema: SILVER_MEAL_DELIVERY
 
-      pace_notification_silver:
+      enterprise_silver_notification:
         +schema: SILVER_NOTIFICATION
 
-      pace_transportation_silver:
+      enterprise_silver_transportation:
         +schema: SILVER_TRANSPORTATION
 
 

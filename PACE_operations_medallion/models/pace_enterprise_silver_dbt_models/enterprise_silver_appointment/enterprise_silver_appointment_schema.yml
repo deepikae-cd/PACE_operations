@@ -1,0 +1,87 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_appointment
+    description: >
+      Cleaned and deduplicated appointment records from
+      BRONZE_APPOINTMENT.RAW_APPOINTMENT. Normalises appointment type,
+      status, and location type. Computes duration, punctuality flags,
+      and an is_completed boolean for downstream aggregation.
+
+    config:
+      schema: silver_appointment
+      alias: appointment
+      materialized: table
+      tags: ["silver", "appointment"]
+
+    columns:
+      - name: appointment_sk
+        description: Surrogate key.
+        tests: [not_null, unique]
+
+      - name: appointment_id
+        description: Natural key.
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: FK to stg_participant.
+
+      - name: caregiver_id
+        description: FK to stg_caregiver (nullable – some appointments have no assigned caregiver).
+
+      - name: provider_id
+        description: FK to stg_provider (nullable).
+
+      - name: appointment_type
+        description: Normalised appointment type.
+
+      - name: appointment_status
+        description: Normalised appointment status.
+
+      - name: scheduled_date
+        description: Scheduled appointment date/time (TIMESTAMP_NTZ).
+
+      - name: actual_start_time
+        description: Actual appointment start time.
+
+      - name: actual_end_time
+        description: Actual appointment end time.
+
+      - name: duration_minutes_actual
+        description: Actual duration in minutes (null if not completed).
+
+      - name: is_completed
+        description: TRUE if status = COMPLETED.
+
+      - name: is_cancelled
+        description: TRUE if status = CANCELLED.
+
+      - name: is_no_show
+        description: TRUE if status = NO_SHOW.
+
+      - name: late_start_minutes
+        description: >
+          Minutes between scheduled_date and actual_start_time (positive = late,
+          negative = early). NULL if appointment not completed.
+
+      - name: location_type
+        description: Normalised location type.
+
+      - name: center_id
+        description: PACE center associated with the appointment.
+
+      - name: parent_appointment_id
+        description: Links to a recurring appointment series parent.
+
+      - name: recurrence_pattern
+        description: Recurrence cadence (WEEKLY / BIWEEKLY / MONTHLY / NULL).
+
+      - name: source_system
+        description: Origin system name.
+
+      - name: loaded_at
+        description: Bronze pipeline load timestamp.
+
+      - name: dbt_updated_at
+        description: DBT model write timestamp.

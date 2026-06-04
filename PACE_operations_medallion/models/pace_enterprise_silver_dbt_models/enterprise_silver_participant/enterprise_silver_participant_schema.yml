@@ -2,13 +2,12 @@ version: 2
 
 models:
 
-  - name: pace_silver_participant
+  - name: enterprise_silver_participant
     description: >
       Cleaned and standardised participant (member) records sourced from
       BRONZE_PARTICIPANT.RAW_PARTICIPANT.  Duplicate rows are removed via
       row_number() over the natural key; values are cast to canonical types
-      and NULL-coalesced where appropriate.  This model is the primary input
-      for DIM_PARTICIPANT and all Silver-Combined joins.
+      and NULL-coalesced where appropriate. 
 
     config:
       schema: silver_participant
@@ -20,9 +19,11 @@ models:
       - name: participant_sk
         description: Surrogate key (SHA-256 hash of PARTICIPANT_ID + _LOADED_AT).
         tests: [not_null, unique]
+
       - name: participant_id
         description: Natural key from source system (UUID).
         tests: [not_null, unique]
+        
       - name: full_name
         description: Concatenated FIRST_NAME + LAST_NAME.
       - name: date_of_birth
