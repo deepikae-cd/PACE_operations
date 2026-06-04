@@ -45,7 +45,7 @@ models:
       - name: delivery_status
         description: Normalised delivery outcome.
 
-      - name: is_delivered
+      - name: is_delivered_flag
         description: TRUE if delivery_status = DELIVERED.
 
       - name: participant_acceptance

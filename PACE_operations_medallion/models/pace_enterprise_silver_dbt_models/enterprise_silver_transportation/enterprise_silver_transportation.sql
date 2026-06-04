@@ -60,9 +60,9 @@ cleaned as (
             else 'UNKNOWN'
         end as transport_status,
 
-        (upper(trim(transport_status)) = 'COMPLETED') as is_completed,
-        (upper(trim(transport_status)) = 'CANCELLED') as is_cancelled,
-        (upper(trim(transport_status)) = 'NO_SHOW')   as is_no_show,
+        (upper(trim(transport_status)) = 'COMPLETED') as is_completed_flag,
+        (upper(trim(transport_status)) = 'CANCELLED') as is_cancelled_flag,
+        (upper(trim(transport_status)) = 'NO_SHOW')   as is_no_show_flag,
 
         trim(cancellation_reason) as cancellation_reason,
         scheduled_pickup_time as scheduled_pickup_timestamp,

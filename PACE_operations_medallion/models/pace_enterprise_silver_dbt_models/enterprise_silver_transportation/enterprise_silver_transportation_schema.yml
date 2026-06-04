@@ -6,8 +6,7 @@ models:
     description: >
       Cleaned and deduplicated transportation records from
       BRONZE_TRANSPORTATION.RAW_TRANSPORTATION. Normalises transport type,
-      trip direction, and status. Computes on-time flag, wait-time, and
-      actual trip duration in minutes.
+      trip direction, and status. Computes wait-time and actual trip duration.
 
     config:
       schema: enterprise_silver_transportation
@@ -30,6 +29,9 @@ models:
       - name: appointment_id
         description: FK to stg_appointment (nullable).
 
+      - name: center_id
+        description: PACE center.
+
       - name: transport_type
         description: Normalised transport type.
 
@@ -39,16 +41,25 @@ models:
       - name: transport_status
         description: Normalised transport outcome.
 
-      - name: is_completed
+      - name: is_completed_flag
         description: TRUE if status = COMPLETED.
 
-      - name: scheduled_pickup_time
+      - name: is_cancelled_flag
+        description: TRUE if status = CANCELLED.
+
+      - name: is_no_show_flag
+        description: TRUE if status = NO_SHOW.
+
+      - name: cancellation_reason
+        description: Reason for cancellation (if applicable).
+
+      - name: scheduled_pickup_timestamp
         description: Scheduled pickup date/time.
 
-      - name: actual_pickup_time
+      - name: actual_pickup_timestamp
         description: Actual pickup time.
 
-      - name: actual_dropoff_time
+      - name: actual_dropoff_timestamp
         description: Actual drop-off time.
 
       - name: pickup_wait_minutes
@@ -56,6 +67,15 @@ models:
 
       - name: trip_duration_minutes
         description: Minutes between actual pickup and drop-off.
+
+      - name: pickup_address
+        description: Pickup location address.
+
+      - name: dropoff_address
+        description: Drop-off location address.
+
+      - name: special_equipment_needed
+        description: Any special equipment required for transport.
 
       - name: mileage
         description: Trip distance in miles.
@@ -68,9 +88,6 @@ models:
 
       - name: vendor_id
         description: Transport vendor identifier.
-
-      - name: center_id
-        description: PACE center.
 
       - name: source_system
         description: Origin system.
