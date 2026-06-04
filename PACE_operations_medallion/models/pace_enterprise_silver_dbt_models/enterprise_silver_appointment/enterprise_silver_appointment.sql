@@ -2,7 +2,7 @@
 /*
   STG_APPOINTMENT
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_appointment', 'raw_appointment') }}
+  Source  : {{ source('bronze_appointment', 'RAW_APPOINTMENT') }}
   Purpose : Cleanse, cast, deduplicate and enrich appointment records.
             Adds computed metrics: actual duration, late-start minutes,
             and boolean status flags.
