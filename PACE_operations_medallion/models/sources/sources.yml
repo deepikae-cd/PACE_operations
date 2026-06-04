@@ -84,4 +84,10 @@ sources:
       - name: RAW_MEDICATION
         description: "Medication prescriptions, dosage, and pharmacy linkage records"
 
+  - name: bronze_organization
+    description: "Raw Organization, Center, and Service Area domain"
+    schema: BRONZE_ORGANIZATION
+    tables:
+      - name: RAW_ORGANIZATION
+        description: "Organization hierarchy, service centers, and geographic service area coverage data"
 
