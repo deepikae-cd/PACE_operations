@@ -9,7 +9,7 @@ models:
       caregiver type, and license fields.
 
     config:
-      schema: silver_caregiver
+      schema: enterprise_silver_caregiver
       alias: caregiver
       materialized: table
       tags: ["silver", "caregiver"]
@@ -62,10 +62,10 @@ models:
       - name: source_system
         description: Origin ingestion system.
 
-      - name: loaded_at
+      - name: loaded_timestamp
         description: Bronze pipeline load timestamp.
 
-      - name: dbt_updated_at
+      - name: dbt_updated_timestamp
         description: Timestamp this DBT model last wrote the row.
 
 

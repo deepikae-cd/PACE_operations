@@ -63,10 +63,9 @@ cleaned as (
         end as appointment_status,
 
         -- Flags
-        (upper(trim(appointment_status)) = 'COMPLETED') as is_completed,
-        (upper(trim(appointment_status)) = 'CANCELLED') as is_cancelled,
-        (upper(trim(appointment_status)) = 'NO_SHOW')   as is_no_show,
-
+        (upper(trim(appointment_status)) = 'COMPLETED') as is_completed_flag,
+        (upper(trim(appointment_status)) = 'CANCELLED') as is_cancelled_flag,
+        (upper(trim(appointment_status)) = 'NO_SHOW')   as is_no_show_flag,
         trim(cancellation_reason) as cancellation_reason,
         scheduled_date,
         actual_start_time,
@@ -99,8 +98,8 @@ cleaned as (
 
         -- Metadata
         upper(trim(source_system)) as source_system,
-        _loaded_at               as loaded_at,
-        current_timestamp()      as dbt_updated_at
+        _loaded_at               as loaded_timestamp,
+        current_timestamp()      as dbt_updated_timestamp
 
     from deduplicated
     where _rn = 1

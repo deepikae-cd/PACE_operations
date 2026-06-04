@@ -10,7 +10,7 @@ models:
       and NULL-coalesced where appropriate. 
 
     config:
-      schema: silver_participant
+      schema: enterprise_silver_participant
       alias:  participant
       materialized: table
       tags: ["silver", "participant"]

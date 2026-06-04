@@ -36,4 +36,21 @@ sources:
     tables:
       - name: RAW_CLINICAL_VISIT
         description: "Medical and clinical encounter records"
-     
+
+
+  - name: bronze_meal_delivery
+    description: "Raw Meal Delivery source tables"
+    schema: BRONZE_MEAL_DELIVERY
+
+    tables:
+      - name: RAW_MEAL_DELIVERY
+        description: "Meal delivery and nutrition service records"
+
+
+  - name: bronze_transportation
+    description: "Raw Transportation source tables"
+    schema: BRONZE_TRANSPORTATION
+
+    tables:
+      - name: RAW_TRANSPORTATION
+        description: "Transportation and trip service records"

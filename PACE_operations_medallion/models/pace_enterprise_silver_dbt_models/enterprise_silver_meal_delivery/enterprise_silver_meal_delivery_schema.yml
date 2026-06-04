@@ -1,0 +1,76 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_meal_delivery
+    description: >
+      Cleaned and deduplicated meal-delivery records from
+      BRONZE_MEAL_DELIVERY.RAW_MEAL_DELIVERY. Normalises meal type,
+      delivery type, delivery status, and participant acceptance values.
+      Computes an is_delivered boolean and a compliance flag for temperature.
+
+    config:
+      schema: enterprise_silver_meal_delivery
+      alias: meal_delivery
+      materialized: table
+      tags: ["silver", "meal_delivery"]
+
+    columns:
+      - name: meal_delivery_sk
+        description: Surrogate key.
+        tests: [not_null, unique]
+
+      - name: meal_delivery_id
+        description: Natural key.
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: FK to stg_participant.
+
+      - name: meal_date
+        description: Date the meal was scheduled for delivery.
+
+      - name: meal_type
+        description: Normalised meal type.
+
+      - name: dietary_restriction
+        description: Dietary restriction flags from source.
+
+      - name: calorie_count
+        description: Calorie count for the meal.
+
+      - name: delivery_type
+        description: Normalised delivery mechanism.
+
+      - name: delivery_status
+        description: Normalised delivery outcome.
+
+      - name: is_delivered_flag
+        description: TRUE if delivery_status = DELIVERED.
+
+      - name: participant_acceptance
+        description: Normalised acceptance code.
+
+      - name: delivered_at
+        description: Actual delivery timestamp.
+
+      - name: delivery_caregiver_id
+        description: FK to stg_caregiver (delivering caregiver).
+
+      - name: vendor_id
+        description: External meal vendor identifier.
+
+      - name: temperature_compliant
+        description: TRUE if temperature on delivery was compliant.
+
+      - name: center_id
+        description: PACE center.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: loaded_at
+        description: Bronze load timestamp.
+
+      - name: dbt_updated_at
+        description: DBT model write timestamp.
