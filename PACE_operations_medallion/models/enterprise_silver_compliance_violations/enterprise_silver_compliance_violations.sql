@@ -8,7 +8,7 @@ Computes lifecycle flags such as is_open.  Logic :
  - Generates surrogate key (violation_sk)         
 - Flags open violations (is_open)        
  Grain   : One record per violation_id (latest version)  
-  ────────────────────────────────────────────────────────────────────────────── /*
+  ────────────────────────────────────────────────────────────────────────────── */
 
 
 with source as (
