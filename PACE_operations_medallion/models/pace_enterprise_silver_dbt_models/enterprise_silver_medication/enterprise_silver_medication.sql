@@ -4,8 +4,8 @@
   Source  : {{ source('bronze_medication', 'RAW_MEDICATION') }}
 
   Purpose : Cleanse, deduplicate, and standardise medication records.
-            Normalises medication attributes, pharmacy data, and adherence context.
-            Computes lifecycle and refill tracking flags.
+            Normalises drug attributes, pharmacy data, and prescription lifecycle.
+            Computes refill, adherence, and cost attributes.
 
   Grain   : One record per medication_id (latest version)
   ──────────────────────────────────────────────────────────────────────────────
@@ -47,15 +47,15 @@ cleaned as (
         trim(ndc_code)        as ndc_code,
         trim(drug_class)      as drug_class,
 
-        trim(dosage)          as dosage,
-        trim(dosage_unit)     as dosage_unit,
-        trim(frequency)       as frequency,
+        trim(dosage)      as dosage,
+        trim(dosage_unit) as dosage_unit,
+        trim(frequency)   as frequency,
         trim(route_of_administration) as route,
 
-        -- Dates (SAFE)
-        try_cast(prescribed_date as date) as prescribed_date,
-        try_cast(start_date as date)      as start_date,
-        try_cast(end_date as date)        as end_date,
+        -- ✅ FIXED: timestamp → date using TO_DATE
+        to_date(prescribed_date) as prescribed_date,
+        to_date(start_date)      as start_date,
+        to_date(end_date)        as end_date,
 
         -- Status normalization
         case
@@ -67,14 +67,16 @@ cleaned as (
 
         coalesce(refills_authorized, 0) as refills_authorized,
         coalesce(refills_remaining,  0) as refills_remaining,
+
+        -- ✅ keep timestamp as-is (no casting)
         last_refill_date,
 
         -- Pharmacy info
-        trim(pharmacy_name) as pharmacy_name,
-        trim(upper(pharmacy_id)) as pharmacy_id,
-        trim(upper(pharmacy_npi)) as pharmacy_npi,
+        trim(pharmacy_name)        as pharmacy_name,
+        trim(upper(pharmacy_id))   as pharmacy_id,
+        trim(upper(pharmacy_npi))  as pharmacy_npi,
         regexp_replace(pharmacy_phone, '[^0-9+]', '') as pharmacy_phone,
-        trim(pharmacy_address) as pharmacy_address,
+        trim(pharmacy_address)     as pharmacy_address,
 
         -- Dispensing
         coalesce(dispensed_quantity, 0) as dispensed_quantity,
@@ -93,8 +95,8 @@ cleaned as (
         end as prior_authorization_status,
 
         -- Clinical safety
-        trim(adverse_reactions) as adverse_reactions,
-        trim(contraindications) as contraindications,
+        trim(adverse_reactions)  as adverse_reactions,
+        trim(contraindications)  as contraindications,
         trim(interaction_alerts) as interaction_alerts,
 
         trim(administration_instructions) as administration_instructions,
