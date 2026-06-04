@@ -4,7 +4,8 @@ sources:
 
   - name: bronze_participant
     description: "Raw Participant domain"
-    database: "{{ target.database }}"
+    
+    database: DEV_PACE_DW     # ✅ FIXED (hardcoded correct DB)
     schema: BRONZE_PARTICIPANT
 
     tables:
