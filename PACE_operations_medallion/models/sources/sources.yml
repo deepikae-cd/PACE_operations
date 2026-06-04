@@ -75,3 +75,13 @@ sources:
     tables:
       - name: RAW_PROVIDER
         description: "Provider, vendor, and external healthcare entity records"
+
+
+  - name: bronze_medication
+    description: "Raw Medication domain"
+    schema: BRONZE_MEDICATION
+    tables:
+      - name: RAW_MEDICATION
+        description: "Medication prescriptions, dosage, and pharmacy linkage records"
+
+
