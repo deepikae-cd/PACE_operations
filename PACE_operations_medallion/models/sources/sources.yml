@@ -1,83 +1,13 @@
 version: 2
 
-# ============================================================
-# PACE BRONZE SOURCE DECLARATIONS
-# ============================================================
-
 sources:
 
   - name: bronze_participant
-    description: "Raw Participant source tables (Domain 1)"
-    database: "{{ target.database }}"
-    schema: bronze_participant
-    tables:
-      - name: raw_participant
-        description: "Core member records loaded by ingestion pipeline"
+    description: "Raw Participant domain"
+    
+    database: DEV_PACE_DW     # ✅ FIXED (hardcoded correct DB)
+    schema: BRONZE_PARTICIPANT
 
-  - name: bronze_caregiver
-    description: "Raw Caregiver source tables (Domain 2)"
-    database: "{{ target.database }}"
-    schema: bronze_caregiver
     tables:
-      - name: raw_caregiver
-        description: "Care staff records"
-      - name: raw_caregiver_assignment
-        description: "Caregiver–participant bridge table"
-
-  - name: bronze_appointment
-    description: "Raw Appointment source tables (Domain 3)"
-    database: "{{ target.database }}"
-    schema: bronze_appointment
-    tables:
-      - name: raw_appointment
-        description: "Scheduled care event records"
-
-  - name: bronze_clinical_visit
-    description: "Raw Clinical Visit source tables (Domain 4)"
-    database: "{{ target.database }}"
-    schema: bronze_clinical_visit
-    tables:
-      - name: raw_clinical_visit
-        description: "Medical and clinical encounter records"
-
-  - name: bronze_meal_delivery
-    description: "Raw Meal Delivery source tables (Domain 5)"
-    database: "{{ target.database }}"
-    schema: bronze_meal_delivery
-    tables:
-      - name: raw_meal_delivery
-        description: "Nutrition and meal service delivery records"
-
-  - name: bronze_transportation
-    description: "Raw Transportation source tables (Domain 6)"
-    database: "{{ target.database }}"
-    schema: bronze_transportation
-    tables:
-      - name: raw_transportation
-        description: "Pickup and drop-off service records"
-
-  - name: bronze_provider
-    description: "Raw Provider source tables (Domain 7)"
-    database: "{{ target.database }}"
-    schema: bronze_provider
-    tables:
-      - name: raw_provider
-        description: "External and internal healthcare provider records"
-
-  - name: bronze_governance
-    description: "Raw Governance source tables (Domain 8)"
-    database: "{{ target.database }}"
-    schema: bronze_governance
-    tables:
-      - name: raw_governance_rules
-        description: "Business rules, compliance definitions, and validations"
-      - name: raw_compliance_violations
-        description: "Compliance violation log"
-
-  - name: bronze_notification
-    description: "Raw Notification source tables (Domain 9)"
-    database: "{{ target.database }}"
-    schema: bronze_notification
-    tables:
-      - name: raw_notification
-        description: "Alerts, reminders, and system notification records"
+      - name: RAW_PARTICIPANT
+        description: "Core participant records"

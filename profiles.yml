@@ -1,18 +1,57 @@
-user:
+pace_dw:
+  target: dev
+
   outputs:
-    default:
-      account: BFEQNMG-TY07886
-      auth_type: password
+
+    dev:
+      type: snowflake
+      account: "{{ env_var('DBT_ACCOUNT') }}"
+      user: "{{ env_var('DBT_USER') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
+
+      role: PACE_ROLE_DBT_TRANSFORM_DEV
+      database: DEV_PACE_DW
+      warehouse: DEV_PACE_TRANSFORM_WH
+      schema: DBT_DEEPIKA
+
+      threads: 6
       client_session_keep_alive: false
       connect_retries: 3
       connect_timeout: 30
-      database: ' PACE_DW'
-      password: Saraswathy3012!
       retry_on_database_errors: true
-      role: ACCOUNTADMIN
-      schema: DBT_DEEPIKA
-      threads: 6
+
+
+    stg:
       type: snowflake
-      user: deepikaeswar95
-      warehouse: PACE_WH
-  target: default
+      account: "{{ env_var('DBT_ACCOUNT') }}"
+      user: "{{ env_var('DBT_USER') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
+
+      role: PACE_ROLE_DBT_TRANSFORM_STG
+      database: STG_PACE_DW
+      warehouse: STG_PACE_TRANSFORM_WH
+      schema: DBT_DEEPIKA
+
+      threads: 6
+      client_session_keep_alive: false
+      connect_retries: 3
+      connect_timeout: 30
+      retry_on_database_errors: true
+
+
+    prod:
+      type: snowflake
+      account: "{{ env_var('DBT_ACCOUNT') }}"
+      user: "{{ env_var('DBT_USER') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
+
+      role: PACE_ROLE_DBT_TRANSFORM_PROD
+      database: PROD_PACE_DW
+      warehouse: PROD_PACE_TRANSFORM_WH
+      schema: DBT_DEEPIKA
+
+      threads: 6
+      client_session_keep_alive: false
+      connect_retries: 3
+      connect_timeout: 30
+      retry_on_database_errors: true
