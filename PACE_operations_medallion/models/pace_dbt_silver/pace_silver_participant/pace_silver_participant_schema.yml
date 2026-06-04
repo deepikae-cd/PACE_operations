@@ -2,10 +2,7 @@ version: 2
 
 models:
 
-  # ─────────────────────────────────────────────────────────────
-  # STG_PARTICIPANT  –  Cleansed, typed, deduplicated staging
-  # ─────────────────────────────────────────────────────────────
-  - name: stg_participant
+  - name: pace_silver_participant
     description: >
       Cleaned and standardised participant (member) records sourced from
       BRONZE_PARTICIPANT.RAW_PARTICIPANT.  Duplicate rows are removed via
@@ -15,6 +12,7 @@ models:
 
     config:
       schema: silver_participant
+      alias:  participant
       materialized: table
       tags: ["silver", "participant"]
 
