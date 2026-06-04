@@ -1,0 +1,91 @@
+version: 2
+
+models:
+
+  - name: dim_caregiver
+    description: >
+      SCD Type-2 dimension for caregivers sourced from snap_caregiver snapshot.
+      Tracks changes to employment_status, center_id, license_expiry_date,
+      supervisor_id, and max_participant_load.
+
+    config:
+      schema: marts
+      materialized: table
+      tags: ["marts", "caregiver", "scd2", "dimension"]
+      on_schema_change: sync_all_columns
+
+    columns:
+      - name: caregiver_hk
+        description: History key – unique per caregiver × version.
+        tests: [not_null, unique]
+
+      - name: caregiver_sk
+        description: Current-record surrogate key.
+        tests: [not_null]
+
+      - name: caregiver_id
+        description: Natural business key.
+      
+
+      - name: valid_from
+        description: Effective start timestamp for this version.
+    
+      - name: valid_to
+        description: End timestamp of this version (NULL = current).
+
+      - name: is_current
+        description: TRUE if this row represents the active version.
+
+      - name: employment_status
+        description: Current employment status of caregiver.
+
+      - name: center_id
+        description: Associated PACE center.
+
+      - name: license_expiry_date
+        description: Expiry date of caregiver license.
+
+      - name: is_license_expired
+        description: TRUE if license_expiry_date is in the past.
+
+      - name: supervisor_id
+        description: Reporting supervisor identifier.
+
+      - name: max_participant_load
+        description: Maximum number of participants assigned.
+
+      - name: full_name
+        description: Full name of caregiver.
+
+      - name: first_name
+        description: First name.
+
+      - name: last_name
+        description: Last name.
+
+      - name: caregiver_type
+        description: Type/category of caregiver.
+
+      - name: license_number
+        description: Professional license number.
+
+      - name: license_state
+        description: State of license issuance.
+
+      - name: specialty
+        description: Area of specialization.
+
+      - name: hire_date
+        description: Date of hiring.
+
+      - name: termination_date
+        description: Date of termination (if applicable).
+
+      - name: source_system
+        description: Origin system.
+
+      - name: loaded_at
+        description: Bronze load timestamp.
+
+      - name: dbt_updated_timestamp
+        description: DBT model update timestamp.
