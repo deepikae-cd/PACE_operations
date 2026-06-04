@@ -2,7 +2,7 @@ version: 2
 
 models:
 
-  - name: silver_participant
+  - name: pace_silver_participant
     description: >
       Cleaned and standardised participant (member) records sourced from
       BRONZE_PARTICIPANT.RAW_PARTICIPANT.  Duplicate rows are removed via
