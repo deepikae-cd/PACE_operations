@@ -30,7 +30,7 @@ sources:
 
 
   - name: bronze_clinical_visit
-    description: "Raw Clinical Visit source tables (Domain 4)"
+    description: "Raw Clinical Visit source tables"
     schema: BRONZE_CLINICAL_VISIT
 
     tables:
