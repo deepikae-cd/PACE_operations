@@ -15,6 +15,6 @@ sources:
     schema: BRONZE_APPOINTMENT
 
     tables:
-      - name: BRONZE_APPOINTMENT
+      - name: RAW_APPOINTMENT
         description: "Scheduled care event records"
  
