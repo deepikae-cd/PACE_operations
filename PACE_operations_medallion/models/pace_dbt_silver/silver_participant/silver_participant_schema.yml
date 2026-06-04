@@ -7,8 +7,7 @@ models:
       Cleaned and standardised participant (member) records sourced from
       BRONZE_PARTICIPANT.RAW_PARTICIPANT.  Duplicate rows are removed via
       row_number() over the natural key; values are cast to canonical types
-      and NULL-coalesced where appropriate.  This model is the primary input
-      for DIM_PARTICIPANT and all Silver-Combined joins.
+      and NULL-coalesced where appropriate. 
 
     config:
       schema: silver_participant
