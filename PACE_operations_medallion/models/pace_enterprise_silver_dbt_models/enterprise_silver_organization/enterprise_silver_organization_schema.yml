@@ -1,0 +1,88 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_organization
+    description: >
+      Cleaned and deduplicated organization, center, and service area
+      records from BRONZE_ORGANIZATION.RAW_ORGANIZATION_SERVICE_AREA.
+      Supports PACE operational coverage, capacity, service delivery,
+      and organizational hierarchy analytics.
+
+    config:
+      schema: enterprise_silver_organization
+      alias: organization
+      materialized: table
+      tags: ["silver", "organization"]
+
+    columns:
+      - name: organization_sk
+        description: Surrogate key generated using organization, center, and service area.
+        tests: [not_null, unique]
+
+      - name: organization_id
+        description: Natural identifier of the organization.
+        tests: [not_null, unique]
+
+      - name: organization_name
+        description: Name of the organization.
+
+      - name: organization_type
+        description: Type of organization (PACE, hospital, clinic, etc.).
+
+      - name: parent_organization_id
+        description: Parent organization identifier for hierarchy tracking.
+
+      - name: center_id
+        description: PACE center identifier.
+
+      - name: center_name
+        description: Name of the service center.
+
+      - name: center_city
+        description: City where the center is located.
+
+      - name: center_state
+        description: State of the center location.
+
+      - name: service_area_id
+        description: Identifier for the service coverage area.
+
+      - name: service_area_name
+        description: Name of the service area.
+
+      - name: service_area_type
+        description: Type of service area (geographic, regional, etc.).
+
+      - name: contract_status
+        description: Status of the organization’s contract (active, expired, etc.).
+
+      - name: transportation_available
+        description: Flag indicating if transportation services are available.
+
+      - name: meal_service_available
+        description: Flag indicating if meal services are provided.
+
+      - name: pharmacy_on_site
+        description: Flag indicating if pharmacy services are available on-site.
+
+      - name: population_served
+        description: Total population covered by the service area.
+
+      - name: enrolled_count
+        description: Number of enrolled participants.
+
+      - name: enrollment_capacity
+        description: Maximum enrollment capacity of the organization.
+
+      - name: quality_rating
+        description: Quality rating score for the organization.
+
+      - name: source_system
+        description: Source system from which data originated.
+
+      - name: loaded_timestamp
+        description: Timestamp when the record was loaded into the bronze layer.
+
+      - name: dbt_updated_timestamp
+        description: Timestamp when the record was last updated by dbt.
