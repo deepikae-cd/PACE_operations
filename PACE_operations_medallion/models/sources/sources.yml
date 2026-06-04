@@ -45,3 +45,12 @@ sources:
     tables:
       - name: RAW_MEAL_DELIVERY
         description: "Meal delivery and nutrition service records"
+
+
+  - name: bronze_transportation
+    description: "Raw Transportation source tables"
+    schema: BRONZE_TRANSPORTATION
+
+    tables:
+      - name: RAW_TRANSPORTATION
+        description: "Transportation and trip service records"
