@@ -1,6 +1,6 @@
 
 /*
-  STG_APPOINTMENT
+  ENTERPRISE_SILVER_APPOINTMENT
   ──────────────────────────────────────────────────────────────────────────────
   Source  : {{ source('bronze_appointment', 'RAW_APPOINTMENT') }}
   Purpose : Cleanse, cast, deduplicate and enrich appointment records.

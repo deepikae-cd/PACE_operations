@@ -1,14 +1,5 @@
-{{
-    config(
-        schema        = 'silver_caregiver',
-        materialized  = 'table',
-        tags          = ['silver', 'caregiver'],
-        on_schema_change = 'sync_all_columns'
-    )
-}}
-
 /*
-  STG_CAREGIVER
+  ENTERPRISE_SILVER_CAREGIVER
   ──────────────────────────────────────────────────────────────────────────────
   Source  : {{ source('bronze_caregiver', 'RAW_CAREGIVER') }}
   Purpose : Cleanse, cast, deduplicate caregiver records.

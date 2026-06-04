@@ -1,6 +1,6 @@
 
 /*
-  STG_PARTICIPANT
+  ENTERPRISE_SILVER_PARTICIPANT
   ──────────────────────────────────────────────────────────────────────────────
   Source  : {{ source('bronze_participant', 'RAW_PARTICIPANT') }}
   Purpose : Cleanse, cast, deduplicate and standardise participant records.
