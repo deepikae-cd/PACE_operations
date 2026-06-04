@@ -2,7 +2,7 @@
 /*
   ENTERPRISE_SILVER_TRANSPORTATION
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_transportation', 'raw_transportation') }}
+  Source  : {{ source('bronze_transportation', 'RAW_TRANSPORTATION') }}
   Purpose : Cleanse, deduplicate, and enrich transportation records.
             Adds pickup_wait_minutes and trip_duration_minutes.
   ──────────────────────────────────────────────────────────────────────────────
