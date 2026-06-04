@@ -63,7 +63,7 @@ cleaned as (
             when delivery_status is null then 'UNKNOWN'
             else 'UNKNOWN'
         end as delivery_status,
-        (upper(trim(delivery_status)) = 'DELIVERED') as is_delivered,
+        (upper(trim(delivery_status)) = 'DELIVERED') as is_delivered_flag,
         trim(refused_reason) as refused_reason,
         delivered_at,
         trim(upper(delivery_caregiver_id)) as delivery_caregiver_id,

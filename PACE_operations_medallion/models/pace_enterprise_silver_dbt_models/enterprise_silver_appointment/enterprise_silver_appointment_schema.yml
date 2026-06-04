@@ -51,13 +51,13 @@ models:
       - name: duration_minutes_actual
         description: Actual duration in minutes (null if not completed).
 
-      - name: is_completed
+      - name: is_completed_flag
         description: TRUE if status = COMPLETED.
 
-      - name: is_cancelled
+      - name: is_cancelled_flag
         description: TRUE if status = CANCELLED.
 
-      - name: is_no_show
+      - name: is_no_show_flag
         description: TRUE if status = NO_SHOW.
 
       - name: late_start_minutes
