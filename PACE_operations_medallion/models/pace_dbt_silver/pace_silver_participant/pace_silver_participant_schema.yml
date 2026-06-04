@@ -1,0 +1,76 @@
+version: 2
+
+models:
+
+  # ─────────────────────────────────────────────────────────────
+  # STG_PARTICIPANT  –  Cleansed, typed, deduplicated staging
+  # ─────────────────────────────────────────────────────────────
+  - name: stg_participant
+    description: >
+      Cleaned and standardised participant (member) records sourced from
+      BRONZE_PARTICIPANT.RAW_PARTICIPANT.  Duplicate rows are removed via
+      row_number() over the natural key; values are cast to canonical types
+      and NULL-coalesced where appropriate.  This model is the primary input
+      for DIM_PARTICIPANT and all Silver-Combined joins.
+
+    config:
+      schema: silver_participant
+      materialized: table
+      tags: ["silver", "participant"]
+
+    columns:
+      - name: participant_sk
+        description: Surrogate key (SHA-256 hash of PARTICIPANT_ID + _LOADED_AT).
+        tests: [not_null, unique]
+      - name: participant_id
+        description: Natural key from source system (UUID).
+        tests: [not_null, unique]
+      - name: full_name
+        description: Concatenated FIRST_NAME + LAST_NAME.
+      - name: date_of_birth
+        description: Participant date of birth (DATE).
+      - name: age_years
+        description: Computed age in full years as of today.
+      - name: gender
+        description: Normalised gender code (MALE / FEMALE / NON_BINARY / UNKNOWN).
+      - name: preferred_language
+        description: Preferred spoken language (uppercased).
+      - name: enrollment_date
+        description: Date participant enrolled in the PACE program.
+      - name: disenrollment_date
+        description: Date participant left the program (NULL if still active).
+      - name: program_status
+        description: Current program status.
+      - name: primary_diagnosis
+        description: Free-text primary diagnosis from source.
+      - name: insurance_id
+        description: Primary insurance identifier.
+      - name: medicare_id
+        description: Medicare beneficiary identifier.
+      - name: medicaid_id
+        description: Medicaid beneficiary identifier.
+      - name: center_id
+        description: PACE center the participant is assigned to.
+        tests: [not_null]
+      - name: full_address
+        description: Concatenated mailing address.
+      - name: state
+        description: Two-character US state code.
+      - name: zip_code
+        description: Postal ZIP code (5-digit normalised).
+      - name: phone_number
+        description: Primary contact phone number.
+      - name: emergency_contact_name
+        description: Emergency contact full name.
+      - name: emergency_contact_phone
+        description: Emergency contact phone number.
+      - name: emergency_contact_relation
+        description: Relationship of emergency contact to participant.
+      - name: source_system
+        description: Origin ingestion system name.
+      - name: loaded_at
+        description: Pipeline load timestamp (from Bronze _LOADED_AT).
+      - name: dbt_updated_at
+        description: Timestamp this DBT model last wrote the row.
+
+  
