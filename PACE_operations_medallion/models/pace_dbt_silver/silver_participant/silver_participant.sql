@@ -2,7 +2,7 @@
 /*
   STG_PARTICIPANT
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_participant', 'raw_participant') }}
+  Source  : {{ source('bronze_participant', 'RAW_PARTICIPANT') }}
   Purpose : Cleanse, cast, deduplicate and standardise participant records.
             Downstream: DIM_PARTICIPANT (SCD2) and Silver-Combined joins.
 
