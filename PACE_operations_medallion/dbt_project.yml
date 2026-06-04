@@ -43,8 +43,8 @@ models:
       enterprise_silver_caregiver:
         +schema: SILVER_CAREGIVER
 
-      enterprise_silver_clinical_visit:
-        +schema: SILVER_CLINICAL_VISIT
+      enterprise_silver_idt_clinical:
+        +schema: SILVER_IDT_CLINICAL
 
       enterprise_silver_combined:
         +schema: SILVER_COMBINED
@@ -61,13 +61,3 @@ models:
       enterprise_silver_transportation:
         +schema: SILVER_TRANSPORTATION
 
-
-# ============================================================
-# SNAPSHOTS
-# ============================================================
-
-snapshots:
-  pace_dw:
-    +target_database: "{{ target.database }}"
-    +persist_docs:
-      relation: true

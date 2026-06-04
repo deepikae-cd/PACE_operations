@@ -1,0 +1,97 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_idt_clinical
+    description: >
+      Cleaned and deduplicated clinical encounter records from
+      BRONZE_CLINICAL_VISIT.RAW_CLINICAL_VISIT. Casts vitals to numeric,
+      normalises visit type and location type, parses pipe-delimited
+      diagnosis / procedure code lists, and computes computed quality flags.
+
+    config:
+      schema: enterprise_silver_idt_clinical
+      alias: idt_clinical
+      materialized: table
+      tags: ["idt", "clinical"]
+
+    columns:
+      - name: clinical_visit_sk
+        description: Surrogate key.
+        tests: [not_null, unique]
+
+      - name: clinical_visit_id
+        description: Natural key.
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: FK to stg_participant.
+
+      - name: appointment_id
+        description: FK to stg_appointment (nullable – walk-ins have no appointment).
+
+      - name: provider_id
+        description: FK to stg_provider.
+
+      - name: caregiver_id
+        description: FK to stg_caregiver.
+
+      - name: visit_type
+        description: Normalised visit type.
+
+      - name: visit_date
+        description: Date/time of the clinical encounter.
+
+      - name: visit_duration_minutes
+        description: Duration of the visit in minutes.
+
+      - name: primary_diagnosis_code
+        description: ICD-10 code for the primary diagnosis.
+
+      - name: primary_diagnosis_desc
+        description: Description of the primary diagnosis.
+
+      - name: secondary_diagnosis_codes
+        description: Pipe-delimited secondary ICD-10 codes.
+
+      - name: procedures_performed
+        description: Pipe-delimited CPT codes.
+
+      - name: vitals_blood_pressure_systolic
+        description: Systolic BP extracted (mmHg).
+
+      - name: vitals_blood_pressure_diastolic
+        description: Diastolic BP extracted (mmHg).
+
+      - name: vitals_heart_rate
+        description: Heart rate in beats per minute.
+
+      - name: vitals_temperature_f
+        description: Body temperature in Fahrenheit.
+
+      - name: vitals_weight_lbs
+        description: Weight in pounds.
+
+      - name: vitals_o2_saturation
+        description: Oxygen saturation percentage.
+
+      - name: follow_up_required
+        description: TRUE if follow-up was ordered.
+
+      - name: follow_up_timeframe_days
+        description: Requested follow-up window in days.
+
+      - name: location_type
+        description: Normalised location type.
+
+      - name: center_id
+        description: PACE center.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: loaded_at
+        description: Bronze load timestamp.
+
+      - name: dbt_updated_at
+        description: DBT model write timestamp.
