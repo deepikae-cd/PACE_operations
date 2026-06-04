@@ -1,0 +1,94 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_notification_service
+    description: >
+      Cleaned and deduplicated notification records from
+      BRONZE_NOTIFICATION.RAW_NOTIFICATION.
+      Normalises notification type, category, delivery channel, and status.
+      Computes delivery latency and delivery outcome flags.
+
+    config:
+      schema: enterprise_silver_notification_service
+      alias: notification_service
+      materialized: table
+      tags: ["silver", "notification"]
+
+    columns:
+      - name: notification_sk
+        description: Surrogate key.
+        tests: [not_null, unique]
+
+      - name: notification_id
+        description: Natural key.
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: FK to stg_participant (nullable).
+
+      - name: caregiver_id
+        description: FK to stg_caregiver (nullable).
+
+      - name: center_id
+        description: PACE center.
+
+      - name: notification_type
+        description: Normalised notification type.
+
+      - name: notification_category
+        description: Normalised category.
+
+      - name: channel
+        description: Delivery channel.
+
+      - name: delivery_status
+        description: Normalised delivery status.
+
+      - name: is_delivered_flag
+        description: TRUE if delivery_status in (DELIVERED, READ).
+
+      - name: is_failed_flag
+        description: TRUE if delivery_status in (FAILED, BOUNCED).
+
+      - name: scheduled_send_at
+        description: Scheduled send timestamp.
+
+      - name: sent_at
+        description: Actual send timestamp.
+
+      - name: read_at
+        description: Timestamp notification was read.
+
+      - name: delivery_latency_minutes
+        description: Minutes between scheduled_send_at and sent_at.
+
+      - name: message_subject
+        description: Notification subject line.
+
+      - name: message_body
+        description: Notification message content.
+
+      - name: related_entity_type
+        description: Domain entity this notification relates to.
+
+      - name: related_entity_id
+        description: ID of the related entity.
+
+      - name: retry_count
+        description: Number of delivery retry attempts.
+
+      - name: recipient_phone
+        description: Normalised phone number.
+
+      - name: recipient_email
+        description: Normalised email address.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: loaded_timestamp
+        description: Bronze load timestamp.
+
+      - name: dbt_updated_timestamp
+        description: DBT model write timestamp.
