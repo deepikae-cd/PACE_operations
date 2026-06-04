@@ -1,0 +1,67 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_compliance_violations
+    description: >
+      Cleaned compliance violation log from
+      BRONZE_GOVERNANCE.RAW_COMPLIANCE_VIOLATIONS.
+      Normalises entity type, severity, and status values.
+      Computes lifecycle flags and captures resolution details.
+
+    config:
+      schema: enterprise_silver_governance_rules
+      alias: compliance_violations
+      materialized: table
+      tags: ["silver", "governance"]
+
+    columns:
+      - name: violation_sk
+        description: Surrogate key.
+        tests: [not_null, unique]
+
+      - name: violation_id
+        description: Natural key.
+        tests: [not_null, unique]
+
+      - name: rule_id
+        description: FK to enterprise_silver_governance_rules.
+
+      - name: entity_type
+        description: Domain entity that triggered the violation.
+
+      - name: entity_id
+        description: ID of the offending entity record.
+
+      - name: violation_date
+        description: Date/time the violation was detected.
+
+      - name: violation_description
+        description: Description of the violation event.
+
+      - name: severity
+        description: Normalised severity.
+
+      - name: status
+        description: Normalised resolution status.
+
+      - name: is_open_flag
+        description: TRUE if status = OPEN.
+
+      - name: resolved_timestamp
+        description: Timestamp when the violation was resolved.
+
+      - name: resolved_by
+        description: User or system that resolved the violation.
+
+      - name: center_id
+        description: PACE center associated with the violation.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: loaded_timestamp
+        description: Bronze load timestamp.
+
+      - name: dbt_updated_timestamp
+        description: DBT model write timestamp.

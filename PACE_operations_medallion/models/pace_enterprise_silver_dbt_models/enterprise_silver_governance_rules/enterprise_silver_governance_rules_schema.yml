@@ -1,0 +1,81 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_governance_rules
+    description: >
+      Cleaned governance rules from BRONZE_GOVERNANCE.RAW_GOVERNANCE_RULES.
+      Normalises rule category, enforcement level, and lifecycle flags.
+      Deduplicates on RULE_ID and computes expiration status.
+
+    config:
+      schema: enterprise_silver_governance_rules
+      alias: governance_rules
+      materialized: table
+      tags: ["silver", "governance"]
+
+    columns:
+      - name: rule_sk
+        description: Surrogate key.
+        tests: [not_null, unique]
+
+      - name: rule_id
+        description: Natural key.
+        tests: [not_null, unique]
+
+      - name: rule_name
+        description: Name of the governance rule.
+
+      - name: rule_category
+        description: Normalised rule category.
+
+      - name: rule_subcategory
+        description: Subcategory classification of the rule.
+
+      - name: rule_description
+        description: Detailed description of the rule logic.
+
+      - name: rule_logic
+        description: Business logic or validation expression.
+
+      - name: applies_to_domain
+        description: PACE domain governed by this rule.
+
+      - name: effective_date
+        description: Date rule came into effect.
+
+      - name: expiry_date
+        description: Date rule expires (NULL = no expiry).
+
+      - name: is_active_flag
+        description: TRUE if the rule is currently active.
+
+      - name: is_expired_flag
+        description: TRUE if expiry_date is earlier than current date.
+
+      - name: enforcement_level
+        description: Normalised enforcement level.
+
+      - name: regulatory_reference
+        description: Regulatory citation (e.g., 42 CFR 460.98).
+
+      - name: created_by
+        description: User or system that created the rule.
+
+      - name: created_timestamp
+        description: Timestamp when the rule was created.
+
+      - name: last_updated_by
+        description: User or system that last updated the rule.
+
+      - name: last_updated_timestamp
+        description: Timestamp of last update.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: loaded_timestamp
+        description: Bronze load timestamp.
+
+      - name: dbt_updated_timestamp
+        description: DBT model write timestamp.
