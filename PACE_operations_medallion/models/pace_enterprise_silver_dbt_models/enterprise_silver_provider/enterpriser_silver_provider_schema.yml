@@ -1,0 +1,91 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_provider
+    description: >
+      Cleaned and deduplicated provider records from
+      BRONZE_PROVIDER.RAW_PROVIDER.
+      Normalises provider type, network status, and contract attributes.
+      Computes active contract flag for downstream analysis.
+
+    config:
+      schema: enterprise_silver_provider
+      alias: provider
+      materialized: table
+      tags: ["silver", "provider"]
+
+    columns:
+      - name: provider_sk
+        description: Surrogate key.
+        tests: [not_null, unique]
+
+      - name: provider_id
+        description: Natural key.
+        tests: [not_null, unique]
+
+      - name: provider_name
+        description: Cleaned provider name.
+
+      - name: provider_type
+        description: Normalised provider type.
+
+      - name: provider_subtype
+        description: Provider subtype classification.
+
+      - name: npi_number
+        description: National Provider Identifier.
+
+      - name: tax_id
+        description: Tax identification number.
+
+      - name: specialty
+        description: Medical or service specialty.
+
+      - name: network_status
+        description: Normalised network participation status.
+
+      - name: contract_start_date
+        description: Contract start date.
+
+      - name: contract_end_date
+        description: Contract end date.
+
+      - name: is_contract_active_flag
+        description: TRUE if contract is currently active.
+
+      - name: accepts_telehealth
+        description: Telehealth acceptance flag.
+
+      - name: accepts_pace_patients
+        description: Acceptance of PACE participants.
+
+      - name: address_line1
+        description: Provider address line.
+
+      - name: city
+        description: City of provider location.
+
+      - name: state
+        description: Two-character state code.
+
+      - name: zip_code
+        description: 5-digit ZIP code.
+
+      - name: phone_number
+        description: Cleaned phone number.
+
+      - name: fax_number
+        description: Cleaned fax number.
+
+      - name: center_id
+        description: PACE center associated with provider.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: loaded_timestamp
+        description: Bronze load timestamp.
+
+      - name: dbt_updated_timestamp
+        description: DBT model write timestamp.
