@@ -33,8 +33,6 @@ cleaned as (
         sha2(concat_ws('||', meal_delivery_id, cast(_loaded_at as varchar))) as meal_delivery_sk,
         trim(upper(meal_delivery_id))     as meal_delivery_id,
         trim(upper(participant_id))       as participant_id,
-
-        -- ✅ SAFE (date casting is okay)
         try_cast(meal_date as date)       as meal_date,
 
         trim(upper(center_id))            as center_id,
@@ -50,9 +48,7 @@ cleaned as (
 
         trim(dietary_restriction) as dietary_restriction,
 
-        -- Numeric cast ✅ safe
         coalesce(try_cast(calorie_count as number(6,0)), 0) as calorie_count,
-
         case
             when upper(trim(delivery_type)) in
                 ('HOME_DELIVERY','CENTER_SERVED','FAMILY_PROVIDED')
@@ -60,7 +56,6 @@ cleaned as (
             when delivery_type is null then 'UNKNOWN'
             else 'OTHER'
         end as delivery_type,
-
         case
             when upper(trim(delivery_status)) in
                 ('DELIVERED','NOT_DELIVERED','REFUSED','PARTIAL')
@@ -68,14 +63,9 @@ cleaned as (
             when delivery_status is null then 'UNKNOWN'
             else 'UNKNOWN'
         end as delivery_status,
-
         (upper(trim(delivery_status)) = 'DELIVERED') as is_delivered,
-
         trim(refused_reason) as refused_reason,
-
-        -- ✅ ✅ FIX: REMOVED timestamp casting
         delivered_at,
-
         trim(upper(delivery_caregiver_id)) as delivery_caregiver_id,
         trim(upper(vendor_id))             as vendor_id,
 
@@ -95,8 +85,8 @@ cleaned as (
         trim(notes) as notes,
 
         upper(trim(source_system)) as source_system,
-        _loaded_at as loaded_at,
-        current_timestamp() as dbt_updated_at
+        _loaded_at as loaded_timestamp,
+        current_timestamp() as dbt_updated_timestamp
 
     from deduplicated
     where _rn = 1

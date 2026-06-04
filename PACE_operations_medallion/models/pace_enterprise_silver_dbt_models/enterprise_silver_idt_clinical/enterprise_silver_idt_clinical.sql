@@ -52,8 +52,6 @@ cleaned as (
             when visit_type is null then 'UNKNOWN'
             else 'OTHER'
         end as visit_type,
-
-        -- ✅ NO TIMESTAMP CASTING
         visit_date,
         visit_duration_minutes,
 
@@ -64,8 +62,6 @@ cleaned as (
         trim(secondary_diagnosis_codes)     as secondary_diagnosis_codes,
         trim(procedures_performed)          as procedures_performed,
         trim(medications_prescribed)        as medications_prescribed,
-
-        -- ✅ BP parsing (safe)
         try_cast(
             split_part(regexp_replace(vitals_blood_pressure,'[^0-9/]',''), '/', 1)
         as number(5,0)) as vitals_blood_pressure_systolic,
@@ -73,8 +69,6 @@ cleaned as (
         try_cast(
             split_part(regexp_replace(vitals_blood_pressure,'[^0-9/]',''), '/', 2)
         as number(5,0)) as vitals_blood_pressure_diastolic,
-
-        -- ✅ Numeric casts are ok
         try_cast(vitals_heart_rate as number(5,0))     as vitals_heart_rate,
         try_cast(vitals_temperature as number(5,2))    as vitals_temperature_f,
         try_cast(vitals_weight_lbs as number(6,2))     as vitals_weight_lbs,
@@ -97,8 +91,8 @@ cleaned as (
 
         -- Metadata
         upper(trim(source_system)) as source_system,
-        _loaded_at as loaded_at,
-        current_timestamp() as dbt_updated_at
+        _loaded_at as loaded_timestamp,
+        current_timestamp() as dbt_updated_timestamp
 
     from deduplicated
     where _rn = 1

@@ -73,10 +73,10 @@ cleaned as (
         trim(upper(supervisor_id))                                          as supervisor_id,
         coalesce(max_participant_load, 0)                                   as max_participant_load,
 
-        -- ── Metadata ────────────────────────────────────────────────────────
+        -- ── Metadata --
         upper(trim(source_system))                                          as source_system,
-        _loaded_at                                                          as loaded_at,
-        current_timestamp()                                                 as dbt_updated_at
+        _loaded_at                                                          as loaded_timestamp,
+        current_timestamp()                                                 as dbt_updated_timestamp
 
     from deduplicated
     where _rn = 1

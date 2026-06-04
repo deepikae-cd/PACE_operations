@@ -62,10 +62,10 @@ models:
       - name: source_system
         description: Origin ingestion system.
 
-      - name: loaded_at
+      - name: loaded_timestamp
         description: Bronze pipeline load timestamp.
 
-      - name: dbt_updated_at
+      - name: dbt_updated_timestamp
         description: Timestamp this DBT model last wrote the row.
 
 

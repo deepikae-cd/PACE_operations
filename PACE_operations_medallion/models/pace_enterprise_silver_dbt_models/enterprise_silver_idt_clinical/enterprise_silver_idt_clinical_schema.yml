@@ -90,8 +90,8 @@ models:
       - name: source_system
         description: Origin system.
 
-      - name: loaded_at
+      - name: loaded_timestamp
         description: Bronze load timestamp.
 
-      - name: dbt_updated_at
+      - name: dbt_updated_timestamp
         description: DBT model write timestamp.

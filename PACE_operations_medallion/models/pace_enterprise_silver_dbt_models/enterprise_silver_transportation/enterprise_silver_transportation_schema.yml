@@ -1,0 +1,82 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_transportation
+    description: >
+      Cleaned and deduplicated transportation records from
+      BRONZE_TRANSPORTATION.RAW_TRANSPORTATION. Normalises transport type,
+      trip direction, and status. Computes on-time flag, wait-time, and
+      actual trip duration in minutes.
+
+    config:
+      schema: enterprise_silver_transportation
+      alias: transportation
+      materialized: table
+      tags: ["silver", "transportation"]
+
+    columns:
+      - name: transport_sk
+        description: Surrogate key.
+        tests: [not_null, unique]
+
+      - name: transport_id
+        description: Natural key.
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: FK to stg_participant.
+
+      - name: appointment_id
+        description: FK to stg_appointment (nullable).
+
+      - name: transport_type
+        description: Normalised transport type.
+
+      - name: trip_direction
+        description: OUTBOUND or RETURN.
+
+      - name: transport_status
+        description: Normalised transport outcome.
+
+      - name: is_completed
+        description: TRUE if status = COMPLETED.
+
+      - name: scheduled_pickup_time
+        description: Scheduled pickup date/time.
+
+      - name: actual_pickup_time
+        description: Actual pickup time.
+
+      - name: actual_dropoff_time
+        description: Actual drop-off time.
+
+      - name: pickup_wait_minutes
+        description: Minutes between scheduled and actual pickup (positive = late).
+
+      - name: trip_duration_minutes
+        description: Minutes between actual pickup and drop-off.
+
+      - name: mileage
+        description: Trip distance in miles.
+
+      - name: driver_id
+        description: Driver identifier.
+
+      - name: vehicle_id
+        description: Vehicle identifier.
+
+      - name: vendor_id
+        description: Transport vendor identifier.
+
+      - name: center_id
+        description: PACE center.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: loaded_timestamp
+        description: Bronze load timestamp.
+
+      - name: dbt_updated_timestamp
+        description: DBT model write timestamp.
