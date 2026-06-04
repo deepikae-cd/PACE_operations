@@ -1,3 +1,17 @@
+
+/*
+  STG_PARTICIPANT
+  ──────────────────────────────────────────────────────────────────────────────
+  Source  : {{ source('bronze_participant', 'raw_participant') }}
+  Purpose : Cleanse, cast, deduplicate and standardise participant records.
+            Downstream: DIM_PARTICIPANT (SCD2) and Silver-Combined joins.
+
+  Deduplication strategy:
+    - Natural key  : PARTICIPANT_ID
+    - Tie-breaker  : latest _LOADED_AT (most recent pipeline load wins)
+  ──────────────────────────────────────────────────────────────────────────────
+*/
+
 with source as (
 
     select *
