@@ -28,3 +28,12 @@ sources:
       - name: RAW_CAREGIVER
         description: "Core caregiver (care staff) records"
 
+
+  - name: bronze_clinical_visit
+    description: "Raw Clinical Visit source tables (Domain 4)"
+    schema: BRONZE_CLINICAL_VISIT
+
+    tables:
+      - name: RAW_CLINICAL_VISIT
+        description: "Medical and clinical encounter records"
+     
