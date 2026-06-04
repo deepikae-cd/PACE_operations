@@ -10,7 +10,7 @@ models:
       and an is_completed boolean for downstream aggregation.
 
     config:
-      schema: silver_appointment
+      schema: enterprise_silver_appointment
       alias: appointment
       materialized: table
       tags: ["silver", "appointment"]

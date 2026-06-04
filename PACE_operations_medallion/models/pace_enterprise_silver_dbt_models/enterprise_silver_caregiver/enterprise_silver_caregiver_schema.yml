@@ -9,7 +9,7 @@ models:
       caregiver type, and license fields.
 
     config:
-      schema: silver_caregiver
+      schema: enterprise_silver_caregiver
       alias: caregiver
       materialized: table
       tags: ["silver", "caregiver"]
