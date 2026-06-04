@@ -10,6 +10,7 @@ sources:
       - name: RAW_PARTICIPANT
         description: "Core participant records"
 
+
   - name: bronze_appointment
     description: "Raw Appointment source tables (Domain 3)"
     schema: BRONZE_APPOINTMENT
@@ -17,4 +18,13 @@ sources:
     tables:
       - name: RAW_APPOINTMENT
         description: "Scheduled care event records"
- 
+
+
+  - name: bronze_caregiver
+    description: "Raw Caregiver domain including staff and assignments"
+    schema: BRONZE_CAREGIVER
+
+    tables:
+      - name: RAW_CAREGIVER
+        description: "Core caregiver (care staff) records"
+

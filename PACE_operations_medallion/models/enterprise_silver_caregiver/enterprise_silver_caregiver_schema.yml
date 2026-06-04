@@ -1,0 +1,72 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_caregiver
+    description: >
+      Cleaned and deduplicated caregiver (care-staff) records from
+      BRONZE_CAREGIVER.RAW_CAREGIVER. Normalises employment status,
+      caregiver type, and license fields.
+
+    config:
+      schema: silver_caregiver
+      alias: caregiver
+      materialized: table
+      tags: ["silver", "caregiver"]
+
+    columns:
+      - name: caregiver_sk
+        description: Surrogate key (SHA-256 of caregiver_id + loaded_at).
+        tests: [not_null, unique]
+
+      - name: caregiver_id
+        description: Natural key from source system.
+        tests: [not_null, unique]
+
+      - name: full_name
+        description: Concatenated first + last name.
+
+      - name: caregiver_type
+        description: Normalised caregiver type code.
+
+      - name: employment_status
+        description: Normalised employment status.
+
+      - name: license_number
+        description: Professional license number.
+
+      - name: license_state
+        description: Two-character state code for the license.
+
+      - name: license_expiry_date
+        description: License expiration date.
+
+      - name: is_license_expired
+        description: TRUE if license is expired as of today.
+
+      - name: center_id
+        description: PACE center the caregiver is assigned to.
+
+      - name: hire_date
+        description: Date caregiver was hired.
+
+      - name: termination_date
+        description: Date employment ended (NULL if active).
+
+      - name: supervisor_id
+        description: FK to another caregiver_id (supervisor).
+
+      - name: max_participant_load
+        description: Maximum participants this caregiver can be assigned.
+
+      - name: source_system
+        description: Origin ingestion system.
+
+      - name: loaded_at
+        description: Bronze pipeline load timestamp.
+
+      - name: dbt_updated_at
+        description: Timestamp this DBT model last wrote the row.
+
+
+  
