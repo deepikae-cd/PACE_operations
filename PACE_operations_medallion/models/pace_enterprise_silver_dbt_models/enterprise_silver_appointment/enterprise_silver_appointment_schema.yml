@@ -2,7 +2,7 @@ version: 2
 
 models:
 
-  - name: pace_silver_appointment
+  - name: enterprise_silver_appointment
     description: >
       Cleaned and deduplicated appointment records from
       BRONZE_APPOINTMENT.RAW_APPOINTMENT. Normalises appointment type,
