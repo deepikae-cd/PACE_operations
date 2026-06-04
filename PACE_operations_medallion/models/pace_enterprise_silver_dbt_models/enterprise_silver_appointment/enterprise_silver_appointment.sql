@@ -1,6 +1,15 @@
-with
 
-source as (
+/*
+  STG_APPOINTMENT
+  ──────────────────────────────────────────────────────────────────────────────
+  Source  : {{ source('bronze_appointment', 'raw_appointment') }}
+  Purpose : Cleanse, cast, deduplicate and enrich appointment records.
+            Adds computed metrics: actual duration, late-start minutes,
+            and boolean status flags.
+  ──────────────────────────────────────────────────────────────────────────────
+*/
+
+with source as (
 
     select * from {{ source('bronze_appointment', 'RAW_APPOINTMENT') }}
 
@@ -59,13 +68,10 @@ cleaned as (
         (upper(trim(appointment_status)) = 'NO_SHOW')   as is_no_show,
 
         trim(cancellation_reason) as cancellation_reason,
-
-        -- ✅ No casting at all
         scheduled_date,
         actual_start_time,
         actual_end_time,
 
-        -- ✅ Safe calculations
         case
             when actual_start_time is not null and actual_end_time is not null
             then datediff('minute', actual_start_time, actual_end_time)
