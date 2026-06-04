@@ -4,21 +4,71 @@ config-version: 2
 
 profile: DBT_PROD
 
+
 model-paths: ["models"]
-seed-paths: ["seeds"]
-test-paths: ["tests"]
 snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+analysis-paths: ["analyses"]
+docs-paths: ["docs"]
 
 target-path: "target"
-clean-targets:
-  - "target"
-  - "dbt_packages"
+clean-targets: ["target", "dbt_packages"]
+
+# ============================================================
+# GLOBAL DEFAULTS
+# ============================================================
 
 models:
   PACE_operations_medallion:
-    silver:
-      +schema: SILVER
-      +materialized: view
-    gold:
-      +schema: GOLD
-      +materialized: table
+    +persist_docs:
+      relation: true
+      columns: true
+
+    # ================= SILVER LAYER =================
+
+    pace_dbt_silver:
+
+      +materialized: table   # default for all silver models
+
+      pace_participant_silver:
+        +schema: SILVER_PARTICIPANT
+
+      pace_provider_silver:
+        +schema: SILVER_PROVIDER
+
+      pace_appointment_silver:
+        +schema: SILVER_APPOINTMENT
+
+      pace_caregiver_silver:
+        +schema: SILVER_CAREGIVER
+
+      pace_clinical_visit_silver:
+        +schema: SILVER_CLINICAL_VISIT
+
+      pace_combined_silver:
+        +schema: SILVER_COMBINED
+
+      pace_governance_silver:
+        +schema: SILVER_GOVERNANCE
+
+      pace_meal_delivery_silver:
+        +schema: SILVER_MEAL_DELIVERY
+
+      pace_notification_silver:
+        +schema: SILVER_NOTIFICATION
+
+      pace_transportation_silver:
+        +schema: SILVER_TRANSPORTATION
+
+
+# ============================================================
+# SNAPSHOTS
+# ============================================================
+
+snapshots:
+  pace_dw:
+    +target_database: "{{ target.database }}"
+    +persist_docs:
+      relation: true
