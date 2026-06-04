@@ -1,10 +1,3 @@
-{{
-    config(
-        schema='SILVER_PARTICIPANT',
-        materialized='table'
-    )
-}}
-
 with source as (
 
     select *
