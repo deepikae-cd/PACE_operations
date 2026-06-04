@@ -2,7 +2,7 @@ version: 2
 
 models:
 
-  - name: enterprise_silver_compliance_violations
+  - name: enterprise_silver_compliance_violation
     description: >
       Cleaned compliance violation log from
       BRONZE_GOVERNANCE.RAW_COMPLIANCE_VIOLATIONS.
@@ -11,7 +11,7 @@ models:
 
     config:
       schema: enterprise_silver_governance_rules
-      alias: compliance_violations
+      alias: compliance_violation
       materialized: table
       tags: ["silver", "governance"]
 
