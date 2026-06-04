@@ -2,7 +2,7 @@ version: 2
 
 models:
 
-  - name: enterprise_silver_clinical_visit
+  - name: enterprise_silver_idt_clinical
     description: >
       Cleaned and deduplicated clinical encounter records from
       BRONZE_CLINICAL_VISIT.RAW_CLINICAL_VISIT. Casts vitals to numeric,
@@ -16,11 +16,11 @@ models:
       tags: ["idt", "clinical"]
 
     columns:
-      - name: visit_sk
+      - name: clinical_visit_sk
         description: Surrogate key.
         tests: [not_null, unique]
 
-      - name: visit_id
+      - name: clinical_visit_id
         description: Natural key.
         tests: [not_null, unique]
 

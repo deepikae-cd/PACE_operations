@@ -34,8 +34,8 @@ cleaned as (
 
     select
         -- Keys
-        sha2(concat_ws('||', visit_id, cast(_loaded_at as varchar))) as visit_sk,
-        trim(upper(visit_id))       as visit_id,
+        sha2(concat_ws('||', visit_id, cast(_loaded_at as varchar))) as clinical_visit_sk,
+        trim(upper(visit_id))       as clinical_visit_id,
         trim(upper(appointment_id)) as appointment_id,
         trim(upper(participant_id)) as participant_id,
         trim(upper(provider_id))    as provider_id,
