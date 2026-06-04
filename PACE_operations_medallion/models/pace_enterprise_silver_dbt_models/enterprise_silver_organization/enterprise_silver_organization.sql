@@ -1,7 +1,7 @@
 /*
   ENTERPRISE_SILVER_ORGANIZATION
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_organization', 'RAW_ORGANIZATION') }}
+  Source  : {{ source('bronze_organization', 'RAW_ORGANIZATION_SERVICE_AREA') }}
 
   Purpose : Cleanse, deduplicate, and standardise organization, center,
             and service area data for PACE operations.
@@ -13,7 +13,7 @@
 
 with source as (
 
-    select * from {{ source('bronze_organization', 'RAW_ORGANIZATION') }}
+    select * from {{ source('bronze_organization', 'RAW_ORGANIZATION_SERVICE_AREA') }}
 
 ),
 

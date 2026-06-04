@@ -88,6 +88,6 @@ sources:
     description: "Raw Organization, Center, and Service Area domain"
     schema: BRONZE_ORGANIZATION
     tables:
-      - name: RAW_ORGANIZATION
+      - name: RAW_ORGANIZATION_SERVICE_AREA
         description: "Organization hierarchy, service centers, and geographic service area coverage data"
 
