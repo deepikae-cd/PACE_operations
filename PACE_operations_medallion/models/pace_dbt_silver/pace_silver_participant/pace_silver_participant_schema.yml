@@ -47,9 +47,6 @@ models:
         description: Medicare beneficiary identifier.
       - name: medicaid_id
         description: Medicaid beneficiary identifier.
-      - name: center_id
-        description: PACE center the participant is assigned to.
-        tests: [not_null]
       - name: full_address
         description: Concatenated mailing address.
       - name: state
