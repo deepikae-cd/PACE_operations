@@ -51,8 +51,11 @@ sources:
 
 
   - name: bronze_governance
-    description: "Raw Governance and regulatory rules domain"
+    description: "Raw Governance and compliance domain"
     schema: BRONZE_GOVERNANCE
     tables:
       - name: RAW_GOVERNANCE_RULES
         description: "Governance rules, compliance logic, and regulatory metadata"
+
+      - name: RAW_COMPLIANCE_VIOLATIONS
+        description: "Compliance violations and rule breach events"
