@@ -67,3 +67,11 @@ sources:
     tables:
       - name: RAW_NOTIFICATION
         description: "Notification delivery, messaging, and communication records"
+
+
+  - name: bronze_provider
+    description: "Raw Provider domain"
+    schema: BRONZE_PROVIDER
+    tables:
+      - name: RAW_PROVIDER
+        description: "Provider, vendor, and external healthcare entity records"
