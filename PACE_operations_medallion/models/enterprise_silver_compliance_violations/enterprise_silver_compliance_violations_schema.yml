@@ -65,4 +65,3 @@ models:
 
       - name: dbt_updated_timestamp
         description: DBT model write timestamp.
-``
