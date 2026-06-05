@@ -46,7 +46,7 @@ select
 
 from {{ ref('staging_task_instance') }} ti
 
-left join {{ ref('staging_care_plan_activity') }} cp
+left join {{ ref('staging_careplan_activity') }} cp
     on ti.care_plan_activity_id = cp.care_plan_activity_id
 
 left join {{ ref('staging_task_template') }} tt
