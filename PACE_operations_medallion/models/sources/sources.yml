@@ -108,3 +108,10 @@ sources:
     tables:
       - name: RAW_CARE_PLAN_ACTIVITY
         description: "Core care plan activity records capturing planned services for participants across program years"
+
+  - name: bronze_task
+    description: "Raw Task domain capturing task execution and task definitions"
+    schema: BRONZE_TASK
+    tables:
+      - name: RAW_TASK_INSTANCE
+        description: "Task execution records capturing actual work performed by aides including duration and timestamps"
