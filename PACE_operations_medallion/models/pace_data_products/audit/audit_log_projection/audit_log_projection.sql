@@ -16,15 +16,14 @@ Key Features:
   - Partition-ready (event_date)
   - Optimized for participant + date filtering
 
-===============================================================================
-*/
-
-with
-
 -- ============================================================
 -- Source: Silver audit log
 -- Incremental load using updated_at
 -- ============================================================
+===============================================================================
+*/
+
+with
 source as (
 
     select *
@@ -69,7 +68,7 @@ enriched as (
         event_category,
 
         -- ─────────────────────────────────────────────
-        -- ✅ Precomputed event description (UI CRITICAL)
+        -- Precomputed event description (UI CRITICAL)
         -- ─────────────────────────────────────────────
         case
             when action = 'CREATE'
@@ -92,7 +91,7 @@ enriched as (
         -- Timestamp fields
         -- ─────────────────────────────────────────────
         event_timestamp,
-        event_date,   -- ✅ already derived in silver (partition key)
+        event_date,   -- already derived in silver (partition key)
 
         -- ─────────────────────────────────────────────
         -- Change tracking (optional for UI detail views)
