@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: staging_task_template
+    description: "Cleaned task template data for downstream transformations"
+
+    config:
+      schema: staging_task_template
+      alias: task_template
+      materialized: view
+      tags: ["staging", "task"]
+
+    columns:
+      - name: task_template_id
+        description: "Unique identifier for task template"
+        tests:
+          - not_null
+          - unique
+
+      - name: task_name
+        description: "Name of the task"
+
+      - name: task_category
+        description: "Categorization of task (e.g., clinical, administrative)"
+
+      - name: source_system
+        description: "Originating system of the data"
+
+      - name: loaded_at
+        description: "Timestamp when record was loaded"
+
+      - name: source_file
+        description: "Source file reference for ingestion"
