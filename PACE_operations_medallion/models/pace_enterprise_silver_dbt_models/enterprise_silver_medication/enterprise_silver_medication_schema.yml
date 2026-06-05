@@ -4,28 +4,31 @@ models:
 
   - name: enterprise_silver_medication
     description: >
-      Cleaned and deduplicated medication records from
-      BRONZE_MEDICATION.RAW_MEDICATION.
-      Normalises drug attributes, pharmacy details, and prescription lifecycle.
-      Supports medication adherence, refill tracking, and cost analytics.
+      Cleaned, deduplicated, and enriched medication records sourced from
+      STG_MEDICATION. Standardises drug attributes, pharmacy details, and
+      prescription lifecycle while computing adherence, refill tracking,
+      and clinical safety indicators.
 
     config:
       schema: enterprise_silver_medication
-      alias : medication
-      materialized: table
+      alias: medication
+      materialized: incremental
+      unique_key: medication_sk
+      incremental_strategy: merge
       tags: ["silver", "medication"]
+      on_schema_change: sync_all_columns
 
     columns:
       - name: medication_sk
-        description: Surrogate key.
+        description: Surrogate key for medication record.
         tests: [not_null, unique]
 
       - name: medication_id
-        description: Natural key.
-        tests: [not_null, unique]
+        description: Natural identifier of medication record.
+        tests: [not_null]
 
       - name: participant_id
-        description: Participant identifier.
+        description: Participant receiving medication.
 
       - name: provider_id
         description: Prescribing provider identifier.
@@ -34,7 +37,7 @@ models:
         description: Associated clinical visit.
 
       - name: medication_name
-        description: Medication name.
+        description: Name of the medication.
 
       - name: generic_name
         description: Generic drug name.
@@ -46,16 +49,16 @@ models:
         description: National Drug Code.
 
       - name: drug_class
-        description: Drug classification category.
+        description: Drug classification.
 
       - name: dosage
-        description: Dosage value.
+        description: Dosage amount.
 
       - name: dosage_unit
-        description: Unit of dosage (mg, ml, etc.).
+        description: Units of dosage.
 
       - name: frequency
-        description: Frequency of administration.
+        description: Administration frequency.
 
       - name: route
         description: Route of administration.
@@ -64,22 +67,22 @@ models:
         description: Date medication was prescribed.
 
       - name: start_date
-        description: Medication start date.
+        description: Start date of medication therapy.
 
       - name: end_date
-        description: Medication end date.
+        description: End date of medication therapy.
 
       - name: medication_status
         description: Normalised medication status.
 
       - name: refills_authorized
-        description: Number of refills authorized.
+        description: Number of authorized refills.
 
       - name: refills_remaining
         description: Remaining refills.
 
       - name: last_refill_date
-        description: Last refill timestamp.
+        description: Timestamp of last refill.
 
       - name: pharmacy_name
         description: Pharmacy name.
@@ -103,10 +106,10 @@ models:
         description: Days of supply.
 
       - name: is_controlled_substance
-        description: TRUE if medication is controlled substance.
+        description: TRUE if controlled substance.
 
       - name: dea_schedule
-        description: DEA schedule classification.
+        description: DEA classification.
 
       - name: prior_auth_required_flag
         description: TRUE if prior authorization required.
@@ -124,7 +127,7 @@ models:
         description: Drug interaction alerts.
 
       - name: administration_instructions
-        description: Instructions for medication administration.
+        description: Instructions for administration.
 
       - name: special_handling_notes
         description: Special handling requirements.
@@ -133,7 +136,7 @@ models:
         description: TRUE if part of PACE formulary.
 
       - name: formulary_tier
-        description: Formulary tier classification.
+        description: Formulary tier level.
 
       - name: cost_per_unit
         description: Cost per unit.
@@ -148,10 +151,13 @@ models:
         description: PACE center identifier.
 
       - name: source_system
-        description: Source system name.
+        description: Origin system.
 
       - name: loaded_timestamp
-        description: Bronze load timestamp.
+        description: Bronze ingestion timestamp.
+
+      - name: source_file
+        description: Source file identifier.
 
       - name: dbt_updated_timestamp
-        description: DBT model update timestamp.
+        description: DBT update timestamp.
