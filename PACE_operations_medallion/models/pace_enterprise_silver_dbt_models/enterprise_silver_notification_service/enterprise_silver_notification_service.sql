@@ -1,29 +1,8 @@
-/*
-  ENTERPRISE_SILVER_NOTIFICATION
-  ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_notification', 'RAW_NOTIFICATION') }}
-
-  Purpose : Cleanse, deduplicate, and standardise notification delivery records.
-            Normalises notification type, category, channel, and delivery status.
-            Computes delivery flags and latency metrics for analysis.
-
-  Logic   :
-            - Deduplicates using latest _loaded_at per notification_id
-            - Standardises categorical fields (type, category, channel, status)
-            - Generates surrogate key (notification_sk)
-            - Flags delivery outcomes (is_delivered_flag, is_failed_flag)
-            - Computes delivery latency in minutes (scheduled → sent)
-            - Cleans contact fields (phone, email)
-
-  Grain   : One record per notification_id (latest version)
-
-  ──────────────────────────────────────────────────────────────────────────────
-*/
 
 /*
   ENTERPRISE_SILVER_NOTIFICATION
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ ref('stg_notification') }}
+  Source  : {{ ref('staging_notification_service') }}
   Purpose : Cleanse, deduplicate and enrich notification records.
             Adds surrogate key, standardised vocabularies, computed flags for:
             delivery success/failure, read status, send delay, retry risk,
@@ -33,7 +12,7 @@
 
 with source as (
 
-    select * from {{ ref('stg_notification') }}
+    select * from {{ ref('staging_notification_service') }}
 
     {% if is_incremental() %}
         where _loaded_at > (select max(loaded_timestamp) from {{ this }})
