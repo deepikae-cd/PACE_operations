@@ -1,5 +1,5 @@
 /*
-  STAGING_COMPLIANCE_VIOLATIONS
+  STAGING_COMPLIANCE_VIOLATION
   ──────────────────────────────────────────────────────────────────────────────
   Source  : {{ source('bronze_governance', 'RAW_COMPLIANCE_VIOLATIONS') }}
   Purpose : Thin staging layer — select, rename, and basic null filtering only.
