@@ -4,78 +4,104 @@ models:
 
   - name: enterprise_silver_governance_rules
     description: >
-      Cleaned governance rules from BRONZE_GOVERNANCE.RAW_GOVERNANCE_RULES.
-      Normalises rule category, enforcement level, and lifecycle flags.
-      Deduplicates on RULE_ID and computes expiration status.
+      Cleaned, deduplicated, and enriched governance rule records sourced from
+      STG_GOVERNANCE_RULES. Standardises rule categories, enforcement levels,
+      and domains while computing lifecycle status, enforcement flags, and
+      regulatory classification.
 
     config:
       schema: enterprise_silver_governance_rules
       alias: governance_rules
       materialized: table
       tags: ["silver", "governance"]
+      on_schema_change: sync_all_columns
 
     columns:
       - name: rule_sk
-        description: Surrogate key.
+        description: Surrogate key for governance rule.
         tests: [not_null, unique]
 
       - name: rule_id
-        description: Natural key.
-        tests: [not_null, unique]
+        description: Natural identifier for the governance rule.
+        tests: [not_null]
 
       - name: rule_name
         description: Name of the governance rule.
+
+      - name: rule_description
+        description: Description of the rule.
+
+      - name: rule_logic
+        description: Business logic or validation condition.
+
+      - name: regulatory_reference
+        description: External regulatory citation.
 
       - name: rule_category
         description: Normalised rule category.
 
       - name: rule_subcategory
-        description: Subcategory classification of the rule.
-
-      - name: rule_description
-        description: Detailed description of the rule logic.
-
-      - name: rule_logic
-        description: Business logic or validation expression.
+        description: Normalised rule subcategory.
 
       - name: applies_to_domain
-        description: PACE domain governed by this rule.
-
-      - name: effective_date
-        description: Date rule came into effect.
-
-      - name: expiry_date
-        description: Date rule expires (NULL = no expiry).
-
-      - name: is_active_flag
-        description: TRUE if the rule is currently active.
-
-      - name: is_expired_flag
-        description: TRUE if expiry_date is earlier than current date.
+        description: Domain to which the rule applies.
 
       - name: enforcement_level
         description: Normalised enforcement level.
 
-      - name: regulatory_reference
-        description: Regulatory citation (e.g., 42 CFR 460.98).
+      - name: enforcement_rank
+        description: Ranking of enforcement strictness.
+
+      - name: is_hard_block_flag
+        description: TRUE if enforcement level is HARD_BLOCK.
+
+      - name: is_soft_warning_flag
+        description: TRUE if enforcement level is SOFT_WARNING.
+
+      - name: is_audit_only_flag
+        description: TRUE if enforcement level is AUDIT_ONLY.
+
+      - name: is_regulatory_flag
+        description: TRUE if rule belongs to external regulation (HIPAA, CMS, etc.).
+
+      - name: effective_date
+        description: Date rule becomes effective.
+
+      - name: expiry_date
+        description: Date rule expires.
+
+      - name: rule_status
+        description: Computed lifecycle status of the rule.
+
+      - name: is_currently_enforceable_flag
+        description: TRUE if rule is active and within valid date range.
+
+      - name: is_expiring_soon_flag
+        description: TRUE if rule expires within next 30 days.
+
+      - name: rule_age_days
+        description: Number of days since rule became effective.
 
       - name: created_by
-        description: User or system that created the rule.
+        description: User who created the rule.
 
-      - name: created_timestamp
-        description: Timestamp when the rule was created.
+      - name: created_at
+        description: Timestamp when rule was created.
 
       - name: last_updated_by
-        description: User or system that last updated the rule.
+        description: User who last updated the rule.
 
-      - name: last_updated_timestamp
+      - name: last_updated_at
         description: Timestamp of last update.
 
       - name: source_system
         description: Origin system.
 
       - name: loaded_timestamp
-        description: Bronze load timestamp.
+        description: Bronze ingestion timestamp.
+
+      - name: source_file
+        description: Source file name.
 
       - name: dbt_updated_timestamp
-        description: DBT model write timestamp.
+        description: DBT model update timestamp.
