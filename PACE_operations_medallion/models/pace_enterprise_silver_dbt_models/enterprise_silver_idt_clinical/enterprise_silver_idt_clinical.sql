@@ -34,10 +34,10 @@ cleaned as (
 
     select
         -- Surrogate key
-        sha2(concat_ws('||', visit_id, cast(_loaded_at as varchar))) as visit_sk,
+        sha2(concat_ws('||', visit_id, cast(_loaded_at as varchar))) as cinical_visit_sk,
 
         -- Natural keys (normalised)
-        trim(upper(visit_id))        as visit_id,
+        trim(upper(visit_id))        as clinical_visit_id,
         trim(upper(appointment_id))  as appointment_id,
         trim(upper(participant_id))  as participant_id,
         trim(upper(provider_id))     as provider_id,

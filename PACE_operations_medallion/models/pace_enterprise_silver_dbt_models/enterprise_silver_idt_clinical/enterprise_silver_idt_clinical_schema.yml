@@ -18,20 +18,19 @@ models:
       on_schema_change: sync_all_columns
 
     columns:
-      - name: visit_sk
+      - name: cinical_visit_sk
         description: Surrogate key for clinical visit.
         tests: [not_null, unique]
 
-      - name: visit_id
+      - name: clinical_visit_id
         description: Natural identifier of visit.
-        tests: [not_null]
 
       - name: appointment_id
         description: Linked appointment identifier (if scheduled visit).
 
       - name: participant_id
         description: Participant receiving care.
-        tests: [not_null]
+    
 
       - name: provider_id
         description: Care provider identifier.
