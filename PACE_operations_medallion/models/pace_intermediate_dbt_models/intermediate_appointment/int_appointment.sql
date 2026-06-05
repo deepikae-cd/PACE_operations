@@ -22,17 +22,10 @@ Tags            : ['intermediate', 'appointment', 'pace', 'care_coordination']
 */
 
 with
-
--- ============================================================
--- Anchor timestamp (consistent evaluation)
--- ============================================================
 current_ts as (
     select current_timestamp as now_ts
 ),
 
--- ============================================================
--- Source CTEs
--- ============================================================
 silver_appointment as (
     select * from {{ ref('enterprise_silver_appointment') }}
 ),
@@ -44,8 +37,6 @@ silver_participant as (
         last_name   as participant_last_name,
         full_name   as participant_full_name,
         date_of_birth,
-
-        -- ✅ SAFE (no dependency on missing columns)
         null as enrollment_status,
 
         primary_pace_center_id,
