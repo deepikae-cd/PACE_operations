@@ -1,18 +1,21 @@
 /*
-  ENTERPRISE_SILVER_IDT_CLINICAL
+  ENTERPRISE_SILVER_CLINICAL_VISIT
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_clinical_visit', 'RAW_CLINICAL_VISIT') }}
-  Purpose : Cleanse, cast, deduplicate clinical encounter records.
-            Parses BP string into systolic / diastolic numerics.
-            Normalises visit type, location type, follow-up flags.
+  Source  : {{ ref('staging_idt_clinical') }}
+  Purpose : Cleanse, deduplicate and enrich clinical visit records.
+            Adds surrogate key, standardised vocabularies, vitals range
+            validation flags, diagnosis/procedure count derivations,
+            follow-up due date, and appointment linkage flag.
   ──────────────────────────────────────────────────────────────────────────────
 */
 
-with
+with source as (
 
-source as (
+    select * from {{ ref('staging_idt_clinical') }}
 
-    select * from {{ source('bronze_clinical_visit', 'RAW_CLINICAL_VISIT') }}
+    {% if is_incremental() %}
+        where _loaded_at > (select max(loaded_timestamp) from {{ this }})
+    {% endif %}
 
 ),
 
@@ -24,75 +27,154 @@ deduplicated as (
                order by _loaded_at desc
            ) as _rn
     from source
-    where visit_id       is not null
-      and participant_id is not null
-      and visit_date     is not null
 
 ),
 
 cleaned as (
 
     select
-        -- Keys
-        sha2(concat_ws('||', visit_id, cast(_loaded_at as varchar))) as clinical_visit_sk,
-        trim(upper(visit_id))       as clinical_visit_id,
-        trim(upper(appointment_id)) as appointment_id,
-        trim(upper(participant_id)) as participant_id,
-        trim(upper(provider_id))    as provider_id,
-        trim(upper(caregiver_id))   as caregiver_id,
-        trim(upper(center_id))      as center_id,
+        -- Surrogate key
+        sha2(concat_ws('||', visit_id, cast(_loaded_at as varchar))) as visit_sk,
 
-        -- Visit type
+        -- Natural keys (normalised)
+        trim(upper(visit_id))        as visit_id,
+        trim(upper(appointment_id))  as appointment_id,
+        trim(upper(participant_id))  as participant_id,
+        trim(upper(provider_id))     as provider_id,
+        trim(upper(caregiver_id))    as caregiver_id,
+        trim(upper(center_id))       as center_id,
+
+        -- Appointment linkage flag
+        (appointment_id is not null) as is_scheduled_visit_flag,
+
+        -- Visit type (controlled vocabulary)
         case
-            when upper(trim(visit_type)) like '%ASSESS%' then 'ASSESSMENT'
-            when upper(trim(visit_type)) like '%FOLLOW%' then 'FOLLOW_UP'
-            when upper(trim(visit_type)) in ('URGENT','EMERGENCY','ER') then 'URGENT'
-            when upper(trim(visit_type)) like '%SPEC%' then 'SPECIALIST'
-            when upper(trim(visit_type)) in ('PREVENTIVE','WELLNESS') then 'PREVENTIVE'
+            when upper(trim(visit_type)) in (
+                'ASSESSMENT', 'FOLLOW_UP', 'URGENT',
+                'SPECIALIST', 'ROUTINE', 'TELEHEALTH'
+            ) then upper(trim(visit_type))
             when visit_type is null then 'UNKNOWN'
             else 'OTHER'
         end as visit_type,
-        visit_date,
-        visit_duration_minutes,
 
-        -- Diagnosis
-        trim(upper(chief_complaint))        as chief_complaint,
-        trim(upper(primary_diagnosis_code)) as primary_diagnosis_code,
-        trim(primary_diagnosis_desc)        as primary_diagnosis_desc,
-        trim(secondary_diagnosis_codes)     as secondary_diagnosis_codes,
-        trim(procedures_performed)          as procedures_performed,
-        trim(medications_prescribed)        as medications_prescribed,
-        try_cast(
-            split_part(regexp_replace(vitals_blood_pressure,'[^0-9/]',''), '/', 1)
-        as number(5,0)) as vitals_blood_pressure_systolic,
-
-        try_cast(
-            split_part(regexp_replace(vitals_blood_pressure,'[^0-9/]',''), '/', 2)
-        as number(5,0)) as vitals_blood_pressure_diastolic,
-        try_cast(vitals_heart_rate as number(5,0))     as vitals_heart_rate,
-        try_cast(vitals_temperature as number(5,2))    as vitals_temperature_f,
-        try_cast(vitals_weight_lbs as number(6,2))     as vitals_weight_lbs,
-        try_cast(vitals_o2_saturation as number(5,2))  as vitals_o2_saturation,
-
-        -- Follow-up
-        coalesce(follow_up_required, false) as follow_up_required,
-        try_cast(follow_up_timeframe_days as number(5,0)) as follow_up_timeframe_days,
-
-        -- Location
+        -- Location type (controlled vocabulary)
         case
-            when upper(trim(location_type)) in
-                ('CENTER','HOME','ER','HOSPITAL','TELEHEALTH')
-            then upper(trim(location_type))
+            when upper(trim(location_type)) in (
+                'CENTER', 'HOME', 'ER', 'HOSPITAL', 'TELEHEALTH'
+            ) then upper(trim(location_type))
             when location_type is null then 'UNKNOWN'
             else 'OTHER'
         end as location_type,
 
+        -- High-acuity location flag (ER or HOSPITAL)
+        (upper(trim(location_type)) in ('ER', 'HOSPITAL')) as is_high_acuity_location_flag,
+
+        -- Chief complaint
+        trim(chief_complaint) as chief_complaint,
+
+        -- Primary diagnosis (ICD-10 normalised)
+        trim(upper(primary_diagnosis_code)) as primary_diagnosis_code,
+        trim(primary_diagnosis_desc)        as primary_diagnosis_desc,
+
+        -- ICD-10 chapter derived from first character of primary code
+        case
+            when primary_diagnosis_code like 'A%' or primary_diagnosis_code like 'B%' then 'INFECTIOUS_PARASITIC'
+            when primary_diagnosis_code like 'C%'                                      then 'NEOPLASMS'
+            when primary_diagnosis_code like 'D%'                                      then 'BLOOD_IMMUNE'
+            when primary_diagnosis_code like 'E%'                                      then 'ENDOCRINE_METABOLIC'
+            when primary_diagnosis_code like 'F%'                                      then 'MENTAL_BEHAVIORAL'
+            when primary_diagnosis_code like 'G%'                                      then 'NERVOUS_SYSTEM'
+            when primary_diagnosis_code like 'H%'                                      then 'EYE_EAR'
+            when primary_diagnosis_code like 'I%'                                      then 'CIRCULATORY'
+            when primary_diagnosis_code like 'J%'                                      then 'RESPIRATORY'
+            when primary_diagnosis_code like 'K%'                                      then 'DIGESTIVE'
+            when primary_diagnosis_code like 'L%'                                      then 'SKIN'
+            when primary_diagnosis_code like 'M%'                                      then 'MUSCULOSKELETAL'
+            when primary_diagnosis_code like 'N%'                                      then 'GENITOURINARY'
+            when primary_diagnosis_code like 'Z%'                                      then 'FACTORS_HEALTH_STATUS'
+            when primary_diagnosis_code is null                                        then 'UNKNOWN'
+            else 'OTHER'
+        end as primary_diagnosis_chapter,
+
+        -- Raw pipe-delimited fields passed through for mart-level parsing
+        secondary_diagnosis_codes,
+        procedures_performed,
+        medications_prescribed,
+
+        -- Secondary diagnosis count (pipe count + 1 if not null)
+        case
+            when secondary_diagnosis_codes is null then 0
+            else array_size(split(secondary_diagnosis_codes, '|'))
+        end as secondary_diagnosis_count,
+
+        -- Procedure count
+        case
+            when procedures_performed is null then 0
+            else array_size(split(procedures_performed, '|'))
+        end as procedure_count,
+
+        -- Visit has procedures flag
+        (procedures_performed is not null) as has_procedures_flag,
+
+        -- Vitals (passed through — range flags added below)
+        vitals_blood_pressure,
+        vitals_heart_rate,
+        vitals_temperature,
+        vitals_weight_lbs,
+        vitals_o2_saturation,
+
+        -- Vitals completeness flag
+        (
+            vitals_heart_rate    is not null
+            and vitals_temperature   is not null
+            and vitals_weight_lbs    is not null
+            and vitals_o2_saturation is not null
+        ) as is_vitals_complete_flag,
+
+        -- Vitals out-of-range flags (clinically standard thresholds)
+        (vitals_heart_rate < 60 or vitals_heart_rate > 100)           as is_heart_rate_abnormal_flag,
+        (vitals_temperature < 96.8 or vitals_temperature > 100.4)     as is_temperature_abnormal_flag,
+        (vitals_o2_saturation is not null
+            and vitals_o2_saturation < 95)                            as is_o2_low_flag,
+
+        -- Clinical notes
         trim(clinical_notes) as clinical_notes,
 
+        -- Follow-up
+        follow_up_required,
+        follow_up_timeframe_days,
+
+        -- Follow-up due date derived from visit date + timeframe
+        case
+            when follow_up_required = true
+             and visit_date is not null
+             and follow_up_timeframe_days is not null
+            then dateadd('day', follow_up_timeframe_days, visit_date::date)
+        end as follow_up_due_date,
+
+        -- Follow-up overdue flag (required but due date has passed)
+        case
+            when follow_up_required = true
+             and visit_date is not null
+             and follow_up_timeframe_days is not null
+             and dateadd('day', follow_up_timeframe_days, visit_date::date) < current_date()
+            then true
+            else false
+        end as is_follow_up_overdue_flag,
+
+        -- Visit timing
+        visit_date,
+        visit_duration_minutes,
+
+        -- Long visit flag (> 60 min)
+        (visit_duration_minutes is not null
+            and visit_duration_minutes > 60) as is_long_visit_flag,
+
         -- Metadata
-        upper(trim(source_system)) as source_system,
-        _loaded_at as loaded_timestamp,
-        current_timestamp() as dbt_updated_timestamp
+        upper(trim(source_system))  as source_system,
+        _loaded_at                  as loaded_timestamp,
+        _source_file                as source_file,
+        current_timestamp()         as dbt_updated_timestamp
 
     from deduplicated
     where _rn = 1
