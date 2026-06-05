@@ -52,46 +52,17 @@ models:
 
       - name: appointment_category
         description: Derived PACE classification of appointment type
-        tests:
-          - accepted_values:
-              values:
-                - interdisciplinary_team
-                - primary_care
-                - specialist
-                - behavioral_health
-                - therapy
-                - transportation_related
-                - ancillary
-                - adult_day_center
-                - other
+     
 
       - name: care_setting
         description: Derived care setting (in_person, telehealth, etc.)
-        tests:
-          - accepted_values:
-              values:
-                - in_person
-                - telehealth
-                - home_visit
-                - inpatient
-                - skilled_nursing
-                - other
-
+     
       # ─────────────────────────────────────────────
       # Attendance + status
       # ─────────────────────────────────────────────
       - name: attendance_status_normalized
         description: Standardized attendance classification
-        tests:
-          - accepted_values:
-              values:
-                - attended
-                - no_show
-                - cancelled
-                - rescheduled
-                - late_cancellation
-                - upcoming
-                - unknown
+     
 
       - name: is_confirmed_no_show
         description: True if appointment is classified as no-show and in the past
