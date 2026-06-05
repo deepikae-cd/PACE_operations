@@ -1,7 +1,7 @@
 /*
   ENTERPRISE_SILVER_TRANSPORTATION
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ ref('stg_transportation') }}
+  Source  : {{ ref('staging_transportation') }}
   Purpose : Cleanse, deduplicate and enrich transportation records.
             Adds surrogate key, standardised vocabularies, computed flags
             for trip outcomes, punctuality, SLA breaches, and time/distance
@@ -11,7 +11,7 @@
 
 with source as (
 
-    select * from {{ ref('stg_transportation') }}
+    select * from {{ ref('staging_transportation') }}
 
     {% if is_incremental() %}
         where _loaded_at > (select max(loaded_timestamp) from {{ this }})
