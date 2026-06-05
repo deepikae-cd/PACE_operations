@@ -27,11 +27,8 @@ Materialization:
 ===============================================================================
 */
 
-select
 
-    -- ─────────────────────────────────────────────
-    -- Keys (normalized identifiers)
-    -- ─────────────────────────────────────────────
+select
     trim(upper(care_plan_activity_id)) as care_plan_activity_id,
     trim(upper(participant_id))        as participant_id,
 
