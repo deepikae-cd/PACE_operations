@@ -1,0 +1,104 @@
+version: 2
+
+models:
+  - name: staging_transportation
+    description: >
+      Thin staging layer for transportation data sourced from
+      BRONZE_TRANSPORTATION.RAW_TRANSPORTATION.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
+
+    config:
+      schema: staging_transportation
+      alias: transportation
+      materialized: view
+      tags:
+        - staging
+        - transportation
+
+    columns:
+
+      # ───────────────────────────────
+      # Keys
+      # ───────────────────────────────
+      - name: transport_id
+        description: Unique identifier for transportation record.
+        tests:
+          - not_null
+
+      - name: participant_id
+        description: Participant associated with trip.
+        tests:
+          - not_null
+
+      - name: appointment_id
+        description: Related appointment identifier.
+
+      - name: driver_id
+        description: Driver identifier.
+
+      - name: vehicle_id
+        description: Vehicle identifier.
+
+      - name: vendor_id
+        description: External vendor identifier.
+
+      - name: center_id
+        description: PACE center identifier.
+
+      # ───────────────────────────────
+      # Trip Details
+      # ───────────────────────────────
+      - name: transport_type
+        description: Type of transportation.
+
+      - name: trip_direction
+        description: Direction of trip (pickup/dropoff).
+
+      - name: transport_status
+        description: Status of the trip.
+
+      - name: cancellation_reason
+        description: Reason for cancellation (if applicable).
+
+      - name: special_equipment_needed
+        description: Indicators for special equipment requirement.
+
+      # ───────────────────────────────
+      # Addresses
+      # ───────────────────────────────
+      - name: pickup_address
+        description: Pickup location.
+
+      - name: dropoff_address
+        description: Dropoff location.
+
+      # ───────────────────────────────
+      # Timestamps
+      # ───────────────────────────────
+      - name: scheduled_pickup_time
+        description: Scheduled pickup timestamp.
+
+      - name: actual_pickup_time
+        description: Actual pickup timestamp.
+
+      - name: actual_dropoff_time
+        description: Actual drop-off timestamp.
+
+      # ───────────────────────────────
+      # Metrics
+      # ───────────────────────────────
+      - name: mileage
+        description: Distance covered for trip.
+
+      # ───────────────────────────────
+      # Metadata
+      # ───────────────────────────────
+      - name: source_system
+        description: Source system name.
+
+      - name: _loaded_at
+        description: Raw ingestion timestamp.
+
+      - name: _source_file
+        description: Source file identifier.
