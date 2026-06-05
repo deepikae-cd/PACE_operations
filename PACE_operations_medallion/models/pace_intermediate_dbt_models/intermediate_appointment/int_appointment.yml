@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: int_appointment
+    description: >
+      Enriches enterprise silver appointment data with participant,
+      provider, and caregiver context. Applies PACE-specific business
+      logic for appointment classification, attendance status resolution,
+      and care coordination flags.
+
+    config:
+      materialized: view
+      schema: intermediate_appointment
+      alias: appointment
+      tags: ['intermediate', 'appointment', 'pace']
+
+    columns:
+      - name: appointment_id
+        description: Unique identifier for the appointment
+
+      - name: participant_id
+        description: Foreign key to participant
+
+      - name: provider_id
+        description: Foreign key to provider
+
+      - name: organization_id
+        description: Foreign key to organization / PACE center
+
+      - name: appointment_datetime
+        description: Timestamp of scheduled appointment
+
+      - name: attendance_status_normalized
+        description: Standardized attendance classification
+
+      - name: appointment_category
+        description: PACE-specific appointment category
+
+      - name: care_setting
+        description: Classified care setting (in_person, telehealth, etc.)
+
+      - name: is_confirmed_no_show
+        description: Flag indicating confirmed no-show based on status and time
+
+      - name: is_missed_idt
+        description: Flag indicating missed interdisciplinary team appointment
+
+      - name: days_from_creation_to_appointment
+        description: Number of days between creation and appointment date
