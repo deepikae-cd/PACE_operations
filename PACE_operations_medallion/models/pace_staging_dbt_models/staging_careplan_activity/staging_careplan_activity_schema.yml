@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: staging_care_plan_activity
+  - name: staging_careplan_activity
 
     description: >
       Staging model for care plan activity data. Cleans and standardizes
@@ -10,8 +10,8 @@ models:
 
     config:
       materialized: view
-      alias: care_plan_activity
-      schema: staging_care_plan_activity
+      alias: careplan_activity
+      schema: staging_careplan_activity
       tags: ['staging', 'care_plan', 'pace']
 
     columns:
