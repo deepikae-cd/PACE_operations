@@ -1,0 +1,79 @@
+version: 2
+
+models:
+
+  - name: staging_meal_delivery
+    description: >
+      Thin staging layer for meal delivery data sourced from
+      BRONZE_MEAL_DELIVERY.RAW_MEAL_DELIVERY.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
+
+    config:
+      schema: staging_meal_delivery
+      alias: meal_delivery
+      materialized: view
+      tags: ["staging", "meal_delivery"]
+
+    columns:
+      - name: meal_delivery_id
+        description: Unique identifier for meal delivery.
+        tests: [not_null]
+
+      - name: participant_id
+        description: Identifier of the participant receiving meals.
+        tests: [not_null]
+
+      - name: meal_plan_id
+        description: Identifier of the meal plan.
+
+      - name: delivery_caregiver_id
+        description: Caregiver responsible for delivery.
+
+      - name: vendor_id
+        description: External vendor providing meals.
+
+      - name: center_id
+        description: PACE center identifier.
+
+      - name: meal_type
+        description: Type of meal (breakfast, lunch, dinner, snack).
+
+      - name: dietary_restriction
+        description: Dietary restrictions applied to the meal.
+
+      - name: calorie_count
+        description: Number of calories in the meal.
+
+      - name: delivery_type
+        description: Type of delivery (home delivery, on-site, etc.).
+
+      - name: delivery_status
+        description: Status of meal delivery.
+
+      - name: refused_reason
+        description: Reason for refusal if meal was not accepted.
+
+      - name: temperature_on_delivery
+        description: Temperature of meal at delivery time.
+
+      - name: participant_acceptance
+        description: Indicator of participant acceptance of meal.
+
+      - name: notes
+        description: Additional notes related to the delivery.
+
+      - name: meal_date
+        description: Date the meal was scheduled.
+
+      - name: delivered_at
+        description: Timestamp when the meal was delivered.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: _loaded_at
+        description: Raw ingestion timestamp from bronze layer.
+
+      - name: _source_file
+        description: Source file name.
