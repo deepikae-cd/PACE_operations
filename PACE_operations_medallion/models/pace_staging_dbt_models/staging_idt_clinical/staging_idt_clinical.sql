@@ -1,71 +1,73 @@
-version: 2
+/*
+  STAGING_CLINICAL_VISIT
+  ──────────────────────────────────────────────────────────────────────────────
+  Source  : {{ source('bronze_clinical_visit', 'RAW_CLINICAL_VISIT') }}
+  Purpose : Thin staging layer — select, rename, and basic null filtering only.
+            No business logic. Materialised as view to avoid storage cost.
+  ──────────────────────────────────────────────────────────────────────────────
+*/
 
-models:
 
-  - name: staging_idt_clinical
-    description: >
-      Thin staging layer for clinical visit data sourced from
-      BRONZE_CLINICAL_VISIT.RAW_CLINICAL_VISIT.
-      Performs basic column selection and minimal filtering only.
-      No business logic applied. Designed as a lightweight view.
+with source as (
 
-    config:
-      schema: staging_idt_clinical
-      alias: idt_clinical
-      materialized: view
-      tags: ["staging", "clinical"]
+    select
+        -- Keys
+        visit_id,
+        appointment_id,
+        participant_id,
+        provider_id,
+        caregiver_id,
+        center_id,
 
-    columns:
-      - name: visit_id
-        description: Unique identifier for the clinical visit.
-        tests: [not_null]
+        -- Visit descriptors (raw — no business logic here)
+        visit_type,
+        location_type,
+        chief_complaint,
 
-      - name: appointment_id
-        description: Associated appointment identifier.
+        -- Diagnosis (raw codes — no parsing here)
+        primary_diagnosis_code,
+        primary_diagnosis_desc,
+        secondary_diagnosis_codes,
 
-      - name: participant_id
-        description: Identifier of the participant.
-        tests: [not_null]
+        -- Procedures & medications (raw pipe-delimited — no parsing here)
+        procedures_performed,
+        medications_prescribed,
 
-      - name: provider_id
-        description: Provider responsible for the visit.
+        -- Vitals (raw — no range validation here)
+        vitals_blood_pressure,
+        vitals_heart_rate,
+        vitals_temperature,
+        vitals_weight_lbs,
+        vitals_o2_saturation,
 
-      - name: caregiver_id
-        description: Caregiver associated with the visit.
+        -- Clinical notes
+        clinical_notes,
 
-      - name: center_id
-        description: PACE center identifier.
+        -- Follow-up
+        follow_up_required,
+        follow_up_timeframe_days,
 
-      - name: visit_type
-        description: Type of clinical visit.
+        -- Timestamps & duration
+        visit_date,
+        visit_duration_minutes,
 
-      - name: location_type
-        description: Location where the visit occurred.
+        -- Metadata
+        source_system,
+        _loaded_at,
+        _source_file
 
-      - name: chief_complaint
-        description: Primary reason for the visit.
+    from {{ source('bronze_clinical_visit', 'RAW_CLINICAL_VISIT') }}
 
-      - name: primary_diagnosis_code
-        description: Primary diagnosis code.
+),
 
-      - name: primary_diagnosis_desc
-        description: Description of the primary diagnosis.
+filtered as (
 
-      - name: secondary_diagnosis_codes
-        description: Additional diagnosis codes (pipe-delimited).
+    -- Drop records that can never be meaningful downstream
+    select *
+    from source
+    where visit_id       is not null
+      and participant_id is not null
 
-      - name: procedures_performed
-        description: Procedures performed during the visit (pipe-delimited).
+)
 
-      - name: medications_prescribed
-        description: Medications prescribed during the visit (pipe-delimited).
-
-      - name: vitals_blood_pressure
-        description: Blood pressure recorded during visit.
-
-      - name: vitals_heart_rate
-        description: Heart rate measurement.
-
-      - name: vitals_temperature
-        description: Body temperature reading.
-
+select * from filtered
