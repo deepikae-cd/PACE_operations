@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int_home_care_task_breakdown
+  - name: int_homecare_task_breakdown
 
     description: >
       Intermediate model that combines care plan activity, task instances,
