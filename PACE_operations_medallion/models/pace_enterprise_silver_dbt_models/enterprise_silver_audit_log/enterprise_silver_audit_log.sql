@@ -148,12 +148,10 @@ final as (
         source_system,
 
         -- ─────────────────────────────────────────────
-        -- Event Description + Metadata
+        -- Event Description 
         -- Preserved as-is for downstream enrichment
         -- ─────────────────────────────────────────────
         event_description,
-        metadata,
-
         -- ─────────────────────────────────────────────
         -- Audit Timestamps
         -- ─────────────────────────────────────────────
