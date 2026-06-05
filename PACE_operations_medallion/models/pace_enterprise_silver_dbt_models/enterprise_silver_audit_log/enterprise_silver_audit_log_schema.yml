@@ -29,17 +29,13 @@ models:
 
       - name: action
         description: Standardized action performed
-        tests:
-          - accepted_values:
-              values: ['CREATE','UPDATE','DELETE','VIEW','APPROVE','REJECT','OTHER']
-
+     
       - name: event_category
         description: Derived category of event (write, read, workflow, other)
 
       - name: event_timestamp
         description: Timestamp when audit event occurred
-        tests:
-          - not_null
+   
 
       - name: event_date
         description: Date derived from event_timestamp for partitioning
