@@ -1,0 +1,105 @@
+version: 2
+
+models:
+
+  - name: staging_participant
+    description: >
+      Thin staging layer for participant data sourced from
+      BRONZE_PARTICIPANT.RAW_PARTICIPANT.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
+
+    config:
+      schema: staging_participant
+      alias: participant
+      materialized: view
+      tags: ["staging", "participant"]
+
+    columns:
+      - name: participant_id
+        description: Unique identifier for participant.
+        tests: [not_null]
+
+      - name: center_id
+        description: Associated PACE center identifier.
+
+      - name: insurance_id
+        description: Insurance identifier.
+
+      - name: medicare_id
+        description: Medicare identifier.
+
+      - name: medicaid_id
+        description: Medicaid identifier.
+
+      # Demographics
+      - name: first_name
+        description: Participant first name.
+
+      - name: last_name
+        description: Participant last name.
+
+      - name: date_of_birth
+        description: Date of birth.
+
+      - name: gender
+        description: Gender of participant.
+
+      - name: preferred_language
+        description: Preferred language for communication.
+
+      # Enrollment
+      - name: enrollment_date
+        description: Date participant enrolled.
+
+      - name: disenrollment_date
+        description: Date participant left program.
+
+      - name: program_status
+        description: Current program status.
+
+      # Clinical
+      - name: primary_diagnosis
+        description: Primary diagnosis.
+
+      - name: secondary_diagnoses
+        description: Additional diagnoses.
+
+      # Address
+      - name: address_line1
+        description: Address line 1.
+
+      - name: address_line2
+        description: Address line 2.
+
+      - name: city
+        description: City.
+
+      - name: state
+        description: State.
+
+      - name: zip_code
+        description: ZIP code.
+
+      # Contact
+      - name: phone_number
+        description: Contact phone number.
+
+      - name: emergency_contact_name
+        description: Emergency contact name.
+
+      - name: emergency_contact_phone
+        description: Emergency contact phone.
+
+      - name: emergency_contact_relation
+        description: Relationship to participant.
+
+      # Metadata
+      - name: source_system
+        description: Origin system.
+
+      - name: _loaded_at
+        description: Raw ingestion timestamp from bronze layer.
+
+      - name: _source_file
+        description: Source file identifier.
