@@ -1,27 +1,39 @@
 version: 2
 
 models:
-
-  - name: staging_participant
-    description: >
-      Thin staging layer for participant data sourced from
-      BRONZE_PARTICIPANT.RAW_PARTICIPANT.
-      Performs basic column selection and minimal filtering only.
-      No business logic applied. Designed as a lightweight view.
+  - name: enterprise_silver_participant
+    description: >   
+      Cleaned, deduplicated, and enriched participant records sourced from
 
     config:
-      schema: staging_participant
+      schema: enterprise_silver_participant
       alias: participant
-      materialized: view
-      tags: ["staging", "participant"]
+      materialized: incremental
+      unique_key: participant_sk
+      incremental_strategy: merge
+      on_schema_change: sync_all_columns
+      tags:
+        - silver
+        - participant
 
     columns:
+
+      # ───────────────────────────────
+      # Keys
+      # ───────────────────────────────
+      - name: participant_sk
+        description: Surrogate key for participant record.
+        tests:
+          - not_null
+          - unique
+
       - name: participant_id
-        description: Unique identifier for participant.
-        tests: [not_null]
+        description: Natural identifier for participant.
+        tests:
+          - not_null
 
       - name: center_id
-        description: Associated PACE center identifier.
+        description: PACE center identifier.
 
       - name: insurance_id
         description: Insurance identifier.
@@ -32,40 +44,90 @@ models:
       - name: medicaid_id
         description: Medicaid identifier.
 
+      # ───────────────────────────────
       # Demographics
+      # ───────────────────────────────
       - name: first_name
         description: Participant first name.
 
       - name: last_name
         description: Participant last name.
 
+      - name: full_name
+        description: Full name derived from first and last name.
+
       - name: date_of_birth
-        description: Date of birth.
+        description: Validated date of birth.
+
+      - name: age_at_load
+        description: Age in years at time of data load.
 
       - name: gender
-        description: Gender of participant.
+        description: Standardized gender value.
 
       - name: preferred_language
-        description: Preferred language for communication.
+        description: Preferred communication language.
 
+      # ───────────────────────────────
       # Enrollment
+      # ───────────────────────────────
       - name: enrollment_date
-        description: Date participant enrolled.
+        description: Program enrollment date.
 
       - name: disenrollment_date
-        description: Date participant left program.
+        description: Program disenrollment date.
 
       - name: program_status
-        description: Current program status.
+        description: Standardized program status.
 
+      - name: is_active_flag
+        description: TRUE if participant is active.
+
+      - name: is_disenrolled_flag
+        description: TRUE if participant is disenrolled.
+
+      - name: is_deceased_flag
+        description: TRUE if participant is deceased.
+
+      - name: is_on_leave_flag
+        description: TRUE if participant is on leave.
+
+      - name: is_active_enrolled_flag
+        description: TRUE if active and currently enrolled.
+
+      - name: enrollment_duration_days
+        description: Total enrollment duration.
+
+      - name: enrollment_age_days
+        description: Number of days since enrollment.
+
+      # ───────────────────────────────
       # Clinical
+      # ───────────────────────────────
       - name: primary_diagnosis
         description: Primary diagnosis.
 
       - name: secondary_diagnoses
-        description: Additional diagnoses.
+        description: Pipe-delimited secondary diagnoses.
 
+      - name: secondary_diagnosis_count
+        description: Count of secondary diagnoses.
+
+      # ───────────────────────────────
+      # Insurance
+      # ───────────────────────────────
+      - name: has_medicare_flag
+        description: TRUE if participant has Medicare.
+
+      - name: has_medicaid_flag
+        description: TRUE if participant has Medicaid.
+
+      - name: is_dual_eligible_flag
+        description: TRUE if both Medicare and Medicaid are present.
+
+      # ───────────────────────────────
       # Address
+      # ───────────────────────────────
       - name: address_line1
         description: Address line 1.
 
@@ -76,14 +138,25 @@ models:
         description: City.
 
       - name: state
-        description: State.
+        description: State code.
 
       - name: zip_code
-        description: ZIP code.
+        description: Valid ZIP or ZIP+4.
 
+      - name: zip5
+        description: 5-digit ZIP code.
+
+      - name: is_valid_state_flag
+        description: TRUE if state is valid US state or territory.
+
+      # ───────────────────────────────
       # Contact
+      # ───────────────────────────────
       - name: phone_number
-        description: Contact phone number.
+        description: Normalized numeric phone number.
+
+      - name: phone_number_raw
+        description: Original phone number format.
 
       - name: emergency_contact_name
         description: Emergency contact name.
@@ -94,12 +167,33 @@ models:
       - name: emergency_contact_relation
         description: Relationship to participant.
 
+      # ───────────────────────────────
+      # Risk Segmentation
+      # ───────────────────────────────
+      - name: age_band
+        description: Age segmentation band.
+
+      - name: enrollment_tenure_band
+        description: Enrollment tenure category.
+
+      - name: complexity_tier
+        description: Complexity tier based on diagnoses.
+
+      - name: is_care_review_overdue_flag
+        description: TRUE if care review SLA is overdue.
+
+      # ───────────────────────────────
       # Metadata
+      # ───────────────────────────────
       - name: source_system
-        description: Origin system.
+        description: Source system name.
 
-      - name: _loaded_at
-        description: Raw ingestion timestamp from bronze layer.
+      - name: loaded_timestamp
+        description: Raw ingestion timestamp.
 
-      - name: _source_file
+      - name: source_file
         description: Source file identifier.
+
+      - name: dbt_updated_timestamp
+        description: DBT update timestamp.
+
