@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: gold_home_care_task_breakdown
+  - name: gold_homecare_task_breakdown
 
     description: >
       Gold model that provides aggregated home care task distribution.
@@ -11,8 +11,8 @@ models:
 
     config:
       materialized: table
-      schema: gold_home_care_task_breakdown
-      alias: home_care_task_breakdown
+      schema: gold_homecare_task_breakdown
+      alias: homecare_task_breakdown
       tags: ['gold', 'home_care', 'analytics', 'performance']
 
     columns:

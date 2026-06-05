@@ -1,6 +1,6 @@
 /*
 ===============================================================================
-Model       : gold_home_care_task_breakdown
+Model       : gold_homecare_task_breakdown
 Layer       : Gold
 Description :
   Calculates percentage distribution of home-care task categories,
@@ -87,4 +87,4 @@ final as (
 -- ============================================================
 -- Final Output
 -- ============================================================
-select * from final;
+select * from final
