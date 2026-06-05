@@ -1,6 +1,6 @@
 /*
 ===============================================================================
-Model       : int_home_care_task_breakdown
+Model       : int_homecare_task_breakdown
 Layer       : Intermediate
 Description :
   Combines care plan, task instance, and task template to create
