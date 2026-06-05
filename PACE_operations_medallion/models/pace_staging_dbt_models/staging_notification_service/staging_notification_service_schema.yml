@@ -1,0 +1,81 @@
+version: 2
+
+models:
+
+  - name: staging_notification_service
+    description: >
+      Thin staging layer for notification service data sourced from
+      BRONZE_NOTIFICATION.RAW_NOTIFICATION.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
+
+    config:
+      schema: staging_notification_service
+      alias: notification_service
+      materialized: view
+      tags: ["staging", "notification"]
+
+    columns:
+      - name: notification_id
+        description: Unique identifier for notification record.
+        tests: [not_null]
+
+      - name: participant_id
+        description: Participant receiving the notification.
+
+      - name: caregiver_id
+        description: Caregiver associated with the notification.
+
+      - name: center_id
+        description: PACE center identifier.
+
+      - name: related_entity_type
+        description: Type of related domain entity (appointment, visit, medication, etc.).
+
+      - name: related_entity_id
+        description: Identifier of related entity.
+
+      - name: notification_type
+        description: Type of notification (reminder, alert, update).
+
+      - name: notification_category
+        description: Category of notification (clinical, operational, administrative).
+
+      - name: channel
+        description: Communication channel (SMS, email, push, etc.).
+
+      - name: delivery_status
+        description: Delivery status of the notification.
+
+      - name: recipient_phone
+        description: Recipient phone number.
+
+      - name: recipient_email
+        description: Recipient email address.
+
+      - name: message_subject
+        description: Subject of the notification message.
+
+      - name: message_body
+        description: Body/content of the message.
+
+      - name: scheduled_send_at
+        description: Scheduled send timestamp.
+
+      - name: sent_at
+        description: Actual send timestamp.
+
+      - name: read_at
+        description: Timestamp when notification was read.
+
+      - name: retry_count
+        description: Number of retry attempts for delivery.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: _loaded_at
+        description: Raw ingestion timestamp from bronze layer.
+
+      - name: _source_file
+        description: Source file name.
