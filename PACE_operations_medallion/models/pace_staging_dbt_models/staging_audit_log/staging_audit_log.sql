@@ -49,4 +49,4 @@ select
 
     current_timestamp                     as stg_loaded_at
 
-from {{ source('bronze_audit', 'raw_audit_log') }}
+from {{ source('bronze_audit', 'RAW_AUDIT_LOG') }}
