@@ -51,4 +51,4 @@ models:
       # ─────────────────────────────────────────────
       - name: category_group
         description: Simplified grouping separating medication assistance from other categories
-    \
+    
