@@ -1,0 +1,71 @@
+version: 2
+
+models:
+
+  - name: staging_idt_clinical
+    description: >
+      Thin staging layer for clinical visit data sourced from
+      BRONZE_CLINICAL_VISIT.RAW_CLINICAL_VISIT.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
+
+    config:
+      schema: staging_idt_clinical
+      alias: idt_clinical
+      materialized: view
+      tags: ["staging", "clinical"]
+
+    columns:
+      - name: visit_id
+        description: Unique identifier for the clinical visit.
+        tests: [not_null]
+
+      - name: appointment_id
+        description: Associated appointment identifier.
+
+      - name: participant_id
+        description: Identifier of the participant.
+        tests: [not_null]
+
+      - name: provider_id
+        description: Provider responsible for the visit.
+
+      - name: caregiver_id
+        description: Caregiver associated with the visit.
+
+      - name: center_id
+        description: PACE center identifier.
+
+      - name: visit_type
+        description: Type of clinical visit.
+
+      - name: location_type
+        description: Location where the visit occurred.
+
+      - name: chief_complaint
+        description: Primary reason for the visit.
+
+      - name: primary_diagnosis_code
+        description: Primary diagnosis code.
+
+      - name: primary_diagnosis_desc
+        description: Description of the primary diagnosis.
+
+      - name: secondary_diagnosis_codes
+        description: Additional diagnosis codes (pipe-delimited).
+
+      - name: procedures_performed
+        description: Procedures performed during the visit (pipe-delimited).
+
+      - name: medications_prescribed
+        description: Medications prescribed during the visit (pipe-delimited).
+
+      - name: vitals_blood_pressure
+        description: Blood pressure recorded during visit.
+
+      - name: vitals_heart_rate
+        description: Heart rate measurement.
+
+      - name: vitals_temperature
+        description: Body temperature reading.
+
