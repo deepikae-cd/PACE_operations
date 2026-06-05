@@ -1,0 +1,77 @@
+name: dbt Cloud CI/CD Pipeline
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+  push:
+    branches: [main]
+
+env:
+  DBT_CLOUD_HOST: https://br531.us1.dbt.com
+
+jobs:
+
+  # ─────────────────────────────
+  # CI JOB (PR)
+  # ─────────────────────────────
+  dbt-ci:
+    name: dbt Cloud CI (PR Slim CI)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Trigger dbt Cloud PR Job
+        run: |
+          echo "Triggering dbt CI job..."
+          curl --fail -X POST "$DBT_CLOUD_HOST/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/jobs/${{ secrets.DBT_CLOUD_PR_JOB_ID }}/run/" \
+            -H "Authorization: Token ${{ secrets.DBT_CLOUD_SERVICE_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"cause": "Triggered from PR"}'
+
+
+  # ─────────────────────────────
+  # PROD SILVER
+  # ─────────────────────────────
+  dbt-prod-silver:
+    name: dbt Cloud Production — Silver
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Trigger dbt Silver Job
+        run: |
+          echo "Triggering dbt Silver job..."
+          curl --fail -X POST "$DBT_CLOUD_HOST/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/jobs/${{ secrets.DBT_CLOUD_PROD_SILVER_JOB_ID }}/run/" \
+            -H "Authorization: Token ${{ secrets.DBT_CLOUD_SERVICE_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"cause": "Triggered from merge to main"}'
+
+
+  # ─────────────────────────────
+  # PROD GOLD
+  # ─────────────────────────────
+  dbt-prod-gold:
+    name: dbt Cloud Production — Gold
+    runs-on: ubuntu-latest
+    needs: dbt-prod-silver
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Trigger dbt Gold Job
+        run: |
+          echo "Triggering dbt Gold job..."
+          curl --fail -X POST "$DBT_CLOUD_HOST/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/jobs/${{ secrets.DBT_CLOUD_PROD_GOLD_JOB_ID }}/run/" \
+            -H "Authorization: Token ${{ secrets.DBT_CLOUD_SERVICE_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"cause": "Triggered after Silver"}'
