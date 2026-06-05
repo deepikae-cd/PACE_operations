@@ -1,21 +1,19 @@
 version: 2
 
 models:
-  - name: enterprise_silver_provider
+  - name: staging_provider
     description: >
-      Cleaned, deduplicated, and enriched provider records sourced from
-      STG_PROVIDER. Standardises provider attributes and computes
-      network status, contract lifecycle flags, and capability indicators.
+      Thin staging layer for provider data sourced from
+      BRONZE_PROVIDER.RAW_PROVIDER.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
 
     config:
-      schema: enterprise_silver_provider
+      schema: staging_provider
       alias: provider
-      materialized: incremental
-      unique_key: provider_sk
-      incremental_strategy: merge
-      on_schema_change: sync_all_columns
+      materialized: view
       tags:
-        - silver
+        - staging
         - provider
 
     columns:
@@ -23,14 +21,8 @@ models:
       # ───────────────────────────────
       # Keys
       # ───────────────────────────────
-      - name: provider_sk
-        description: Surrogate key for provider record.
-        tests:
-          - not_null
-          - unique
-
       - name: provider_id
-        description: Natural identifier for provider.
+        description: Unique identifier for provider.
         tests:
           - not_null
 
@@ -47,52 +39,30 @@ models:
       # Provider Details
       # ───────────────────────────────
       - name: provider_name
-        description: Provider name.
+        description: Name of the provider.
+        tests:
+          - not_null
 
       - name: provider_type
-        description: Standardized provider type.
+        description: High-level provider classification.
 
       - name: provider_subtype
-        description: Standardized provider subtype.
+        description: More specific provider classification.
 
       - name: specialty
-        description: Medical specialty.
+        description: Area of medical specialty.
 
-      # ───────────────────────────────
-      # Network Status
-      # ───────────────────────────────
       - name: network_status
-        description: Standardized network participation status.
-
-      - name: is_in_network_flag
-        description: TRUE if provider is in-network.
-
-      - name: is_out_of_network_flag
-        description: TRUE if provider is out-of-network.
-
-      - name: is_preferred_flag
-        description: TRUE if provider is preferred.
+        description: Network participation status.
 
       # ───────────────────────────────
-      # Contract Lifecycle
+      # Contract
       # ───────────────────────────────
       - name: contract_start_date
         description: Contract start date.
 
       - name: contract_end_date
         description: Contract end date.
-
-      - name: is_contract_active_flag
-        description: TRUE if contract is currently active.
-
-      - name: contract_duration_days
-        description: Total contract duration.
-
-      - name: days_until_contract_expiry
-        description: Number of days remaining until contract expiration.
-
-      - name: is_contract_expiring_soon_flag
-        description: TRUE if contract expires within 30 days.
 
       # ───────────────────────────────
       # Address & Contact
@@ -104,10 +74,10 @@ models:
         description: City.
 
       - name: state
-        description: State code.
+        description: State.
 
       - name: zip_code
-        description: ZIP code.
+        description: Zip code.
 
       - name: phone_number
         description: Contact phone number.
@@ -116,16 +86,13 @@ models:
         description: Fax number.
 
       # ───────────────────────────────
-      # Capability Flags
+      # Flags
       # ───────────────────────────────
-      - name: accepts_telehealth_flag
-        description: TRUE if telehealth services are supported.
+      - name: accepts_telehealth
+        description: Indicates if provider supports telehealth services.
 
-      - name: accepts_pace_patients_flag
-        description: TRUE if provider accepts PACE participants.
-
-      - name: is_preferred_active_pace_flag
-        description: TRUE if provider is preferred, active, and accepts PACE.
+      - name: accepts_pace_patients
+        description: Indicates if provider accepts PACE participants.
 
       # ───────────────────────────────
       # Metadata
@@ -133,11 +100,8 @@ models:
       - name: source_system
         description: Source system name.
 
-      - name: loaded_timestamp
-        description: Bronze ingestion timestamp.
+      - name: _loaded_at
+        description: Raw ingestion timestamp.
 
-      - name: source_file
+      - name: _source_file
         description: Source file identifier.
-
-      - name: dbt_updated_timestamp
-        description: DBT update timestamp.
