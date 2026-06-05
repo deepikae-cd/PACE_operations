@@ -10,7 +10,7 @@
 
 with source as (
 
-    select * from {{ ref('stg_caregiver_assignment') }}
+    select * from {{ ref('staging_caregiver_assignment') }}
 
     {% if is_incremental() %}
         where _loaded_at > (select max(loaded_timestamp) from {{ this }})

@@ -18,12 +18,16 @@ sources:
         description: "Scheduled care event records"
 
 
+
   - name: bronze_caregiver
     description: "Raw Caregiver domain"
     schema: BRONZE_CAREGIVER
     tables:
       - name: RAW_CAREGIVER
         description: "Core caregiver (care staff) records"
+
+      - name: RAW_CAREGIVER_ASSIGNMENT
+        description: "Caregiver to participant assignment and relationship records"
 
 
   - name: bronze_clinical_visit
