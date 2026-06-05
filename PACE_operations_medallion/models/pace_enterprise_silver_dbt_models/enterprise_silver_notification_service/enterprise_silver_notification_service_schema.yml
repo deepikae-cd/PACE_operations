@@ -4,52 +4,88 @@ models:
 
   - name: enterprise_silver_notification_service
     description: >
-      Cleaned and deduplicated notification records from
-      BRONZE_NOTIFICATION.RAW_NOTIFICATION.
-      Normalises notification type, category, delivery channel, and status.
-      Computes delivery latency and delivery outcome flags.
+      Cleaned, deduplicated, and enriched notification records sourced from
+      STG_NOTIFICATION. Standardises notification type, category, and channel
+      while computing delivery success, read status, send delay, retry risk,
+      recipient classification, and entity linkage.
 
     config:
       schema: enterprise_silver_notification_service
       alias: notification_service
-      materialized: table
+      materialized: incremental
+      unique_key: notification_sk
+      incremental_strategy: merge
       tags: ["silver", "notification"]
+      on_schema_change: sync_all_columns
 
     columns:
       - name: notification_sk
-        description: Surrogate key.
+        description: Surrogate key for notification record.
         tests: [not_null, unique]
 
       - name: notification_id
-        description: Natural key.
-        tests: [not_null, unique]
+        description: Natural identifier of notification.
+        tests: [not_null]
 
       - name: participant_id
-        description: FK to stg_participant (nullable).
+        description: Participant receiving notification.
 
       - name: caregiver_id
-        description: FK to stg_caregiver (nullable).
+        description: Caregiver receiving notification.
 
       - name: center_id
-        description: PACE center.
+        description: PACE center identifier.
+
+      - name: recipient_type
+        description: Classification of notification recipient (PARTICIPANT, STAFF, BOTH, SYSTEM).
 
       - name: notification_type
         description: Normalised notification type.
 
       - name: notification_category
-        description: Normalised category.
+        description: Normalised category of notification.
+
+      - name: is_clinical_flag
+        description: TRUE if notification category is CLINICAL.
+
+      - name: is_compliance_flag
+        description: TRUE if notification category is COMPLIANCE.
+
+      - name: is_operational_flag
+        description: TRUE if notification category is OPERATIONAL.
 
       - name: channel
-        description: Delivery channel.
+        description: Delivery channel (SMS, EMAIL, etc.).
+
+      - name: recipient_phone_masked
+        description: Masked phone number for privacy.
+
+      - name: recipient_email_masked
+        description: Masked email domain for privacy.
+
+      - name: message_subject
+        description: Subject line of the notification.
+
+      - name: message_body
+        description: Body content of the notification.
+
+      - name: related_entity_type
+        description: Domain entity linked to notification.
+
+      - name: related_entity_id
+        description: Identifier of related entity.
 
       - name: delivery_status
         description: Normalised delivery status.
 
       - name: is_delivered_flag
-        description: TRUE if delivery_status in (DELIVERED, READ).
+        description: TRUE if notification was delivered.
+
+      - name: is_read_flag
+        description: TRUE if notification was read.
 
       - name: is_failed_flag
-        description: TRUE if delivery_status in (FAILED, BOUNCED).
+        description: TRUE if delivery failed or bounced.
 
       - name: scheduled_send_at
         description: Scheduled send timestamp.
@@ -58,37 +94,37 @@ models:
         description: Actual send timestamp.
 
       - name: read_at
-        description: Timestamp notification was read.
+        description: Timestamp when notification was read.
 
-      - name: delivery_latency_minutes
-        description: Minutes between scheduled_send_at and sent_at.
+      - name: send_delay_minutes
+        description: Delay (in minutes) between scheduled and actual send time.
 
-      - name: message_subject
-        description: Notification subject line.
+      - name: is_late_send_flag
+        description: TRUE if send delay exceeds threshold.
 
-      - name: message_body
-        description: Notification message content.
+      - name: hours_to_read
+        description: Time taken to read notification (in hours).
 
-      - name: related_entity_type
-        description: Domain entity this notification relates to.
+      - name: is_unread_flag
+        description: TRUE if delivered but not read.
 
-      - name: related_entity_id
-        description: ID of the related entity.
+      - name: is_stuck_flag
+        description: TRUE if scheduled but not sent.
 
       - name: retry_count
         description: Number of delivery retry attempts.
 
-      - name: recipient_phone
-        description: Normalised phone number.
-
-      - name: recipient_email
-        description: Normalised email address.
+      - name: is_high_retry_flag
+        description: TRUE if retry count exceeds threshold.
 
       - name: source_system
         description: Origin system.
 
       - name: loaded_timestamp
-        description: Bronze load timestamp.
+        description: Bronze ingestion timestamp.
+
+      - name: source_file
+        description: Source file identifier.
 
       - name: dbt_updated_timestamp
-        description: DBT model write timestamp.
+        description: DBT model update timestamp.
