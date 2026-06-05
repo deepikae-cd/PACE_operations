@@ -11,6 +11,8 @@ models:
 
     config:
       materialized: table
+      schema: gold_home_care_task_breakdown
+      alias: home_care_task_breakdown
       tags: ['gold', 'home_care', 'analytics', 'performance']
 
     columns:
