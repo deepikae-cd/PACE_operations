@@ -4,73 +4,128 @@ models:
 
   - name: enterprise_silver_meal_delivery
     description: >
-      Cleaned and deduplicated meal-delivery records from
-      BRONZE_MEAL_DELIVERY.RAW_MEAL_DELIVERY. Normalises meal type,
-      delivery type, delivery status, and participant acceptance values.
-      Computes an is_delivered boolean and a compliance flag for temperature.
+      Cleaned, deduplicated, and enriched meal delivery records sourced from
+      STG_MEAL_DELIVERY. Standardises meal attributes, delivery status, dietary
+      restrictions, and participant acceptance while computing compliance,
+      temperature safety, and delivery timing metrics.
 
     config:
       schema: enterprise_silver_meal_delivery
       alias: meal_delivery
-      materialized: table
+      materialized: incremental
+      unique_key: meal_delivery_sk
+      incremental_strategy: merge
       tags: ["silver", "meal_delivery"]
+      on_schema_change: sync_all_columns
 
     columns:
       - name: meal_delivery_sk
-        description: Surrogate key.
+        description: Surrogate key for meal delivery record.
         tests: [not_null, unique]
 
       - name: meal_delivery_id
-        description: Natural key.
-        tests: [not_null, unique]
+        description: Natural identifier of meal delivery.
+        tests: [not_null]
 
       - name: participant_id
-        description: FK to stg_participant.
+        description: Participant receiving the meal.
+        tests: [not_null]
 
-      - name: meal_date
-        description: Date the meal was scheduled for delivery.
+      - name: meal_plan_id
+        description: Associated meal plan identifier.
+
+      - name: delivery_caregiver_id
+        description: Caregiver responsible for delivery.
+
+      - name: vendor_id
+        description: External vendor identifier.
+
+      - name: center_id
+        description: PACE center identifier.
 
       - name: meal_type
         description: Normalised meal type.
 
       - name: dietary_restriction
-        description: Dietary restriction flags from source.
+        description: Normalised dietary restriction.
+
+      - name: is_clinical_dietary_need_flag
+        description: TRUE if meal requires clinical dietary handling.
 
       - name: calorie_count
-        description: Calorie count for the meal.
+        description: Total calorie count of the meal.
+
+      - name: calorie_range
+        description: Categorised calorie range.
 
       - name: delivery_type
-        description: Normalised delivery mechanism.
+        description: Normalised delivery type.
 
       - name: delivery_status
-        description: Normalised delivery outcome.
+        description: Normalised delivery status.
 
       - name: is_delivered_flag
-        description: TRUE if delivery_status = DELIVERED.
+        description: TRUE if meal was delivered.
+
+      - name: is_not_delivered_flag
+        description: TRUE if meal was not delivered.
+
+      - name: is_refused_flag
+        description: TRUE if meal was refused.
+
+      - name: is_partial_delivery_flag
+        description: TRUE if delivery was partial.
+
+      - name: is_delivery_compliant_flag
+        description: TRUE if delivery meets compliance criteria.
+
+      - name: refused_reason
+        description: Reason for refusal.
 
       - name: participant_acceptance
-        description: Normalised acceptance code.
+        description: Normalised participant acceptance status.
+
+      - name: is_accepted_flag
+        description: TRUE if meal was accepted.
+
+      - name: is_participant_refused_flag
+        description: TRUE if participant refused meal.
+
+      - name: is_partial_acceptance_flag
+        description: TRUE if partially accepted.
+
+      - name: temperature_on_delivery
+        description: Temperature condition at delivery.
+
+      - name: is_temperature_noncompliant_flag
+        description: TRUE if temperature is outside acceptable standards.
+
+      - name: notes
+        description: Additional notes for delivery.
+
+      - name: meal_date
+        description: Scheduled meal date.
 
       - name: delivered_at
         description: Actual delivery timestamp.
 
-      - name: delivery_caregiver_id
-        description: FK to stg_caregiver (delivering caregiver).
+      - name: hours_after_meal_date
+        description: Hours difference between meal date and delivery.
 
-      - name: vendor_id
-        description: External meal vendor identifier.
+      - name: is_late_delivery_flag
+        description: TRUE if delivery is delayed beyond threshold.
 
-      - name: temperature_compliant
-        description: TRUE if temperature on delivery was compliant.
-
-      - name: center_id
-        description: PACE center.
+      - name: is_vendor_delivery_flag
+        description: TRUE if delivery handled by vendor.
 
       - name: source_system
         description: Origin system.
 
-      - name: loaded_at
-        description: Bronze load timestamp.
+      - name: loaded_timestamp
+        description: Bronze ingestion timestamp.
 
-      - name: dbt_updated_at
-        description: DBT model write timestamp.
+      - name: source_file
+        description: Source file identifier.
+
+      - name: dbt_updated_timestamp
+        description: DBT model update timestamp.

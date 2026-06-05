@@ -2,39 +2,33 @@ version: 2
 
 models:
 
-  - name: enterprise_silver_medication
+  - name: staging_medication
     description: >
-      Cleaned, deduplicated, and enriched medication records sourced from
-      STG_MEDICATION. Standardises drug attributes, pharmacy details, and
-      prescription lifecycle while computing adherence, refill tracking,
-      and clinical safety indicators.
+      Thin staging layer for medication records sourced from
+      BRONZE_MEDICATION.RAW_MEDICATION.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
 
     config:
-      schema: enterprise_silver_medication
+      schema: staging_medication
       alias: medication
-      materialized: incremental
-      unique_key: medication_sk
-      incremental_strategy: merge
-      tags: ["silver", "medication"]
-      on_schema_change: sync_all_columns
+      materialized: view
+      tags: ["staging", "medication"]
 
     columns:
-      - name: medication_sk
-        description: Surrogate key for medication record.
-        tests: [not_null, unique]
-
       - name: medication_id
-        description: Natural identifier of medication record.
+        description: Unique identifier for medication record.
         tests: [not_null]
 
       - name: participant_id
-        description: Participant receiving medication.
+        description: Identifier of the participant receiving medication.
+        tests: [not_null]
 
       - name: provider_id
         description: Prescribing provider identifier.
 
       - name: visit_id
-        description: Associated clinical visit.
+        description: Associated clinical visit identifier.
 
       - name: medication_name
         description: Name of the medication.
@@ -43,40 +37,40 @@ models:
         description: Generic drug name.
 
       - name: brand_name
-        description: Brand name.
+        description: Brand name of medication.
 
       - name: ndc_code
-        description: National Drug Code.
+        description: National Drug Code identifier.
 
       - name: drug_class
-        description: Drug classification.
+        description: Classification of the drug.
 
       - name: dosage
         description: Dosage amount.
 
       - name: dosage_unit
-        description: Units of dosage.
+        description: Unit of dosage (mg, ml, etc.).
 
       - name: frequency
-        description: Administration frequency.
+        description: Frequency of administration.
 
-      - name: route
-        description: Route of administration.
+      - name: route_of_administration
+        description: Route of administration (oral, IV, etc.).
 
       - name: prescribed_date
         description: Date medication was prescribed.
 
       - name: start_date
-        description: Start date of medication therapy.
+        description: Start date of medication.
 
       - name: end_date
-        description: End date of medication therapy.
+        description: End date of medication.
 
       - name: medication_status
-        description: Normalised medication status.
+        description: Current status of medication.
 
       - name: refills_authorized
-        description: Number of authorized refills.
+        description: Number of refills authorized.
 
       - name: refills_remaining
         description: Remaining refills.
@@ -85,16 +79,16 @@ models:
         description: Timestamp of last refill.
 
       - name: pharmacy_name
-        description: Pharmacy name.
+        description: Name of dispensing pharmacy.
 
       - name: pharmacy_id
         description: Pharmacy identifier.
 
       - name: pharmacy_npi
-        description: Pharmacy NPI.
+        description: Pharmacy NPI number.
 
       - name: pharmacy_phone
-        description: Pharmacy phone number.
+        description: Pharmacy contact number.
 
       - name: pharmacy_address
         description: Pharmacy address.
@@ -103,37 +97,37 @@ models:
         description: Quantity dispensed.
 
       - name: days_supply
-        description: Days of supply.
+        description: Number of days supply.
 
       - name: is_controlled_substance
-        description: TRUE if controlled substance.
+        description: TRUE if medication is controlled substance.
 
       - name: dea_schedule
-        description: DEA classification.
+        description: DEA schedule classification.
 
-      - name: prior_auth_required_flag
-        description: TRUE if prior authorization required.
+      - name: prior_authorization_required
+        description: Indicates if prior authorization is needed.
 
       - name: prior_authorization_status
-        description: Prior authorization status.
+        description: Status of prior authorization.
 
       - name: adverse_reactions
         description: Known adverse reactions.
 
       - name: contraindications
-        description: Contraindications.
+        description: Known contraindications.
 
       - name: interaction_alerts
         description: Drug interaction alerts.
 
       - name: administration_instructions
-        description: Instructions for administration.
+        description: Instructions for administering medication.
 
       - name: special_handling_notes
         description: Special handling requirements.
 
       - name: is_pace_formulary
-        description: TRUE if part of PACE formulary.
+        description: TRUE if medication is part of PACE formulary.
 
       - name: formulary_tier
         description: Formulary tier level.
@@ -145,7 +139,7 @@ models:
         description: Total medication cost.
 
       - name: coverage_type
-        description: Insurance coverage type.
+        description: Type of insurance coverage.
 
       - name: center_id
         description: PACE center identifier.
@@ -153,11 +147,8 @@ models:
       - name: source_system
         description: Origin system.
 
-      - name: loaded_timestamp
-        description: Bronze ingestion timestamp.
+      - name: _loaded_at
+        description: Raw ingestion timestamp.
 
-      - name: source_file
-        description: Source file identifier.
-
-      - name: dbt_updated_timestamp
-        description: DBT update timestamp.
+      - name: _source_file
+        description: Source file name.
