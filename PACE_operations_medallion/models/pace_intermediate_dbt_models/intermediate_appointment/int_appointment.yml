@@ -14,9 +14,30 @@ models:
       alias: appointment
       tags: ['intermediate', 'appointment', 'pace']
 
+   version: 2
+
+models:
+  - name: int_appointment
+    description: >
+      Intermediate model that enriches appointment data with participant,
+      provider, caregiver, and organization context. Applies PACE-specific
+      classification logic for appointment type, attendance status, care setting,
+      and coordination flags.
+
+    config:
+      materialized: view
+      tags: ['intermediate', 'appointment', 'pace']
+
     columns:
+
+      # ─────────────────────────────────────────────
+      # Keys
+      # ─────────────────────────────────────────────
       - name: appointment_id
         description: Unique identifier for the appointment
+        tests:
+          - not_null
+          - unique
 
       - name: participant_id
         description: Foreign key to participant
@@ -25,25 +46,152 @@ models:
         description: Foreign key to provider
 
       - name: organization_id
-        description: Foreign key to organization / PACE center
+        description: Foreign key to organization
 
+      # ─────────────────────────────────────────────
+      # Core appointment fields
+      # ─────────────────────────────────────────────
       - name: appointment_datetime
         description: Timestamp of scheduled appointment
 
-      - name: attendance_status_normalized
-        description: Standardized attendance classification
+      - name: appointment_date
+        description: Date component of appointment
+
+      - name: appointment_time
+        description: Time component of appointment
+
+      - name: scheduled_date
+        description: Date when appointment was scheduled
 
       - name: appointment_category
-        description: PACE-specific appointment category
+        description: Derived PACE classification of appointment type
+        tests:
+          - accepted_values:
+              values:
+                - interdisciplinary_team
+                - primary_care
+                - specialist
+                - behavioral_health
+                - therapy
+                - transportation_related
+                - ancillary
+                - adult_day_center
+                - other
 
       - name: care_setting
-        description: Classified care setting (in_person, telehealth, etc.)
+        description: Derived care setting (in_person, telehealth, etc.)
+        tests:
+          - accepted_values:
+              values:
+                - in_person
+                - telehealth
+                - home_visit
+                - inpatient
+                - skilled_nursing
+                - other
+
+      # ─────────────────────────────────────────────
+      # Attendance + status
+      # ─────────────────────────────────────────────
+      - name: attendance_status_normalized
+        description: Standardized attendance classification
+        tests:
+          - accepted_values:
+              values:
+                - attended
+                - no_show
+                - cancelled
+                - rescheduled
+                - late_cancellation
+                - upcoming
+                - unknown
 
       - name: is_confirmed_no_show
-        description: Flag indicating confirmed no-show based on status and time
+        description: True if appointment is classified as no-show and in the past
 
       - name: is_missed_idt
-        description: Flag indicating missed interdisciplinary team appointment
+        description: True if interdisciplinary team appointment was missed
+
+      # ─────────────────────────────────────────────
+      # Scheduling metrics
+      # ─────────────────────────────────────────────
+      - name: is_same_day_scheduled
+        description: True if appointment scheduled for the same day
 
       - name: days_from_creation_to_appointment
-        description: Number of days between creation and appointment date
+        description: Days between record creation and appointment datetime
+
+      # ─────────────────────────────────────────────
+      # Participant
+      # ─────────────────────────────────────────────
+      - name: participant_full_name
+        description: Full name of participant
+
+      - name: date_of_birth
+        description: Participant date of birth
+
+      - name: participant_enrollment_status
+        description: Enrollment status of participant
+
+      - name: is_active_enrollee
+        description: Flag indicating active enrollment
+
+      # ─────────────────────────────────────────────
+      # Provider
+      # ─────────────────────────────────────────────
+      - name: provider_full_name
+        description: Full name of provider
+
+      - name: provider_type_description
+        description: Provider type classification
+
+      - name: provider_specialty_description
+        description: Provider specialty
+
+      - name: is_active_provider
+        description: Flag indicating active provider
+
+      # ─────────────────────────────────────────────
+      # Organization / PACE center
+      # ─────────────────────────────────────────────
+      - name: organization_name
+        description: Name of organization
+
+      - name: pace_center_name
+        description: Name of PACE center
+
+      - name: pace_center_city
+        description: City of PACE center
+
+      - name: pace_center_state
+        description: State of PACE center
+
+      # ─────────────────────────────────────────────
+      # Caregiver
+      # ─────────────────────────────────────────────
+      - name: primary_caregiver_id
+        description: Identifier for primary caregiver
+
+      - name: primary_caregiver_full_name
+        description: Full name of primary caregiver
+
+      - name: primary_caregiver_relationship
+        description: Relationship of caregiver to participant
+
+      # ─────────────────────────────────────────────
+      # Audit
+      # ─────────────────────────────────────────────
+      - name: created_at
+        description: Record creation timestamp
+
+      - name: updated_at
+        description: Record update timestamp
+
+      - name: source_system
+        description: Source system of data
+
+      - name: silver_loaded_at
+        description: Timestamp when record was loaded into silver layer
+
+      - name: int_loaded_at
+        description: Timestamp when record was processed in intermediate layer

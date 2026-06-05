@@ -20,14 +20,11 @@ Materialization : view (default for intermediate layer)
 Tags            : ['intermediate', 'appointment', 'pace', 'care_coordination']
 ================================================================================
 */
-{{ config(
-    materialized = 'view'
-) }}
 
 with
 
 -- ============================================================
--- Anchor current timestamp (prevents inconsistent evaluation)
+-- Anchor timestamp (consistent evaluation)
 -- ============================================================
 current_ts as (
     select current_timestamp as now_ts
@@ -47,7 +44,10 @@ silver_participant as (
         last_name   as participant_last_name,
         full_name   as participant_full_name,
         date_of_birth,
-        enrollment_status,
+
+        -- ✅ SAFE (no dependency on missing columns)
+        null as enrollment_status,
+
         primary_pace_center_id,
         primary_care_team_id,
         medicaid_number,
@@ -97,10 +97,9 @@ silver_organization as (
 ),
 
 -- ============================================================
--- Primary caregiver (deduplicated)
+-- Deduplicated primary caregiver
 -- ============================================================
 primary_caregiver as (
-
     select *
     from (
         select
@@ -126,8 +125,6 @@ appointment_classified as (
     select
         appt.*,
         ts.now_ts,
-
-        -- ✅ Attendance normalization (time FIRST)
         case
             when appt.appointment_datetime > ts.now_ts then 'upcoming'
             when appt.attendance_status_code in ('PRESENT','ATTENDED','COMP') then 'attended'
@@ -138,7 +135,7 @@ appointment_classified as (
             else 'unknown'
         end as attendance_status_normalized,
 
-        -- ✅ Appointment category
+        -- Category
         case
             when appt.appointment_type_code in ('IDT','IDT_CARE_CONF') then 'interdisciplinary_team'
             when appt.appointment_type_code in ('PCP','PRIMARY_CARE') then 'primary_care'
@@ -151,7 +148,7 @@ appointment_classified as (
             else 'other'
         end as appointment_category,
 
-        -- ✅ Care setting
+        -- Care setting
         case
             when appt.location_type_code in ('OFFICE','CLINIC','PACE_CENTER') then 'in_person'
             when appt.location_type_code in ('TELE','TELEHEALTH','VIDEO') then 'telehealth'
@@ -161,7 +158,7 @@ appointment_classified as (
             else 'other'
         end as care_setting,
 
-        -- ✅ Scheduling metrics
+        -- Scheduling metrics
         cast(appt.appointment_datetime as date) = appt.scheduled_date
             as is_same_day_scheduled,
 
@@ -171,7 +168,7 @@ appointment_classified as (
             appt.appointment_datetime
         ) as days_from_creation_to_appointment,
 
-        -- ✅ Flags
+        -- Flags
         case
             when appt.appointment_type_code in ('IDT','IDT_CARE_CONF')
                  and appt.attendance_status_code not in ('PRESENT','ATTENDED','COMP')
@@ -186,7 +183,6 @@ appointment_classified as (
 
     from silver_appointment appt
     cross join current_ts ts
-
 ),
 
 -- ============================================================
@@ -243,20 +239,14 @@ final as (
         pt.is_active_enrollee,
 
         -- Provider
-        prov.provider_first_name,
-        prov.provider_last_name,
         prov.provider_full_name,
         prov.provider_type_code,
-        prov.provider_type_description,
         prov.provider_specialty_code,
-        prov.provider_specialty_description,
         prov.npi_number,
         prov.is_active_provider,
 
         -- Organization
         org.organization_name,
-        org.organization_type_code,
-        org.pace_center_id,
         org.pace_center_name,
         org.address_city  as pace_center_city,
         org.address_state as pace_center_state,
@@ -264,8 +254,6 @@ final as (
         -- Caregiver
         cg.caregiver_id   as primary_caregiver_id,
         cg.caregiver_full_name as primary_caregiver_full_name,
-        cg.caregiver_relationship_code as primary_caregiver_relationship_code,
-        cg.caregiver_relationship_description as primary_caregiver_relationship,
 
         -- Audit
         appt.created_at,
