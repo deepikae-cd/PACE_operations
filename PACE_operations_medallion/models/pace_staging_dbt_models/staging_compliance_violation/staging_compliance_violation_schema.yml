@@ -1,0 +1,61 @@
+version: 2
+
+models:
+
+  - name: staging_compliance_violations
+    description: >
+      Thin staging layer for compliance violations sourced from
+      BRONZE_GOVERNANCE.RAW_COMPLIANCE_VIOLATIONS.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
+
+    config:
+      schema: staging_governance_rules
+      alias: compliance_violations
+      materialized: view
+      tags: ["staging", "governance"]
+
+    columns:
+      - name: violation_id
+        description: Unique identifier for the compliance violation.
+        tests: [not_null]
+
+      - name: rule_id
+        description: Identifier of the governance rule violated.
+        tests: [not_null]
+
+      - name: entity_id
+        description: Identifier of the entity associated with the violation.
+
+      - name: center_id
+        description: PACE center associated with the violation.
+
+      - name: entity_type
+        description: Type of entity involved in the violation.
+
+      - name: violation_description
+        description: Description of the violation event.
+
+      - name: severity
+        description: Severity level assigned to the violation.
+
+      - name: status
+        description: Current status of the violation (open, resolved, etc.).
+
+      - name: resolved_by
+        description: Identifier of the user or system that resolved the violation.
+
+      - name: violation_date
+        description: Timestamp when the violation occurred.
+
+      - name: resolved_at
+        description: Timestamp when the violation was resolved.
+
+      - name: source_system
+        description: Origin system from which data was ingested.
+
+      - name: _loaded_at
+        description: Raw ingestion timestamp from bronze layer.
+
+      - name: _source_file
+        description: Source file name from ingestion.

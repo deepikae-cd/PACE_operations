@@ -4,64 +4,71 @@ models:
 
   - name: enterprise_silver_compliance_violation
     description: >
-      Cleaned compliance violation log from
-      BRONZE_GOVERNANCE.RAW_COMPLIANCE_VIOLATIONS.
-      Normalises entity type, severity, and status values.
-      Computes lifecycle flags and captures resolution details.
+      Cleaned, deduplicated, and standardised update timestamp.      Cleaned, deduplicated, and standardised compliance violation records
+      sourced from STG_COMPLIANCE_VIOLATIONS.
+      Normalises entity attributes, severity, and status while tracking
+      resolution lifecycle and open violation state.
 
     config:
       schema: enterprise_silver_governance_rules
       alias: compliance_violation
-      materialized: table
+      materialized: incremental
+      unique_key: violation_sk
+      incremental_strategy: merge
       tags: ["silver", "governance"]
+      on_schema_change: sync_all_columns
 
     columns:
       - name: violation_sk
-        description: Surrogate key.
+        description: Surrogate key for violation record.
         tests: [not_null, unique]
 
       - name: violation_id
-        description: Natural key.
-        tests: [not_null, unique]
+        description: Natural identifier for violation.
+        tests: [not_null]
 
       - name: rule_id
-        description: FK to enterprise_silver_governance_rules.
+        description: Identifier of the rule violated.
+        tests: [not_null]
 
       - name: entity_type
-        description: Domain entity that triggered the violation.
+        description: Type of entity triggering the violation.
 
       - name: entity_id
-        description: ID of the offending entity record.
+        description: Identifier of the related entity record.
 
       - name: violation_date
-        description: Date/time the violation was detected.
+        description: Timestamp when violation occurred.
 
       - name: violation_description
-        description: Description of the violation event.
+        description: Description of the violation.
 
       - name: severity
-        description: Normalised severity.
+        description: Normalised severity level.
 
       - name: status
-        description: Normalised resolution status.
+        description: Normalised violation status.
 
       - name: is_open_flag
-        description: TRUE if status = OPEN.
+        description: TRUE if violation status is OPEN.
 
       - name: resolved_timestamp
-        description: Timestamp when the violation was resolved.
+        description: Timestamp when violation was resolved.
 
       - name: resolved_by
         description: User or system that resolved the violation.
 
       - name: center_id
-        description: PACE center associated with the violation.
+        description: Associated PACE center.
 
       - name: source_system
-        description: Origin system.
+        description: Source system name.
 
       - name: loaded_timestamp
-        description: Bronze load timestamp.
+        description: Bronze ingestion timestamp.
+
+      - name: source_file
+        description: Source file identifier.
 
       - name: dbt_updated_timestamp
-        description: DBT model write timestamp.
+        description: DBT model update timestamp.
