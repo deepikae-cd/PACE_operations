@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: audit_log_projection
+  - name: gold_audit_log_projection
 
     description: >
       Read-optimized audit log projection designed for fast UI access.
@@ -10,7 +10,7 @@ models:
       date-range queries using partitioning and clustering.
 
     config:
-      schema: audit
+      schema: gold_audit_log
       alias: audit_log_projection
       materialized: incremental
       unique_key: audit_log_id
