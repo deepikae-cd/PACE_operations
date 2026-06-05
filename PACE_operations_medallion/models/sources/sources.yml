@@ -101,3 +101,10 @@ sources:
     tables:
       - name: RAW_AUDIT_LOG
         description: "Audit trail of all user and system actions across PACE systems including PHI access, changes, and compliance-sensitive events"
+  
+  - name: bronze_care_plan
+    description: "Raw Care Plan domain"
+    schema: BRONZE_CARE_PLAN
+    tables:
+      - name: RAW_CARE_PLAN_ACTIVITY
+        description: "Core care plan activity records capturing planned services for participants across program years"

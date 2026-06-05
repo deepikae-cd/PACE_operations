@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: staging_care_plan_activity
+
+    description: >
+      Staging model for care plan activity data. Cleans and standardizes
+      raw records from the bronze layer while preserving 1:1 mapping.
+      Normalizes identifiers, casts program_year, and adds ingestion metadata.
+
+    config:
+      materialized: view
+      alias: care_plan_activity
+      schema: staging_care_plan_activity
+      tags: ['staging', 'care_plan', 'pace']
+
+    columns:
+
+      # ─────────────────────────────────────────────
+      # Keys
+      # ─────────────────────────────────────────────
+      - name: care_plan_activity_id
+        description: Unique identifier for care plan activity
+        tests:
+          - not_null
+
+      - name: participant_id
+        description: Identifier of participant receiving care
+        tests:
+          - not_null
+
+      # ─────────────────────────────────────────────
+      # Business fields
+      # ─────────────────────────────────────────────
+      - name: program_year
+        description: Program year associated with the care activity
+
+      - name: activity_type
+        description: Type of care plan activity
+
+      # ─────────────────────────────────────────────
+      # Source metadata
+      # ─────────────────────────────────────────────
+      - name: source_system
+        description: Source system from which the record originated
+
+      - name: loaded_at
+        description: Timestamp when record was loaded into bronze layer
+
+      - name: source_file
+        description: Source file used for ingestion tracking
+
+      # ─────────────────────────────────────────────
+      # Audit / processing
+      # ─────────────────────────────────────────────
+      - name: stg_loaded_at
+        description: Timestamp when record was processed in staging layer
