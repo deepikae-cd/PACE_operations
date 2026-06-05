@@ -9,7 +9,6 @@
 */
 
 
-
 with source as (
 
     select * from {{ ref('staging_provider') }}
