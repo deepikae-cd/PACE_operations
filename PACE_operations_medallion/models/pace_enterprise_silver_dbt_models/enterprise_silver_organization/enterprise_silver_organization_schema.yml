@@ -4,85 +4,124 @@ models:
 
   - name: enterprise_silver_organization
     description: >
-      Cleaned and deduplicated organization, center, and service area
-      records from BRONZE_ORGANIZATION.RAW_ORGANIZATION_SERVICE_AREA.
-      Supports PACE operational coverage, capacity, service delivery,
-      and organizational hierarchy analytics.
+      Cleaned, deduplicated, and enriched organization and service area records.
+      Computes accreditation, contract lifecycle, enrollment utilization,
+      audit recency, and service capability attributes.
 
     config:
       schema: enterprise_silver_organization
       alias: organization
       materialized: table
       tags: ["silver", "organization"]
+      on_schema_change: sync_all_columns
 
     columns:
-      - name: organization_sk
-        description: Surrogate key generated using organization, center, and service area.
+      - name: organization_sa_sk
+        description: Surrogate key for organization + service area.
         tests: [not_null, unique]
 
       - name: organization_id
-        description: Natural identifier of the organization.
+        description: Organization identifier.
         tests: [not_null]
 
-      - name: organization_name
-        description: Name of the organization.
-
-      - name: organization_type
-        description: Type of organization (PACE, hospital, clinic, etc.).
-
-      - name: parent_organization_id
-        description: Parent organization identifier for hierarchy tracking.
-
       - name: center_id
-        description: PACE center identifier.
-
-      - name: center_name
-        description: Name of the service center.
-
-      - name: center_city
-        description: City where the center is located.
-
-      - name: center_state
-        description: State of the center location.
+        description: Center identifier.
 
       - name: service_area_id
-        description: Identifier for the service coverage area.
+        description: Service area identifier.
 
-      - name: service_area_name
-        description: Name of the service area.
+      - name: is_child_organization_flag
+        description: TRUE if organization has parent.
 
-      - name: service_area_type
-        description: Type of service area (geographic, regional, etc.).
+      - name: organization_name
+        description: Organization name.
 
-      - name: contract_status
-        description: Status of the organization’s contract (active, expired, etc.).
+      - name: organization_type
+        description: Organization classification.
 
-      - name: transportation_available
-        description: Flag indicating if transportation services are available.
+      - name: accreditation_status
+        description: Standardized accreditation status.
 
-      - name: meal_service_available
-        description: Flag indicating if meal services are provided.
+      - name: is_accredited_flag
+        description: TRUE if accredited.
 
-      - name: pharmacy_on_site
-        description: Flag indicating if pharmacy services are available on-site.
+      - name: is_accreditation_expired_flag
+        description: TRUE if expired.
+
+      - name: center_name
+        description: Center name.
+
+      - name: center_full_address
+        description: Full formatted address.
+
+      - name: center_status
+        description: Center status.
+
+      - name: is_center_active_flag
+        description: TRUE if center is active.
 
       - name: population_served
-        description: Total population covered by the service area.
+        description: Population served.
 
       - name: enrolled_count
-        description: Number of enrolled participants.
+        description: Enrolled participants.
 
       - name: enrollment_capacity
-        description: Maximum enrollment capacity of the organization.
+        description: Maximum enrollment.
+
+      - name: enrollment_utilisation_rate
+        description: Enrollment utilization ratio.
+
+      - name: is_at_capacity_flag
+        description: TRUE if at capacity.
+
+      - name: contract_status
+        description: Contract status.
+
+      - name: is_contract_active_flag
+        description: TRUE if active contract.
+
+      - name: is_contract_expiring_soon_flag
+        description: TRUE if expiring within 90 days.
+
+      - name: core_service_count
+        description: Count of services offered.
+
+      - name: is_transportation_available_flag
+        description: Transportation availability.
+
+      - name: is_meal_service_available_flag
+        description: Meal service availability.
+
+      - name: is_pharmacy_on_site_flag
+        description: Pharmacy availability.
+
+      - name: is_home_care_available_flag
+        description: Home care availability.
+
+      - name: is_cms_audit_overdue_flag
+        description: TRUE if CMS audit overdue.
+
+      - name: is_state_audit_overdue_flag
+        description: TRUE if state audit overdue.
+
+      - name: days_since_cms_audit
+        description: Days since CMS audit.
 
       - name: quality_rating
-        description: Quality rating score for the organization.
+        description: Quality rating.
+
+      - name: quality_rating_tier
+        description: Categorized rating.
 
       - name: source_system
-        description: Source system from which data originated.
+        description: Source system.
 
       - name: loaded_timestamp
-        description: Timestamp when the record was loaded into the bronze layer.
+        description: Bronze ingestion timestamp.
+
+      - name: source_file
+        description: Source file.
 
       - name: dbt_updated_timestamp
-        description: Timestamp when the record was last updated by dbt.
+        description: DBT update timestamp.

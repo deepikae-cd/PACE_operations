@@ -1,19 +1,22 @@
 /*
-  ENTERPRISE_SILVER_ORGANIZATION
+  ENTERPRISE_SILVER_ORGANIZATION_SERVICE_AREA
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_organization', 'RAW_ORGANIZATION_SERVICE_AREA') }}
-
-  Purpose : Cleanse, deduplicate, and standardise organization, center,
-            and service area data for PACE operations.
-            Normalises organization type, contract status, and service attributes.
-
-  Grain   : One record per organization_id + center_id + service_area_id (latest)
+  Source  : {{ ref('staging_organization') }}
+  Purpose : Cleanse, deduplicate and enrich organization and service area
+            records. Adds surrogate key, standardised vocabularies, computed
+            flags for: accreditation status, contract lifecycle, enrollment
+            capacity utilisation, audit recency, service capability profile,
+            and regulatory compliance signals.
+  ──────────────────────────────────────────────────────────────────────────────
+  Note    : Organization/center data is low-volume reference data.
+            Materialised as table (full refresh) to ensure all downstream
+            models always join to a complete and current org profile.
   ──────────────────────────────────────────────────────────────────────────────
 */
 
 with source as (
 
-    select * from {{ source('bronze_organization', 'RAW_ORGANIZATION_SERVICE_AREA') }}
+    select * from {{ ref('staging_organization') }}
 
 ),
 
@@ -25,138 +28,243 @@ deduplicated as (
                order by _loaded_at desc
            ) as _rn
     from source
-    where organization_id is not null
 
 ),
 
 cleaned as (
 
     select
-        -- ✅ Surrogate key
-        sha2(
-            concat_ws('||',
-                organization_id,
-                center_id,
-                service_area_id,
-                cast(_loaded_at as varchar)
-            )
-        ) as organization_sk,
+        -- Surrogate key
+        sha2(concat_ws('||',
+            organization_id,
+            center_id,
+            coalesce(service_area_id, 'NO_SA'),
+            cast(_loaded_at as varchar)
+        )) as organization_sa_sk,
 
-        -- ✅ Organization
-        trim(upper(organization_id))        as organization_id,
-        trim(organization_name)             as organization_name,
+        -- Natural keys (normalised)
+        trim(upper(organization_id))         as organization_id,
+        trim(upper(parent_organization_id))  as parent_organization_id,
+        trim(upper(center_id))               as center_id,
+        trim(upper(service_area_id))         as service_area_id,
 
-        case
-            when upper(trim(organization_type)) in
-                ('PACE','HOSPITAL','CLINIC','GROUP','OTHER')
-            then upper(trim(organization_type))
-            else 'UNKNOWN'
-        end as organization_type,
+        -- Is child org flag
+        (parent_organization_id is not null) as is_child_organization_flag,
 
-        trim(upper(parent_organization_id)) as parent_organization_id,
-        trim(tax_id)                        as tax_id,
-        trim(npi_number)                    as npi_number,
+        -- Organization identity
+        initcap(trim(organization_name))     as organization_name,
+        trim(upper(organization_type))       as organization_type,
+        trim(upper(tax_id))                  as tax_id,
+        trim(upper(npi_number))              as npi_number,
+        trim(upper(cms_certification_number)) as cms_certification_number,
+        trim(upper(state_license_number))    as state_license_number,
 
-        trim(cms_certification_number)      as cms_certification_number,
-        trim(state_license_number)          as state_license_number,
-
+        -- Accreditation (controlled vocabulary)
         case
             when upper(trim(accreditation_status)) in
-                ('ACTIVE','EXPIRED','PENDING')
+                ('ACCREDITED', 'PROVISIONAL', 'PENDING', 'EXPIRED', 'REVOKED')
             then upper(trim(accreditation_status))
-            else 'UNKNOWN'
+            when accreditation_status is null then 'UNKNOWN'
+            else 'OTHER'
         end as accreditation_status,
 
-        trim(accreditation_body)            as accreditation_body,
+        trim(accreditation_body)    as accreditation_body,
         accreditation_expiry_date,
 
-        -- ✅ Center
-        trim(upper(center_id))              as center_id,
-        trim(center_name)                   as center_name,
-        trim(center_address_line1)          as center_address_line1,
-        trim(center_address_line2)          as center_address_line2,
-        trim(center_city)                   as center_city,
-        upper(trim(center_state))           as center_state,
-        left(regexp_replace(center_zip_code, '[^0-9]', ''), 5) as center_zip_code,
-        trim(center_county)                 as center_county,
+        -- Accreditation flags
+        (upper(trim(accreditation_status)) = 'ACCREDITED') as is_accredited_flag,
 
-        regexp_replace(center_phone, '[^0-9+]', '') as center_phone,
-        regexp_replace(center_fax, '[^0-9+]', '')   as center_fax,
-        lower(trim(center_email))                   as center_email,
+        (
+            accreditation_expiry_date is not null
+            and accreditation_expiry_date < current_date()
+        ) as is_accreditation_expired_flag,
 
-        trim(center_operating_hours)       as center_operating_hours,
-        coalesce(center_capacity, 0)       as center_capacity,
+        (
+            accreditation_expiry_date is not null
+            and accreditation_expiry_date
+                between current_date()
+                and dateadd('day', 90, current_date())
+        ) as is_accreditation_expiring_soon_flag,
 
+        -- Center identity
+        initcap(trim(center_name))       as center_name,
+        trim(center_address_line1)       as center_address_line1,
+        trim(center_address_line2)       as center_address_line2,
+        initcap(trim(center_city))       as center_city,
+        trim(upper(center_state))        as center_state,
+        trim(center_zip_code)            as center_zip_code,
+        initcap(trim(center_county))     as center_county,
+
+        -- Full address for display
+        trim(
+            center_address_line1
+            || case when center_address_line2 is not null
+               then ', ' || center_address_line2 else '' end
+            || ', ' || initcap(trim(center_city))
+            || ', ' || upper(trim(center_state))
+            || ' '  || trim(center_zip_code)
+        ) as center_full_address,
+
+        trim(center_phone)               as center_phone,
+        trim(center_fax)                 as center_fax,
+        trim(lower(center_email))        as center_email,
+        trim(center_operating_hours)     as center_operating_hours,
+        center_capacity,
+
+        -- Center status (controlled vocabulary)
         case
             when upper(trim(center_status)) in
-                ('ACTIVE','INACTIVE','CLOSED')
+                ('ACTIVE', 'INACTIVE', 'PENDING', 'SUSPENDED', 'CLOSED')
             then upper(trim(center_status))
-            else 'UNKNOWN'
+            when center_status is null then 'UNKNOWN'
+            else 'OTHER'
         end as center_status,
 
-        -- ✅ Service Area
-        trim(upper(service_area_id)) as service_area_id,
-        trim(service_area_name)      as service_area_name,
-        trim(service_area_type)      as service_area_type,
+        (upper(trim(center_status)) = 'ACTIVE') as is_center_active_flag,
 
-        coalesce(coverage_radius_miles, 0) as coverage_radius_miles,
-        trim(zip_codes_served)       as zip_codes_served,
-        trim(counties_served)        as counties_served,
-        upper(trim(state_served))    as state_served,
+        -- Service area
+        initcap(trim(service_area_name))     as service_area_name,
+        trim(upper(service_area_type))       as service_area_type,
+        coverage_radius_miles,
 
-        coalesce(population_served, 0)    as population_served,
-        coalesce(eligible_population, 0) as eligible_population,
-        coalesce(enrolled_count, 0)      as enrolled_count,
-        coalesce(enrollment_capacity, 0) as enrollment_capacity,
+        -- Raw geo fields passed through for mart-level parsing
+        zip_codes_served,
+        counties_served,
+        trim(upper(state_served))            as state_served,
 
-        -- ✅ Contract
+        -- Population & enrollment
+        population_served,
+        eligible_population,
+        enrolled_count,
+        enrollment_capacity,
+
+        -- Enrollment utilisation rate (0.0 – 1.0)
+        case
+            when enrollment_capacity is not null
+             and enrollment_capacity > 0
+            then round(enrolled_count / enrollment_capacity, 4)
+        end as enrollment_utilisation_rate,
+
+        -- Enrollment status tiers
+        case
+            when enrollment_capacity is null or enrollment_capacity = 0 then 'UNKNOWN'
+            when enrolled_count >= enrollment_capacity                   then 'AT_CAPACITY'
+            when enrolled_count >= enrollment_capacity * 0.9            then 'NEAR_CAPACITY'
+            when enrolled_count >= enrollment_capacity * 0.5            then 'MODERATE'
+            else 'LOW_UTILISATION'
+        end as enrollment_capacity_status,
+
+        (enrolled_count >= enrollment_capacity) as is_at_capacity_flag,
+
+        -- Eligible but not enrolled (market penetration gap)
+        case
+            when eligible_population is not null and enrolled_count is not null
+            then eligible_population - enrolled_count
+        end as eligible_not_enrolled_count,
+
+        -- Contract lifecycle
         contract_start_date,
         contract_end_date,
 
         case
             when upper(trim(contract_status)) in
-                ('ACTIVE','EXPIRED','TERMINATED')
+                ('ACTIVE', 'PENDING', 'EXPIRED', 'TERMINATED', 'RENEWAL_IN_PROGRESS')
             then upper(trim(contract_status))
-            else 'UNKNOWN'
+            when contract_status is null then 'UNKNOWN'
+            else 'OTHER'
         end as contract_status,
 
-        -- ✅ Services
-        trim(services_offered) as services_offered,
+        (upper(trim(contract_status)) = 'ACTIVE') as is_contract_active_flag,
 
-        coalesce(transportation_available, false) as transportation_available,
-        coalesce(meal_service_available, false)   as meal_service_available,
-        coalesce(pharmacy_on_site, false)         as pharmacy_on_site,
-        coalesce(adult_day_care, false)           as adult_day_care,
-        coalesce(home_care_available, false)      as home_care_available,
-        coalesce(inpatient_partnership, false)    as inpatient_partnership,
+        (
+            contract_end_date is not null
+            and contract_end_date
+                between current_date()
+                and dateadd('day', 90, current_date())
+        ) as is_contract_expiring_soon_flag,
 
-        trim(specialty_services) as specialty_services,
+        -- Contract duration in days
+        case
+            when contract_start_date is not null and contract_end_date is not null
+            then datediff('day', contract_start_date, contract_end_date)
+        end as contract_duration_days,
 
-        -- ✅ Contacts
-        trim(primary_contact_name)  as primary_contact_name,
-        trim(primary_contact_title) as primary_contact_title,
-        regexp_replace(primary_contact_phone, '[^0-9+]', '') as primary_contact_phone,
-        lower(trim(primary_contact_email)) as primary_contact_email,
+        -- Services capability flags (from boolean columns)
+        coalesce(transportation_available, false)  as is_transportation_available_flag,
+        coalesce(meal_service_available,   false)  as is_meal_service_available_flag,
+        coalesce(pharmacy_on_site,         false)  as is_pharmacy_on_site_flag,
+        coalesce(adult_day_care,           false)  as is_adult_day_care_flag,
+        coalesce(home_care_available,      false)  as is_home_care_available_flag,
+        coalesce(inpatient_partnership,    false)  as is_inpatient_partnership_flag,
 
-        trim(medical_director_name) as medical_director_name,
-        trim(medical_director_npi)  as medical_director_npi,
+        -- Service count (how many core services offered)
+        (
+            coalesce(cast(transportation_available as integer), 0)
+          + coalesce(cast(meal_service_available,   as integer), 0)
+          + coalesce(cast(pharmacy_on_site,         as integer), 0)
+          + coalesce(cast(adult_day_care,           as integer), 0)
+          + coalesce(cast(home_care_available,      as integer), 0)
+          + coalesce(cast(inpatient_partnership,    as integer), 0)
+        ) as core_service_count,
 
-        -- ✅ Agreements
-        trim(fiscal_intermediary)   as fiscal_intermediary,
-        trim(medicare_agreement_id) as medicare_agreement_id,
-        trim(medicaid_agreement_id) as medicaid_agreement_id,
+        -- Raw service strings passed through for mart-level parsing
+        trim(services_offered)    as services_offered,
+        trim(specialty_services)  as specialty_services,
 
-        trim(funding_model)         as funding_model,
-        coalesce(capitation_rate_monthly, 0) as capitation_rate_monthly,
+        -- Contacts (PII-aware — titles and names only, no raw phone/email in reports)
+        initcap(trim(primary_contact_name))   as primary_contact_name,
+        trim(primary_contact_title)           as primary_contact_title,
+        trim(primary_contact_phone)           as primary_contact_phone,
+        trim(lower(primary_contact_email))    as primary_contact_email,
+        initcap(trim(medical_director_name))  as medical_director_name,
+        trim(upper(medical_director_npi))     as medical_director_npi,
 
+        -- Regulatory & financial
+        trim(fiscal_intermediary)             as fiscal_intermediary,
+        trim(upper(medicare_agreement_id))    as medicare_agreement_id,
+        trim(upper(medicaid_agreement_id))    as medicaid_agreement_id,
+        trim(upper(funding_model))            as funding_model,
+        capitation_rate_monthly,
         last_cms_audit_date,
         last_state_audit_date,
-        quality_rating,
 
-        -- ✅ Metadata
-        upper(trim(source_system)) as source_system,
-        _loaded_at                as loaded_timestamp,
-        current_timestamp()       as dbt_updated_timestamp
+        -- Audit recency flags (CMS expects annual audits)
+        (
+            last_cms_audit_date is null
+            or last_cms_audit_date < dateadd('year', -1, current_date())
+        ) as is_cms_audit_overdue_flag,
+
+        (
+            last_state_audit_date is null
+            or last_state_audit_date < dateadd('year', -1, current_date())
+        ) as is_state_audit_overdue_flag,
+
+        -- Days since last audit
+        case
+            when last_cms_audit_date is not null
+            then datediff('day', last_cms_audit_date, current_date())
+        end as days_since_cms_audit,
+
+        case
+            when last_state_audit_date is not null
+            then datediff('day', last_state_audit_date, current_date())
+        end as days_since_state_audit,
+
+        -- Quality rating tier
+        quality_rating,
+        case
+            when quality_rating is null        then 'UNRATED'
+            when quality_rating >= 4.5         then 'EXCELLENT'
+            when quality_rating >= 3.5         then 'GOOD'
+            when quality_rating >= 2.5         then 'AVERAGE'
+            when quality_rating <  2.5         then 'BELOW_AVERAGE'
+        end as quality_rating_tier,
+
+        -- Metadata
+        upper(trim(source_system))  as source_system,
+        _loaded_at                  as loaded_timestamp,
+        _source_file                as source_file,
+        current_timestamp()         as dbt_updated_timestamp
 
     from deduplicated
     where _rn = 1
