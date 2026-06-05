@@ -1,0 +1,59 @@
+version: 2
+
+models:
+  - name: int_homecare_task_breakdown
+
+    description: >
+      Intermediate model that combines care plan activity, task instances,
+      and task templates to produce a unified dataset for analyzing
+      home care activity distribution across program years.
+
+    config:
+      materialized: view
+      schema: intermediate_homecare_task_breakdown
+      alias: homecare_task_breakdown
+      tags: ['intermediate', 'home_care', 'analysis']
+
+    columns:
+
+      # Keys
+      - name: task_instance_id
+        description: Unique identifier for task instance
+        tests:
+          - not_null
+
+      - name: care_plan_activity_id
+        description: Identifier linking to care plan activity
+
+      - name: task_template_id
+        description: Identifier linking to task template
+
+      # Metrics
+      - name: actual_duration_minutes
+        description: Duration of task in minutes
+
+      # Time + Context
+      - name: performed_at
+        description: Timestamp when task was performed
+
+      - name: program_year
+        description: Program year associated with care activity
+
+      - name: participant_id
+        description: Participant receiving the care
+
+      # Classification
+      - name: task_category
+        description: Task category used for grouping and analysis
+        tests:
+          - not_null
+
+      - name: task_name
+        description: Descriptive name of the task
+
+      # Metadata
+      - name: source_system
+        description: Source system of the task record
+
+      - name: loaded_at
+        description: Timestamp when record was loaded from staging

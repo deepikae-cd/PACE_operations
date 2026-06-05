@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: gold_homecare_task_breakdown
+
+    description: >
+      Gold model that provides aggregated home care task distribution.
+      Calculates total task minutes and percentage contribution by task category
+      within each program year. Supports analysis of medication assistance
+      versus other home care activities for operational and staffing decisions.
+
+    config:
+      materialized: table
+      schema: gold_homecare_task_breakdown
+      alias: homecare_task_breakdown
+      tags: ['gold', 'home_care', 'analytics', 'performance']
+
+    columns:
+
+      # ─────────────────────────────────────────────
+      # Grain
+      # ─────────────────────────────────────────────
+      - name: program_year
+        description: Program year used as aggregation window
+        tests:
+          - not_null
+
+      - name: task_category
+        description: Category of task (MEDICATION_ASSISTANCE, BATHING, etc.)
+        tests:
+          - not_null
+
+      # ─────────────────────────────────────────────
+      # Metrics
+      # ─────────────────────────────────────────────
+      - name: total_minutes
+        description: Total minutes spent on tasks in this category for the program year
+        tests:
+          - not_null
+
+      - name: grand_total_minutes
+        description: Total minutes spent across all task categories for the program year
+        tests:
+          - not_null
+
+      - name: pct_of_total_minutes
+        description: Percentage of total minutes represented by this task category
+        tests:
+          - not_null
+
+      # ─────────────────────────────────────────────
+      # Reporting helper
+      # ─────────────────────────────────────────────
+      - name: category_group
+        description: Simplified grouping separating medication assistance from other categories
+    
