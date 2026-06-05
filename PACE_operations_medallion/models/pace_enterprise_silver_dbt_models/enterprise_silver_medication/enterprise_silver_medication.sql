@@ -1,7 +1,7 @@
 /*
   ENTERPRISE_SILVER_MEDICATION
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ ref('stg_medication') }}
+  Source  : {{ ref('staging_medication') }}
   Purpose : Cleanse, deduplicate and enrich medication records.
             Adds surrogate key, standardised vocabularies, computed flags for:
             active/expired prescriptions, refill urgency, controlled substance
