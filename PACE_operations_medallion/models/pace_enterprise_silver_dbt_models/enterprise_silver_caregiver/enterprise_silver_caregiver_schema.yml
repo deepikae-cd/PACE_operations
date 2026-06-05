@@ -4,69 +4,103 @@ models:
 
   - name: enterprise_silver_caregiver
     description: >
-      Cleaned and deduplicated caregiver (care-staff) records from
-      BRONZE_CAREGIVER.RAW_CAREGIVER. Normalises employment status,
-      caregiver type, and license fields.
+      Cleaned, deduplicated, and enriched caregiver records sourced from
+      STG_CAREGIVER. Standardises caregiver type, employment status, and license
+      attributes. Computes lifecycle metrics such as tenure, license expiry,
+      and capacity flags.
 
     config:
       schema: enterprise_silver_caregiver
       alias: caregiver
-      materialized: table
+      materialized: incremental
+      unique_key: caregiver_sk
+      incremental_strategy: merge
       tags: ["silver", "caregiver"]
+      on_schema_change: sync_all_columns
 
     columns:
       - name: caregiver_sk
-        description: Surrogate key (SHA-256 of caregiver_id + loaded_at).
+        description: Surrogate key for caregiver record.
         tests: [not_null, unique]
 
       - name: caregiver_id
-        description: Natural key from source system.
-        tests: [not_null, unique]
+        description: Natural identifier of caregiver.
+        tests: [not_null]
+
+      - name: center_id
+        description: Associated PACE center identifier.
+
+      - name: supervisor_id
+        description: Supervisor caregiver identifier.
+
+      - name: first_name
+        description: First name of caregiver.
+
+      - name: last_name
+        description: Last name of caregiver.
 
       - name: full_name
-        description: Concatenated first + last name.
+        description: Full name (first + last).
 
       - name: caregiver_type
-        description: Normalised caregiver type code.
+        description: Normalised caregiver type.
 
-      - name: employment_status
-        description: Normalised employment status.
+      - name: specialty
+        description: Area of specialization.
 
       - name: license_number
         description: Professional license number.
 
       - name: license_state
-        description: Two-character state code for the license.
+        description: State of license issuance.
 
       - name: license_expiry_date
         description: License expiration date.
 
-      - name: is_license_expired
-        description: TRUE if license is expired as of today.
+      - name: license_status
+        description: Computed license status (VALID, EXPIRED, EXPIRING_SOON, NO_LICENSE).
 
-      - name: center_id
-        description: PACE center the caregiver is assigned to.
+      - name: is_license_expired_flag
+        description: TRUE if license is expired.
+
+      - name: is_license_expiring_soon_flag
+        description: TRUE if license expires within 30 days.
 
       - name: hire_date
-        description: Date caregiver was hired.
+        description: Caregiver hire date.
 
       - name: termination_date
-        description: Date employment ended (NULL if active).
+        description: Caregiver termination date (if any).
 
-      - name: supervisor_id
-        description: FK to another caregiver_id (supervisor).
+      - name: employment_status
+        description: Normalised employment status.
+
+      - name: is_active_flag
+        description: TRUE if employment status is ACTIVE.
+
+      - name: is_terminated_flag
+        description: TRUE if employment status is TERMINATED.
+
+      - name: is_on_leave_flag
+        description: TRUE if employment status is ON_LEAVE.
+
+      - name: tenure_days
+        description: Number of days employed.
 
       - name: max_participant_load
-        description: Maximum participants this caregiver can be assigned.
+        description: Maximum participant load capacity.
+
+      - name: is_capacity_undefined_flag
+        description: TRUE if capacity is null or zero.
 
       - name: source_system
-        description: Origin ingestion system.
+        description: Source system name.
 
       - name: loaded_timestamp
-        description: Bronze pipeline load timestamp.
+        description: Bronze ingestion timestamp.
+
+      - name: source_file
+        description: Source file identifier.
 
       - name: dbt_updated_timestamp
-        description: Timestamp this DBT model last wrote the row.
-
-
-  
+        description: DBT model update timestamp.

@@ -1,16 +1,20 @@
 /*
   ENTERPRISE_SILVER_CAREGIVER
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_caregiver', 'RAW_CAREGIVER') }}
-  Purpose : Cleanse, cast, deduplicate caregiver records.
+  Source  : {{ ref('staging_caregiver') }}
+  Purpose : Cleanse, deduplicate and enrich caregiver records.
+            Adds surrogate key, standardised vocabularies, computed flags:
+            license expiry status, employment tenure, and capacity flags.
   ──────────────────────────────────────────────────────────────────────────────
 */
 
-with
+with source as (
 
-source as (
+    select * from {{ ref('staging_caregiver') }}
 
-    select * from {{ source('bronze_caregiver', 'RAW_CAREGIVER') }}
+    {% if is_incremental() %}
+        where _loaded_at > (select max(loaded_timestamp) from {{ this }})
+    {% endif %}
 
 ),
 
@@ -22,61 +26,94 @@ deduplicated as (
                order by _loaded_at desc
            ) as _rn
     from source
-    where caregiver_id is not null
 
 ),
 
 cleaned as (
 
     select
-        -- ── Surrogate key ───────────────────────────────────────────────────
-        sha2(concat_ws('||', caregiver_id, cast(_loaded_at as varchar)))    as caregiver_sk,
+        -- Surrogate key
+        sha2(concat_ws('||', caregiver_id, cast(_loaded_at as varchar))) as caregiver_sk,
 
-        -- ── Natural key ─────────────────────────────────────────────────────
-        trim(upper(caregiver_id))                                           as caregiver_id,
+        -- Natural keys (normalised)
+        trim(upper(caregiver_id))   as caregiver_id,
+        trim(upper(center_id))      as center_id,
+        trim(upper(supervisor_id))  as supervisor_id,
 
-        -- ── Name ────────────────────────────────────────────────────────────
-        trim(initcap(coalesce(first_name, '')))                             as first_name,
-        trim(initcap(coalesce(last_name,  '')))                             as last_name,
-        trim(initcap(coalesce(first_name,'') || ' ' || coalesce(last_name,''))) as full_name,
+        -- Personal
+        initcap(trim(first_name))   as first_name,
+        initcap(trim(last_name))    as last_name,
+        initcap(trim(first_name))
+            || ' ' ||
+        initcap(trim(last_name))    as full_name,
 
-        -- ── Type normalisation ───────────────────────────────────────────────
+        -- Caregiver type (controlled vocabulary)
         case
-            when upper(trim(caregiver_type)) in ('RN','LPN','NURSE')        then 'NURSE'
-            when upper(trim(caregiver_type)) = 'SOCIAL_WORKER'              then 'SOCIAL_WORKER'
-            when upper(trim(caregiver_type)) in ('PT','OT','SLP','THERAPIST') then 'THERAPIST'
-            when upper(trim(caregiver_type)) in ('HOME_AIDE','CNA','HHA')   then 'HOME_AIDE'
-            when upper(trim(caregiver_type)) in ('MD','DO','PHYSICIAN')     then 'PHYSICIAN'
-            when upper(trim(caregiver_type)) in ('RD','DIETITIAN')          then 'DIETITIAN'
-            when caregiver_type is null                                      then 'UNKNOWN'
+            when upper(trim(caregiver_type)) in (
+                'NURSE', 'SOCIAL_WORKER', 'THERAPIST',
+                'HOME_AIDE', 'PHYSICIAN', 'DIETITIAN', 'DRIVER'
+            ) then upper(trim(caregiver_type))
+            when caregiver_type is null then 'UNKNOWN'
             else 'OTHER'
-        end                                                                  as caregiver_type,
+        end as caregiver_type,
 
-        -- ── License ─────────────────────────────────────────────────────────
-        trim(upper(license_number))                                         as license_number,
-        upper(trim(license_state))                                          as license_state,
-        try_cast(license_expiry_date as date)                              as license_expiry_date,
-        (try_cast(license_expiry_date as date) < current_date())           as is_license_expired,
-        trim(specialty)                                                     as specialty,
+        initcap(trim(specialty)) as specialty,
 
-        -- ── Employment ──────────────────────────────────────────────────────
-        trim(upper(center_id))                                              as center_id,
-        try_cast(hire_date as date)                                        as hire_date,
-        try_cast(termination_date as date)                                 as termination_date,
+        -- License
+        trim(upper(license_number)) as license_number,
+        trim(upper(license_state))  as license_state,
+        license_expiry_date,
+
+        -- License status as of today
+        case
+            when license_expiry_date is null                    then 'NO_LICENSE'
+            when license_expiry_date < current_date()          then 'EXPIRED'
+            when license_expiry_date < dateadd('day', 30, current_date()) then 'EXPIRING_SOON'
+            else 'VALID'
+        end as license_status,
+
+        (license_expiry_date is not null
+            and license_expiry_date < current_date())          as is_license_expired_flag,
+
+        (license_expiry_date is not null
+            and license_expiry_date
+                between current_date()
+                and dateadd('day', 30, current_date()))        as is_license_expiring_soon_flag,
+
+        -- Employment
+        hire_date,
+        termination_date,
 
         case
-            when upper(trim(employment_status)) in ('ACTIVE','TERMINATED','ON_LEAVE')
-                then upper(trim(employment_status))
-            else 'UNKNOWN'
-        end                                                                  as employment_status,
+            when upper(trim(employment_status)) in
+                ('ACTIVE', 'TERMINATED', 'ON_LEAVE')
+            then upper(trim(employment_status))
+            when employment_status is null then 'UNKNOWN'
+            else 'OTHER'
+        end as employment_status,
 
-        trim(upper(supervisor_id))                                          as supervisor_id,
-        coalesce(max_participant_load, 0)                                   as max_participant_load,
+        -- Boolean employment flags
+        (upper(trim(employment_status)) = 'ACTIVE')      as is_active_flag,
+        (upper(trim(employment_status)) = 'TERMINATED')  as is_terminated_flag,
+        (upper(trim(employment_status)) = 'ON_LEAVE')    as is_on_leave_flag,
 
-        -- ── Metadata --
-        upper(trim(source_system))                                          as source_system,
-        _loaded_at                                                          as loaded_timestamp,
-        current_timestamp()                                                 as dbt_updated_timestamp
+        -- Tenure in days (null if not yet terminated = still active)
+        case
+            when hire_date is not null and termination_date is not null
+            then datediff('day', hire_date, termination_date)
+            when hire_date is not null
+            then datediff('day', hire_date, current_date())
+        end as tenure_days,
+
+        -- Capacity
+        max_participant_load,
+        (max_participant_load is null or max_participant_load = 0) as is_capacity_undefined_flag,
+
+        -- Metadata
+        upper(trim(source_system))  as source_system,
+        _loaded_at                  as loaded_timestamp,
+        _source_file                as source_file,
+        current_timestamp()         as dbt_updated_timestamp
 
     from deduplicated
     where _rn = 1
