@@ -1,7 +1,7 @@
 /*
   ENTERPRISE_SILVER_CAREGIVER_ASSIGNMENT
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ ref('stg_caregiver_assignment') }}
+  Source  : {{ ref('staging_caregiver_assignment') }}
   Purpose : Cleanse, deduplicate and enrich caregiver assignment records.
             Adds surrogate key, standardised assignment type, computed flags
             for active/expired assignments, and assignment duration in days.
