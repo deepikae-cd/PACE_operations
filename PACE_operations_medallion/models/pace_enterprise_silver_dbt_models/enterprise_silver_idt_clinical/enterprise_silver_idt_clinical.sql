@@ -1,7 +1,7 @@
 /*
   ENTERPRISE_SILVER_CLINICAL_VISIT
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ ref('staging_clinical_visit') }}
+  Source  : {{ ref('staging_idt_clinical') }}
   Purpose : Cleanse, deduplicate and enrich clinical visit records.
             Adds surrogate key, standardised vocabularies, vitals range
             validation flags, diagnosis/procedure count derivations,
@@ -11,7 +11,7 @@
 
 with source as (
 
-    select * from {{ ref('staging_clinical_visit') }}
+    select * from {{ ref('staging_idt_clinical') }}
 
     {% if is_incremental() %}
         where _loaded_at > (select max(loaded_timestamp) from {{ this }})
