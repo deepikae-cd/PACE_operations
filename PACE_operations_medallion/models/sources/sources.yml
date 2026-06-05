@@ -115,3 +115,6 @@ sources:
     tables:
       - name: RAW_TASK_INSTANCE
         description: "Task execution records capturing actual work performed by aides including duration and timestamps"
+
+      - name: RAW_TASK_TEMPLATE
+        description: "Task template definitions capturing standard task configurations and reusable task structures"
