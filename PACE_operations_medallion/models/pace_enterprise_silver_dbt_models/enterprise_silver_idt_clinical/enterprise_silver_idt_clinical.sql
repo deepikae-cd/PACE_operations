@@ -1,7 +1,7 @@
 /*
   ENTERPRISE_SILVER_CLINICAL_VISIT
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ ref('stg_clinical_visit') }}
+  Source  : {{ ref('staging_clinical_visit') }}
   Purpose : Cleanse, deduplicate and enrich clinical visit records.
             Adds surrogate key, standardised vocabularies, vitals range
             validation flags, diagnosis/procedure count derivations,
@@ -9,16 +9,9 @@
   ──────────────────────────────────────────────────────────────────────────────
 */
 
-{{ config(
-    materialized         = 'incremental',
-    unique_key           = 'visit_sk',
-    incremental_strategy = 'merge',
-    tags                 = ['silver', 'clinical']
-) }}
-
 with source as (
 
-    select * from {{ ref('stg_clinical_visit') }}
+    select * from {{ ref('staging_clinical_visit') }}
 
     {% if is_incremental() %}
         where _loaded_at > (select max(loaded_timestamp) from {{ this }})
