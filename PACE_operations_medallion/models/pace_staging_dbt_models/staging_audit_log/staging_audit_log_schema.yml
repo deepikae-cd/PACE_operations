@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_audit_log
+  - name: staging_audit_log
     description: >
       Staging model for audit record was processed in staging layer      Staging model for audit log data. Cleans and standardizes raw bronze audit records,
       normalizes casing, trims strings, and enforces consistent data types.
