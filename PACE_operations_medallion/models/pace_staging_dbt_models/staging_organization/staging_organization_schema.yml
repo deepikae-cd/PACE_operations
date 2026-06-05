@@ -1,0 +1,219 @@
+version: 2
+
+models:
+
+  - name: staging_organization
+    description: >
+      Thin staging layer for organization, center, and service area data sourced
+      from BRONZE_ORGANIZATION.RAW_ORGANIZATION_SERVICE_AREA.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
+
+    config:
+      schema: staging_organization
+      alias: organization
+      materialized: view
+      tags: ["staging", "organization"]
+
+    columns:
+      - name: organization_id
+        description: Unique identifier for organization.
+        tests: [not_null]
+
+      - name: parent_organization_id
+        description: Parent organization identifier.
+
+      - name: center_id
+        description: PACE center identifier.
+        tests: [not_null]
+
+      - name: service_area_id
+        description: Service area identifier.
+
+      - name: organization_name
+        description: Name of the organization.
+
+      - name: organization_type
+        description: Type of organization.
+
+      - name: tax_id
+        description: Tax identification number.
+
+      - name: npi_number
+        description: National Provider Identifier.
+
+      - name: cms_certification_number
+        description: CMS certification number.
+
+      - name: state_license_number
+        description: State license number.
+
+      - name: accreditation_status
+        description: Accreditation status.
+
+      - name: accreditation_body
+        description: Accrediting body.
+
+      - name: accreditation_expiry_date
+        description: Accreditation expiry date.
+
+      # Center
+      - name: center_name
+        description: Name of the service center.
+
+      - name: center_address_line1
+        description: Address line 1.
+
+      - name: center_address_line2
+        description: Address line 2.
+
+      - name: center_city
+        description: City of the center.
+
+      - name: center_state
+        description: State of the center.
+
+      - name: center_zip_code
+        description: ZIP code.
+
+      - name: center_county
+        description: County.
+
+      - name: center_phone
+        description: Contact phone.
+
+      - name: center_fax
+        description: Fax number.
+
+      - name: center_email
+        description: Contact email.
+
+      - name: center_operating_hours
+        description: Operating hours.
+
+      - name: center_capacity
+        description: Capacity of center.
+
+      - name: center_status
+        description: Status of center.
+
+      # Service Area
+      - name: service_area_name
+        description: Name of service area.
+
+      - name: service_area_type
+        description: Type of service area.
+
+      - name: coverage_radius_miles
+        description: Coverage radius in miles.
+
+      - name: zip_codes_served
+        description: ZIP codes served.
+
+      - name: counties_served
+        description: Counties served.
+
+      - name: state_served
+        description: State served.
+
+      # Population
+      - name: population_served
+        description: Population served.
+
+      - name: eligible_population
+        description: Eligible population.
+
+      - name: enrolled_count
+        description: Number of enrolled participants.
+
+      - name: enrollment_capacity
+        description: Enrollment capacity.
+
+      # Contract
+      - name: contract_start_date
+        description: Contract start date.
+
+      - name: contract_end_date
+        description: Contract end date.
+
+      - name: contract_status
+        description: Contract status.
+
+      # Services
+      - name: services_offered
+        description: Services offered.
+
+      - name: transportation_available
+        description: Transportation availability flag.
+
+      - name: meal_service_available
+        description: Meal service availability flag.
+
+      - name: pharmacy_on_site
+        description: Pharmacy availability flag.
+
+      - name: adult_day_care
+        description: Adult day care availability.
+
+      - name: home_care_available
+        description: Home care availability.
+
+      - name: inpatient_partnership
+        description: Inpatient partnership indicator.
+
+      - name: specialty_services
+        description: Specialty services offered.
+
+      # Contacts
+      - name: primary_contact_name
+        description: Primary contact name.
+
+      - name: primary_contact_title
+        description: Contact title.
+
+      - name: primary_contact_phone
+        description: Contact phone.
+
+      - name: primary_contact_email
+        description: Contact email.
+
+      - name: medical_director_name
+        description: Medical director name.
+
+      - name: medical_director_npi
+        description: Medical director NPI.
+
+      # Regulatory / Financial
+      - name: fiscal_intermediary
+        description: Fiscal intermediary.
+
+      - name: medicare_agreement_id
+        description: Medicare agreement ID.
+
+      - name: medicaid_agreement_id
+        description: Medicaid agreement ID.
+
+      - name: funding_model
+        description: Funding model.
+
+      - name: capitation_rate_monthly
+        description: Monthly capitation rate.
+
+      - name: last_cms_audit_date
+        description: Last CMS audit date.
+
+      - name: last_state_audit_date
+        description: Last state audit date.
+
+      - name: quality_rating
+        description: Quality rating score.
+
+      # Metadata
+      - name: source_system
+        description: Origin system.
+
+      - name: _loaded_at
+        description: Raw ingestion timestamp.
+
+      - name: _source_file
+        description: Source file identifier.
