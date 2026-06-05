@@ -10,10 +10,6 @@
   ──────────────────────────────────────────────────────────────────────────────
 */
 
-/*
-  ENTERPRISE_SILVER_MEDICATION
-*/
-
 with source as (
 
     select * from {{ ref('staging_medication') }}
@@ -62,11 +58,13 @@ cleaned as (
         trim(upper(frequency))              as frequency,
         trim(upper(route_of_administration)) as route_of_administration,
 
-        -- ✅ FIXED: FORCE DATE CONSISTENCY
-        to_date(prescribed_date)  as prescribed_date,
-        to_date(start_date)       as start_date,
-        to_date(end_date)         as end_date,
-        to_date(last_refill_date) as last_refill_date,
+        -- ✅ DATE fields (consistent)
+        to_date(prescribed_date) as prescribed_date,
+        to_date(start_date)      as start_date,
+        to_date(end_date)        as end_date,
+
+        -- ✅ KEEP TIMESTAMP (DO NOT CAST)
+        last_refill_date,
 
         -- Status
         case
@@ -78,11 +76,12 @@ cleaned as (
             else 'OTHER'
         end as medication_status,
 
+        -- Flags
         (upper(trim(medication_status)) = 'ACTIVE')       as is_active_flag,
         (upper(trim(medication_status)) = 'DISCONTINUED') as is_discontinued_flag,
         (upper(trim(medication_status)) = 'ON_HOLD')      as is_on_hold_flag,
 
-        -- ✅ FIXED: DATE logic only
+        -- ✅ DATE-based lifecycle logic
         case
             when start_date is not null
              and (end_date is null or end_date >= current_date())
@@ -110,10 +109,11 @@ cleaned as (
 
         (refills_remaining = 0) as is_refills_exhausted_flag,
 
+        -- ✅ Safe usage of timestamp
         case
             when last_refill_date is not null
              and days_supply is not null
-             and datediff('day', last_refill_date, current_date()) >= (days_supply - 7)
+             and datediff('day', last_refill_date::date, current_date()) >= (days_supply - 7)
             then true else false
         end as is_refill_due_soon_flag,
 
@@ -150,9 +150,9 @@ cleaned as (
         ) as is_prior_auth_at_risk_flag,
 
         -- Clinical safety
-        (trim(adverse_reactions)   != '') as has_adverse_reactions_flag,
-        (trim(contraindications)   != '') as has_contraindications_flag,
-        (trim(interaction_alerts)  != '') as has_interaction_alerts_flag,
+        (trim(coalesce(adverse_reactions, '')) != '') as has_adverse_reactions_flag,
+        (trim(coalesce(contraindications, '')) != '') as has_contraindications_flag,
+        (trim(coalesce(interaction_alerts, '')) != '') as has_interaction_alerts_flag,
 
         trim(adverse_reactions)           as adverse_reactions,
         trim(contraindications)           as contraindications,
