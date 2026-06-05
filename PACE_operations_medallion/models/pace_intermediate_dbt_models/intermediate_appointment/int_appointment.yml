@@ -14,19 +14,6 @@ models:
       alias: appointment
       tags: ['intermediate', 'appointment', 'pace']
 
-   version: 2
-
-models:
-  - name: int_appointment
-    description: >
-      Intermediate model that enriches appointment data with participant,
-      provider, caregiver, and organization context. Applies PACE-specific
-      classification logic for appointment type, attendance status, care setting,
-      and coordination flags.
-
-    config:
-      materialized: view
-      tags: ['intermediate', 'appointment', 'pace']
 
     columns:
 
