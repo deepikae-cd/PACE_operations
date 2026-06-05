@@ -11,7 +11,7 @@ models:
 
     config:
       schema: staging_governance_rules
-      alias: compliance_violations
+      alias: compliance_violation
       materialized: view
       tags: ["staging", "governance"]
 
