@@ -10,6 +10,8 @@ models:
 
     config:
       materialized: view
+      schema: intermediate_homecare_task_breakdown
+      alias: homecare_task_breakdown
       tags: ['intermediate', 'home_care', 'analysis']
 
     columns:
