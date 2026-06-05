@@ -2,7 +2,7 @@ version: 2
 
 models:
 
-  - name: staging_compliance_violations
+  - name: staging_compliance_violation
     description: >
       Thin staging layer for compliance violations sourced from
       BRONZE_GOVERNANCE.RAW_COMPLIANCE_VIOLATIONS.
