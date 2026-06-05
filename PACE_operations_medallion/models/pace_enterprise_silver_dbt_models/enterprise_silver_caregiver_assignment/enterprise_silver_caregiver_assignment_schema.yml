@@ -1,0 +1,72 @@
+version: 2
+
+models:
+
+  - name: enterprise_silver_caregiver_assignment
+    description: >
+      Cleaned, deduplicated, and enriched caregiver assignment records sourced
+      from STG_CAREGIVER_ASSIGNMENT. Standardises assignment type and computes
+      lifecycle metrics such as active status, expiration, duration, and
+      long-term assignment flags.
+
+    config:
+      schema: enterprise_silver_caregiver
+      alias: caregiver_assignment
+      materialized: incremental
+      unique_key: assignment_sk
+      incremental_strategy: merge
+      tags: ["silver", "caregiver"]
+      on_schema_change: sync_all_columns
+
+    columns:
+      - name: assignment_sk
+        description: Surrogate key for caregiver assignment record.
+        tests: [not_null, unique]
+
+      - name: assignment_id
+        description: Natural identifier for assignment.
+        tests: [not_null]
+
+      - name: caregiver_id
+        description: Identifier of the caregiver.
+
+
+      - name: participant_id
+        description: Identifier of the participant.
+    
+
+      - name: assignment_type
+        description: Normalised assignment type (PRIMARY, BACKUP, etc.).
+
+      - name: is_active_flag
+        description: TRUE if assignment is active based on source flag and end date.
+
+      - name: is_expired_flag
+        description: TRUE if assignment has ended.
+
+      - name: is_primary_flag
+        description: TRUE if caregiver is primary assignment.
+
+      - name: effective_date
+        description: Assignment start date.
+
+      - name: end_date
+        description: Assignment end date.
+
+      - name: assignment_duration_days
+        description: Duration of assignment in days.
+
+      - name: is_long_term_assignment_flag
+        description: TRUE if assignment exceeds 365 days.
+
+      - name: source_system
+        description: Source system name.
+
+      - name: loaded_timestamp
+        description: Bronze ingestion timestamp.
+
+      - name: source_file
+        description: Source file identifier.
+
+      - name: dbt_updated_timestamp
+        description: DBT model update timestamp.
