@@ -1,0 +1,75 @@
+version: 2
+
+models:
+
+  - name: staging_governance_rules
+    description: >
+      Thin staging layer for governance rules sourced from
+      BRONZE_GOVERNANCE.RAW_GOVERNANCE_RULES.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
+
+    config:
+      schema: staging_governance
+      alias: governance_rules
+      materialized: view
+      tags: ["staging", "governance"]
+
+    columns:
+      - name: rule_id
+        description: Unique identifier for governance rule.
+        tests: [not_null]
+
+      - name: rule_name
+        description: Name of the governance rule.
+
+      - name: rule_category
+        description: High-level classification of the rule.
+
+      - name: rule_subcategory
+        description: More granular classification of the rule.
+
+      - name: rule_description
+        description: Detailed description of the rule.
+
+      - name: rule_logic
+        description: Business logic or validation expression.
+
+      - name: applies_to_domain
+        description: Domain or subject area the rule applies to.
+
+      - name: enforcement_level
+        description: Level of enforcement (advisory, mandatory, etc.).
+
+      - name: regulatory_reference
+        description: External regulatory reference (e.g., CMS citation).
+
+      - name: is_active
+        description: Flag indicating whether the rule is active.
+
+      - name: effective_date
+        description: Date the rule becomes effective.
+
+      - name: expiry_date
+        description: Date the rule expires (if applicable).
+
+      - name: created_by
+        description: User or system that created the rule.
+
+      - name: created_at
+        description: Timestamp when the rule was created.
+
+      - name: last_updated_by
+        description: User or system that last updated the rule.
+
+      - name: last_updated_at
+        description: Timestamp of last update.
+
+      - name: source_system
+        description: Origin system.
+
+      - name: _loaded_at
+        description: Raw ingestion timestamp from bronze layer.
+
+      - name: _source_file
+        description: Source file name.
