@@ -12,7 +12,7 @@
 
 with source as (
 
-    select * from {{ ref('stg_medication') }}
+    select * from {{ ref('staging_medication') }}
 
     {% if is_incremental() %}
         where _loaded_at > (select max(loaded_timestamp) from {{ this }})
