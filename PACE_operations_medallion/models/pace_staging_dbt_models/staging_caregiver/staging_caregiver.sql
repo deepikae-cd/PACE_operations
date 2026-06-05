@@ -1,5 +1,5 @@
 /*
-  STG_CAREGIVER
+  STAGING_CAREGIVER
   ──────────────────────────────────────────────────────────────────────────────
   Source  : {{ source('bronze_caregiver', 'RAW_CAREGIVER') }}
   Purpose : Thin staging layer — select, rename, and basic null filtering only.

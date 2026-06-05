@@ -1,0 +1,50 @@
+version: 2
+
+models:
+
+  - name: staging_caregiver_assignment
+    description: >
+      Thin staging layer for caregiver assignment data sourced from
+      BRONZE_CAREGIVER.RAW_CAREGIVER_ASSIGNMENT.
+      Performs basic column selection and minimal filtering only.
+      No business logic applied. Designed as a lightweight view.
+
+    config:
+      schema: staging_caregiver_assignment
+      alias: caregiver_assignment
+      materialized: view
+      tags: ["staging", "caregiver"]
+
+    columns:
+      - name: assignment_id
+        description: Unique identifier for caregiver assignment.
+        tests: [not_null]
+
+      - name: caregiver_id
+        description: Identifier of the assigned caregiver.
+        tests: [not_null]
+
+      - name: participant_id
+        description: Identifier of the assigned participant.
+        tests: [not_null]
+
+      - name: assignment_type
+        description: Type of assignment (primary, secondary, temporary, etc.).
+
+      - name: is_active
+        description: Flag indicating whether the assignment is currently active.
+
+      - name: effective_date
+        description: Start date of caregiver assignment.
+
+      - name: end_date
+        description: End date of caregiver assignment (if applicable).
+
+      - name: source_system
+        description: Origin system.
+
+      - name: _loaded_at
+        description: Raw ingestion timestamp from bronze layer.
+
+      - name: _source_file
+        description: Source file name.
