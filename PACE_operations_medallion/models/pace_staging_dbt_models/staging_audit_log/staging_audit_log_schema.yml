@@ -1,0 +1,100 @@
+version: 2
+
+models:
+  - name: stg_audit_log
+    description: >
+      Staging model for audit record was processed in staging layer      Staging model for audit log data. Cleans and standardizes raw bronze audit records,
+      normalizes casing, trims strings, and enforces consistent data types.
+      Maintains 1:1 mapping with raw audit log without deduplication.
+
+    config:
+      materialized: view
+      schema: staging_audit_log
+      alias: audit_log
+      tags: ['staging', 'audit', 'pace']
+
+    columns:
+      - name: audit_log_id
+        description: Unique identifier for audit log record
+        tests:
+          - not_null
+
+      - name: participant_id
+        description: Participant associated with the audit event
+
+      - name: actor_id
+        description: Identifier of actor performing the action
+
+      - name: actor_type
+        description: Type of actor (USER, SYSTEM, API_SERVICE, etc.)
+
+      - name: actor_role
+        description: Role of actor (NURSE, ADMIN, PROVIDER, etc.)
+
+      - name: actor_name
+        description: Name of actor performing the action
+
+      - name: action
+        description: Action performed (CREATE, UPDATE, DELETE, etc.)
+
+      - name: entity_type
+        description: Type of entity affected (PARTICIPANT, APPOINTMENT, etc.)
+
+      - name: entity_id
+        description: Identifier of the affected entity
+   
+      - name: event_timestamp
+        description: Timestamp when the audit event occurred
+        tests:
+          - not_null
+
+      - name: event_description
+        description: Human-readable description of the event
+
+      - name: field_changed
+        description: Field that was modified
+
+      - name: old_value
+        description: Previous value before change
+
+      - name: new_value
+        description: New value after change
+
+      - name: change_reason
+        description: Reason for the change
+
+      - name: ip_address
+        description: IP address of the actor
+
+      - name: user_agent
+        description: User agent string
+
+      - name: session_id
+        description: Session identifier
+
+      - name: request_id
+        description: Request identifier
+
+      - name: module
+        description: Application module (EHR, SCHEDULING, etc.)
+
+      - name: center_id
+        description: PACE center identifier
+
+      - name: is_phi_access
+        description: True if event involved PHI access
+
+      - name: is_sensitive
+        description: True if regulatory or sensitive event
+
+      - name: source_system
+        description: Source system of the event
+
+      - name: loaded_at
+        description: Timestamp when record was loaded into bronze layer
+
+      - name: source_file
+        description: Source file or ingestion reference
+
+      - name: stg_loaded_at
+        description: Timestamp when record was processed in staging layer
