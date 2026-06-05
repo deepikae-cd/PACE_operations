@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: enterprise_silver_audit_log
+
+    description: >
+      Trusted and deduplicated audit log table. Standardizes audit events,
+      enforces controlled vocabularies, and prepares data for gold projection.
+
+    config:
+      schema: enterprise_silver_audit_log
+      alias: audit_log
+      materialized: incremental
+      unique_key: audit_log_id
+      tags: ['silver', 'audit', 'pace']
+
+    columns:
+      - name: audit_log_id
+        description: Unique identifier for audit event
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: Participant associated with the audit event
+
+      - name: actor_id
+        description: Identifier of actor performing the action
+
+      - name: action
+        description: Standardized action performed
+     
+      - name: event_category
+        description: Derived category of event (write, read, workflow, other)
+
+      - name: event_timestamp
+        description: Timestamp when audit event occurred
+   
+
+      - name: event_date
+        description: Date derived from event_timestamp for partitioning
+
+      - name: entity_type
+        description: Type of entity affected
+
+      - name: entity_id
+        description: Identifier of affected entity
+
+      - name: is_phi_access
+        description: Indicates if event involved PHI access
+
+      - name: is_sensitive
+        description: Indicates if event is sensitive or compliance-related
+
+      - name: module
+        description: Source application module
+
+      - name: center_id
+        description: PACE center identifier
+
+      - name: updated_at
+        description: Last update timestamp from staging layer
+
+      - name: silver_loaded_at
+        description: Timestamp when record was processed in silver layer

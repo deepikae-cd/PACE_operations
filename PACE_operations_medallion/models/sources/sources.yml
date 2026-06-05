@@ -95,3 +95,9 @@ sources:
       - name: RAW_ORGANIZATION_SERVICE_AREA
         description: "Organization hierarchy, service centers, and geographic service area coverage data"
 
+  - name: bronze_audit
+    description: "Raw Audit Log domain capturing all system actions and events"
+    schema: BRONZE_AUDIT
+    tables:
+      - name: RAW_AUDIT_LOG
+        description: "Audit trail of all user and system actions across PACE systems including PHI access, changes, and compliance-sensitive events"
