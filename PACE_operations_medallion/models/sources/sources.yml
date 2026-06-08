@@ -88,13 +88,6 @@ sources:
       - name: RAW_MEDICATION
         description: "Medication prescriptions, dosage, and pharmacy linkage records"
 
-  - name: bronze_organization
-    description: "Raw Organization, Center, and Service Area domain"
-    schema: BRONZE_ORGANIZATION
-    tables:
-      - name: RAW_ORGANIZATION_SERVICE_AREA
-        description: "Organization hierarchy, service centers, and geographic service area coverage data"
-
   - name: bronze_audit
     description: "Raw Audit Log domain capturing all system actions and events"
     schema: BRONZE_AUDIT
@@ -118,3 +111,13 @@ sources:
 
       - name: RAW_TASK_TEMPLATE
         description: "Task template definitions capturing standard task configurations and reusable task structures"
+
+  - name: bronze_organization
+    description: "Raw Organization, Center, and Service Area domain"
+    schema: BRONZE_ORGANIZATION
+    tables:
+      - name: RAW_ORGANIZATION_SERVICE_AREA
+        description: "Organization hierarchy, service centers, and geographic service area coverage data"
+
+      - name: RAW_PACE_CENTER
+        description: "PACE center details including facility-level operational and geographic information"
