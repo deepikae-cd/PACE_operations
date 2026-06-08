@@ -23,7 +23,7 @@ deduplicated as (
 
     select *,
            row_number() over (
-               partition by transport_id
+               partition by transportation_id
                order by _loaded_at desc
            ) as _rn
     from source
