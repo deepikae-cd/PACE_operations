@@ -7,8 +7,10 @@ models:
 
     config:
       materialized: table
-      schema: dimensions
+      schema: marts_dimensions
       alias: participant
+      tags: ["marts", "caregiver", "scd2", "dimension"]
+      on_schema_change: sync_all_columns
 
     columns:
 
