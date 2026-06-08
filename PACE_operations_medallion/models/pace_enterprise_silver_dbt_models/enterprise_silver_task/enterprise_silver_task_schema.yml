@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: enterprise_silver_task
+    description: "Unified task dataset combining task instance executions with task template metadata for analytics and reporting"
+
+    config:
+      schema: enterprise_silver_task
+      materialized: table
+      tags: ["silver", "task"]
+      persist_docs:
+        relation: true
+        columns: true
+
+    columns:
+
+      - name: task_instance_id
+        description: "Unique identifier for each task execution"
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: "Unique identifier for participant associated with the task"
+        tests:
+          - not_null
+
+      - name: task_template_id
+        description: "Reference to task template"
+        tests:
+          - not_null
+
+      - name: task_name
+        description: "Name of the task from template"
+
+      - name: task_category
+        description: "Category of the task from template"
+
+      - name: task_status
+        description: "Execution status of the task instance"
+
+      - name: start_time
+        description: "Task execution start timestamp"
+
+      - name: end_time
+        description: "Task execution end timestamp"
+
+      - name: duration_minutes
+        description: "Duration of the task in minutes"
+
+      - name: source_system
+        description: "Source system from which the data originated"
