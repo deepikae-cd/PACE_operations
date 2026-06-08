@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: fct_meal_delivery
+
+    description: >
+      Fact table capturing meal delivery events for participants.
+      Each row represents a delivery with status and meal details.
+
+    config:
+      materialized: incremental
+      schema: marts_facts
+      alias: meal_delivery
+
+    columns:
+
+      - name: delivery_id
+        description: Unique delivery identifier
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: Participant receiving the meal
+       
+      - name: delivery_date
+        description: Date of meal delivery
+
+      - name: meal_type
+        description: Type of meal delivered (breakfast, lunch, etc.)
+
+      - name: delivered_flag
+        description: Indicates if the meal was successfully delivered (1 = yes, 0 = no)
+   
