@@ -1,11 +1,15 @@
 select
 
-    delivery_id,
+
+    meal_delivery_id as delivery_id,
     participant_id,
 
-    delivery_date,
+    --  date column
+    meal_date as delivery_date,
     meal_type,
+    case 
+        when delivery_status = 'delivered' then 1 
+        else 0 
+    end as delivered_flag
 
-    case when delivered = true then 1 else 0 end as delivered_flag
-
-from {{ ref('staging_meal_delivery') }}
+from {{ ref('stagig_meal_delivery') }}
