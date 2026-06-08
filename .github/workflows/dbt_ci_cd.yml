@@ -8,8 +8,12 @@ on:
   push:
     branches: [main]
 
+  workflow_dispatch:  # manual prod trigger
+  
+
 env:
   DBT_CLOUD_HOST: https://br531.us1.dbt.com
+
 
 jobs:
 
@@ -22,56 +26,51 @@ jobs:
     if: github.event_name == 'pull_request'
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Trigger dbt Cloud PR Job
+      - name: Trigger dbt Cloud CI Job
         run: |
           echo "Triggering dbt CI job..."
-          curl --fail -X POST "$DBT_CLOUD_HOST/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/jobs/${{ secrets.DBT_CLOUD_PR_JOB_ID }}/run/" \
+          run_response=$(curl --silent --fail -X POST "$DBT_CLOUD_HOST/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/jobs/${{ secrets.DBT_CLOUD_PR_JOB_ID }}/run/" \
             -H "Authorization: Token ${{ secrets.DBT_CLOUD_SERVICE_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"cause": "Triggered from PR"}'
+            -d '{"cause": "Triggered from PR"}')
+
+          run_id=$(echo $run_response | jq -r '.data.id')
+
+          echo "Run ID: $run_id"
 
 
   # ─────────────────────────────
-  # PROD SILVER
+  # STAGING DEPLOY
   # ─────────────────────────────
-  dbt-prod-silver:
-    name: dbt Cloud Production — Silver
+  dbt-staging:
+    name: dbt Cloud Deployment — Staging
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Trigger dbt Silver Job
+      - name: Trigger dbt Staging Job
         run: |
-          echo "Triggering dbt Silver job..."
-          curl --fail -X POST "$DBT_CLOUD_HOST/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/jobs/${{ secrets.DBT_CLOUD_PROD_SILVER_JOB_ID }}/run/" \
+          echo "Triggering dbt staging job..."
+          curl --fail -X POST "$DBT_CLOUD_HOST/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/jobs/${{ secrets.DBT_CLOUD_STAGING_JOB_ID }}/run/" \
             -H "Authorization: Token ${{ secrets.DBT_CLOUD_SERVICE_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"cause": "Triggered from merge to main"}'
+            -d '{"cause": "Deploy to staging from main"}'
 
 
   # ─────────────────────────────
-  # PROD GOLD
+  # PROD DEPLOY (MANUAL)
   # ─────────────────────────────
-  dbt-prod-gold:
-    name: dbt Cloud Production — Gold
+  dbt-prod:
+    name: dbt Cloud Deployment — Production
     runs-on: ubuntu-latest
-    needs: dbt-prod-silver
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: dbt-staging
+    if: github.event_name == 'workflow_dispatch'
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Trigger dbt Gold Job
+      - name: Trigger dbt Production Job
         run: |
-          echo "Triggering dbt Gold job..."
-          curl --fail -X POST "$DBT_CLOUD_HOST/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/jobs/${{ secrets.DBT_CLOUD_PROD_GOLD_JOB_ID }}/run/" \
+          echo "Triggering dbt production job..."
+          curl --fail -X POST "$DBT_CLOUD_HOST/api/v2/accounts/${{ secrets.DBT_CLOUD_ACCOUNT_ID }}/jobs/${{ secrets.DBT_CLOUD_PROD_JOB_ID }}/run/" \
             -H "Authorization: Token ${{ secrets.DBT_CLOUD_SERVICE_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"cause": "Triggered after Silver"}'
+            -d '{"cause": "Manual production deployment"}'
