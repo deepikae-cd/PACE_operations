@@ -5,6 +5,11 @@ models:
 
     description: Current dimension table for participant
 
+    config:
+      materialized: table
+      schema: dimensions
+      alias: participant
+
     columns:
 
       - name: participant_id
