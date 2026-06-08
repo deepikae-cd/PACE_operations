@@ -5,7 +5,7 @@ Layer:        Silver (Staging → Silver)
 Source:
               - staging_task_instance
               - staging_task_template
-Author:       Deepika Eswar
+
 
 Description:
     Integrates task execution data with task template metadata
