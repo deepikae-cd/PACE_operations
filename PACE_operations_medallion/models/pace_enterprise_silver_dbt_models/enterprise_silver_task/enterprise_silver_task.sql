@@ -1,36 +1,30 @@
-
 /*
 ===========================================================
-Model:        staging_task_template
-Layer:        Staging (Bronze → Staging)
-
-/*
-===========================================================
-Model:        staging_task_template
-Layer:        Staging (Bronze → Staging)
-Source:       BRONZE_TASK.RAW_TASK_TEMPLATE
+Model:        enterprise_silver_task
+Layer:        Silver (Staging → Silver)
+Source:
+              - staging_task_instance
+              - staging_task_template
 Author:       Deepika Eswar
-Created On:   2026-06-08
 
 Description:
-    Transforms raw task template data from Bronze layer into
-    a cleaned, standardized staging model. Applies column
-    renaming, consistent casing, and metadata preservation.
+    Integrates task execution data with task template metadata
+    to produce a unified, analytics-ready task dataset.
 
 Business Logic:
-    - Standardizes column naming to snake_case
-    - Preserves ingestion metadata for lineage tracking
+    - Joins task instance with task template using task_template_id
+    - Enriches task records with task name and category
+    - Preserves execution-level granularity
+
+Grain:
+    One record per task_instance_id
 
 Dependencies:
-    - source('bronze_task', 'RAW_TASK_TEMPLATE')
-
-Outputs:
-    - PACE_DW.staging_task_template
+    - ref('staging_task_instance')
+    - ref('staging_task_template')
 
 ===========================================================
 */
-
-
 
 WITH instance AS (
 
@@ -48,16 +42,13 @@ joined AS (
 
     SELECT
         i.task_instance_id,
-        i.participant_id,
-
         i.task_template_id,
+
         t.task_name,
         t.task_category,
 
-        i.task_status,
-        i.start_time,
-        i.end_time,
-        i.duration_minutes,
+        i.actual_duration_minutes,
+        i.performed_at,
 
         i.source_system
 
@@ -67,4 +58,5 @@ joined AS (
 
 )
 
-SELECT * FROM joined
+SELECT *
+FROM joined
