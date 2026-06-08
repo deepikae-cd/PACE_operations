@@ -2,7 +2,7 @@ name: PACE_operations_medallion
 version: '1.0.0'
 config-version: 2
 
-profile: DBT_PROD
+profile: PACE_operations
 
 model-paths: ["models"]
 snapshot-paths: ["snapshots"]
