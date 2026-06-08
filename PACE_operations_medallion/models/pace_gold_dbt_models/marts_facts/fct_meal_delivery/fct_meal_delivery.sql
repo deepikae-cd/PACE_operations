@@ -12,4 +12,4 @@ select
         else 0 
     end as delivered_flag
 
-from {{ ref('stagig_meal_delivery') }}
+from {{ ref('staging_meal_delivery') }}
