@@ -10,7 +10,9 @@ models:
 
     config:
       materialized: table
-      schema: GOLD_FACTS
+      schema:  marts_facts
+      alias: meal_delivery
+
 
     columns:
 
