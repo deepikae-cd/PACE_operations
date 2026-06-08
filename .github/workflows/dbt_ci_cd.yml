@@ -72,4 +72,4 @@ jobs:
             -H "Authorization: Token ${{ secrets.DBT_CLOUD_SERVICE_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{"cause": "Manual production deployment"}'
-``
+
