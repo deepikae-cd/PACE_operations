@@ -21,7 +21,7 @@ models:
       # ───────────────────────────────
       # Keys
       # ───────────────────────────────
-      - name: transport_id
+      - name: transportation_id
         description: Unique identifier for transportation record.
         tests:
           - not_null
