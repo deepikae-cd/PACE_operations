@@ -1,4 +1,4 @@
-pace_dw:
+PACE_operations:
   target: dev
 
   outputs:
