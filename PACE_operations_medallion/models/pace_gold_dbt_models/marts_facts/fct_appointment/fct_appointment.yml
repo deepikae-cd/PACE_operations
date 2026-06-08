@@ -7,8 +7,8 @@ models:
 
     config:
       materialized: incremental
-      schema: facts
-      alias: 
+      schema: marts_facts
+      alias: appointment
 
     columns:
 
