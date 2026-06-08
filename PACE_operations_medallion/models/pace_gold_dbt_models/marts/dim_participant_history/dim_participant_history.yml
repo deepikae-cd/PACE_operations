@@ -1,0 +1,58 @@
+
+version: 2
+
+models:
+  - name: dim_participant_history
+
+    description: >
+      Historical dimension table for participant.
+      Contains full SCD Type-2 history from snapshot,
+      including current and past records.
+
+    config:
+      materialized: table
+      schema: GOLD_PARTICIPANT
+
+    columns:
+
+      - name: participant_id
+        description: Unique participant identifier
+        tests:
+          - not_null
+
+      - name: center_id
+        description: Associated center
+
+      - name: program_status
+        description: Participant program status
+
+      - name: primary_diagnosis
+        description: Primary diagnosis
+
+      - name: preferred_language
+        description: Preferred language
+
+      - name: disenrollment_date
+        description: Program exit date
+
+      - name: address_line1
+        description: Address line 1
+
+      - name: zip_code
+        description: Zip code
+
+      - name: phone_number
+        description: Contact phone number
+
+      - name: record_start_date
+        description: Start of record validity
+
+      - name: record_end_date
+        description: End of record validity
+
+      - name: record_status
+        description: Indicates whether record is CURRENT or HISTORICAL
+
+
+      - name: record_status
+       

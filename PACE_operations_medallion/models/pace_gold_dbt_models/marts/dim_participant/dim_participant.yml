@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: dim_participant
+
+    description: Current dimension table for participant
+
+    columns:
+
+      - name: participant_id
+        description: Unique participant ID
+        tests:
+          - not_null
+          - unique
+
+      - name: program_status
+        description: Current program status
+
+      - name: primary_diagnosis
+        description: Primary diagnosis
+
+      - name: center_id
+        description: Assigned center
+
+      - name: record_start_date
+        description: Start of current record
