@@ -26,7 +26,7 @@ select
     employment_status,
     center_id,
     license_expiry_date,
-    is_license_expired,
+    is_license_expired_flag,
     supervisor_id,
     max_participant_load,
 
