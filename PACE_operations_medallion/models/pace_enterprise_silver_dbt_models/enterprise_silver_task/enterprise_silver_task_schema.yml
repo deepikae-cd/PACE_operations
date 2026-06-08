@@ -6,6 +6,7 @@ models:
 
     config:
       schema: enterprise_silver_task
+      alias: task
       materialized: table
       tags: ["silver", "task"]
       persist_docs:
