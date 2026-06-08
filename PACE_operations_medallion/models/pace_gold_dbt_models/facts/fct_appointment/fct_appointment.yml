@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: fct_appointment
+
+    description: Fact table for participant appointments
+
+    config:
+      materialized: incremental
+      schema: GOLD_FACTS
+
+    columns:
+
+      - name: appointment_id
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        tests:
+          - not_null
+
+      - name: appointment_date
+        description: Date of appointment
+
+      - name: completed_flag
+        description: Indicates completed appointment
