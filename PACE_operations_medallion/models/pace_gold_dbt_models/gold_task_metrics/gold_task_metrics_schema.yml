@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: gold_task_metrics
+
+    config:
+      schema: gold
+      alias: task_metrics
+      materialized: table
+      tags: ["gold", "task"]
+
+    columns:
+      - name: task_date
+        tests: [not_null]
+
+      - name: total_tasks
+        description: "Total tasks per day"
+
+      - name: avg_duration
+        description: "Average task duration"
+
+      - name: max_duration
+        description: "Longest task duration"
+
+      - name: min_duration
+        description: "Shortest task duration"
