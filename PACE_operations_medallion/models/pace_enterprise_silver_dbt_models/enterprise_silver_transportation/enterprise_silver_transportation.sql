@@ -14,10 +14,13 @@ with source as (
 
     select *
     from {{ ref('staging_transportation') }}
-    where transportation_id is not null   
+    where transportation_id is not null
 
     {% if is_incremental() %}
-        and _loaded_at > (select max(loaded_timestamp) from {{ this }})
+        and _loaded_at > (
+            select coalesce(max(loaded_timestamp), '1900-01-01')
+            from {{ this }}
+        )
     {% endif %}
 
 ),
@@ -37,10 +40,10 @@ cleaned as (
 
     select
 
-        --  Surrogate key
-        sha2(concat_ws('||', transportation_id, cast(_loaded_at as varchar))) as transport_sk,
+        -- ✅ Surrogate key (stable)
+        sha2(concat_ws('||', transportation_id)) as transport_sk,
 
-        --  Business keys
+        -- ✅ Business keys
         trim(upper(transportation_id)) as transportation_id,
         trim(upper(participant_id))    as participant_id,
         trim(upper(appointment_id))    as appointment_id,
@@ -49,7 +52,7 @@ cleaned as (
         trim(upper(vendor_id))         as vendor_id,
         trim(upper(center_id))         as center_id,
 
-        --  Transport type
+        -- ✅ Transport type
         case
             when upper(trim(transport_type)) in (
                 'AMBULANCE','WHEELCHAIR_VAN','RIDESHARE',
@@ -69,7 +72,7 @@ cleaned as (
             else 99
         end as transport_type_rank,
 
-        --  Trip direction
+        -- ✅ Trip direction
         case
             when upper(trim(trip_direction)) in ('OUTBOUND','RETURN')
             then upper(trim(trip_direction))
@@ -77,7 +80,7 @@ cleaned as (
             else 'OTHER'
         end as trip_direction,
 
-        --  Trip status
+        -- ✅ Trip status
         case
             when upper(trim(trip_status)) in (
                 'SCHEDULED','COMPLETED','CANCELLED','NO_SHOW','IN_PROGRESS'
@@ -86,7 +89,7 @@ cleaned as (
             else 'OTHER'
         end as trip_status,
 
-        --  Flags
+        -- ✅ Flags
         (upper(trim(trip_status)) = 'SCHEDULED')   as is_scheduled_flag,
         (upper(trim(trip_status)) = 'COMPLETED')   as is_completed_flag,
         (upper(trim(trip_status)) = 'CANCELLED')   as is_cancelled_flag,
@@ -95,7 +98,7 @@ cleaned as (
 
         (upper(trim(trip_status)) in ('CANCELLED','NO_SHOW')) as is_unsuccessful_flag,
 
-        --  Cancellation
+        -- ✅ Cancellation
         trim(cancellation_reason) as cancellation_reason,
 
         (
@@ -103,7 +106,7 @@ cleaned as (
             and nullif(trim(cancellation_reason), '') is not null
         ) as is_cancelled_with_reason_flag,
 
-        --  Equipment
+        -- ✅ Equipment
         case
             when upper(trim(special_equipment_needed)) in (
                 'WHEELCHAIR_LIFT','STRETCHER','OXYGEN',
@@ -118,16 +121,16 @@ cleaned as (
             and upper(trim(special_equipment_needed)) != 'NONE'
         ) as requires_special_equipment_flag,
 
-        --  Locations
+        -- ✅ Locations
         trim(pickup_location)  as pickup_location,
         trim(dropoff_location) as dropoff_location,
 
-        --  Timestamps
+        -- ✅ Timestamps
         ride_date,
         actual_pickup_time,
         actual_dropoff_time,
 
-        --  Metrics
+        -- ✅ Metrics
         case
             when ride_date is not null and actual_pickup_time is not null
             then datediff('minute', ride_date, actual_pickup_time)
@@ -152,7 +155,7 @@ cleaned as (
             then true else false
         end as is_late_pickup_flag,
 
-        --  SLA
+        -- ✅ SLA breach logic
         case
             when upper(trim(trip_status)) not in ('COMPLETED','IN_PROGRESS')
             then false
@@ -166,7 +169,7 @@ cleaned as (
             else false
         end as is_sla_breached_flag,
 
-        --  Mileage
+        -- ✅ Mileage
         case when mileage >= 0 then mileage end as mileage,
 
         case
@@ -177,13 +180,13 @@ cleaned as (
             else '30+ MI'
         end as mileage_band,
 
-        --  Date dims
+        -- ✅ Date dimensions
         date_trunc('day', ride_date)   as trip_date,
         date_trunc('month', ride_date) as trip_month,
         dayofweek(ride_date)           as trip_day_of_week,
         hour(ride_date)                as scheduled_pickup_hour,
 
-        --  Metadata
+        -- ✅ Metadata
         upper(trim(source_system)) as source_system,
         _loaded_at as loaded_timestamp,
         _source_file as source_file,
