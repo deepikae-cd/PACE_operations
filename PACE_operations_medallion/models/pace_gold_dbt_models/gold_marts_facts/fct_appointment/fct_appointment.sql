@@ -3,19 +3,12 @@ with source_data as (
     select
         appointment_id,
         participant_id,
-        provider_id,                     
-        center_id,                       
+        provider_id,
+        center_id,
         scheduled_date as appointment_date,
         appointment_status,
         loaded_timestamp
     from {{ ref('enterprise_silver_appointment') }}
-
-    {% if is_incremental() %}
-        where loaded_timestamp > (
-            select coalesce(max(loaded_at), '1900-01-01')
-            from {{ this }}
-        )
-    {% endif %}
 
 ),
 
@@ -24,7 +17,7 @@ deduplicated as (
     select
         appointment_id,
         participant_id,
-        provider_id,                     
+        provider_id,
         center_id,
         appointment_date,
         appointment_status,
@@ -35,7 +28,8 @@ deduplicated as (
             order by
                 loaded_timestamp desc,
                 participant_id asc,
-                provider_id asc
+                provider_id asc,
+                center_id asc
         ) as row_num
 
     from source_data
@@ -45,7 +39,7 @@ deduplicated as (
 select
     appointment_id,
     participant_id,
-    provider_id,                     
+    provider_id,
     center_id,
     appointment_date,
     appointment_status,
@@ -60,7 +54,7 @@ select
         else 0
     end as no_show_flag,
 
-    loaded_timestamp as loaded_at
+    loaded_timestamp
 
 from deduplicated
 where row_num = 1
