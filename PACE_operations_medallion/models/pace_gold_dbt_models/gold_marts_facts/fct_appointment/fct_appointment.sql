@@ -3,6 +3,8 @@ with base as (
     select
         appointment_id,
         participant_id,
+        provider_id,         
+        center_id,           
         scheduled_date as appointment_date,
         appointment_status,
         loaded_timestamp
@@ -24,12 +26,22 @@ deduplicated as (
 select
     appointment_id,
     participant_id,
+    provider_id,          
+    center_id,              
     appointment_date,
+    appointment_status,     
 
     case 
         when appointment_status = 'COMPLETED' then 1
         else 0
-    end as completed_flag
+    end as completed_flag,
+
+    case 
+        when appointment_status = 'NO_SHOW' then 1
+        else 0
+    end as no_show_flag,    
+
+    loaded_timestamp as loaded_at  
 
 from deduplicated
 where _rn = 1
