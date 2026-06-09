@@ -3,18 +3,17 @@
   ──────────────────────────────────────────────────────────────────────────────
   Source  : {{ ref('staging_transportation') }}
   Purpose : Cleanse, deduplicate and enrich transportation records.
-            Adds surrogate key, standardised vocabularies, computed flags
-            for trip outcomes, punctuality, SLA breaches, and time/distance
-            metrics.
-  ──────────────────────────────────────────────────────────────────────────────
+            Adds surrogate key, standardized vocabularies, computed flags
+            for trip outcomes, punctuality, SLA breaches, and metrics.
 */
-
 
 with source as (
 
     select *
     from {{ ref('staging_transportation') }}
-    where transportation_id is not null
+
+    -- ✅ FIX: remove NULL, empty, and blank IDs (this solves your failure)
+    where nullif(trim(transportation_id), '') is not null
 
     {% if is_incremental() %}
         and _loaded_at > (
@@ -40,7 +39,7 @@ cleaned as (
 
     select
 
-        -- ✅ Surrogate key (stable)
+        -- ✅ Surrogate key
         sha2(concat_ws('||', transportation_id)) as transport_sk,
 
         -- ✅ Business keys
@@ -155,7 +154,7 @@ cleaned as (
             then true else false
         end as is_late_pickup_flag,
 
-        -- ✅ SLA breach logic
+        -- ✅ SLA breach
         case
             when upper(trim(trip_status)) not in ('COMPLETED','IN_PROGRESS')
             then false
