@@ -15,7 +15,7 @@ deduplicated as (
     select *,
            row_number() over (
                partition by appointment_id
-               order by _loaded_at desc   -- ✅ FIXED
+               order by loaded_timestamp desc   
            ) as _rn
     from base
 
