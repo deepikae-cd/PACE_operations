@@ -1,10 +1,10 @@
-
-
-with base as (
+with source_data as (
 
     select
         appointment_id,
         participant_id,
+        provider_id,                     
+        center_id,                       
         scheduled_date as appointment_date,
         appointment_status,
         loaded_timestamp
@@ -24,20 +24,29 @@ deduplicated as (
     select
         appointment_id,
         participant_id,
+        provider_id,                     
+        center_id,
         appointment_date,
         appointment_status,
         loaded_timestamp,
+
         row_number() over (
             partition by appointment_id
-            order by loaded_timestamp desc, participant_id
-        ) as _rn
-    from base
+            order by
+                loaded_timestamp desc,
+                participant_id asc,
+                provider_id asc
+        ) as row_num
+
+    from source_data
 
 )
 
 select
     appointment_id,
     participant_id,
+    provider_id,                     
+    center_id,
     appointment_date,
     appointment_status,
 
@@ -54,4 +63,4 @@ select
     loaded_timestamp as loaded_at
 
 from deduplicated
-where _rn = 1
+where row_num = 1
