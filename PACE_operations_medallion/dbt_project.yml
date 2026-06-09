@@ -34,7 +34,6 @@ models:
       relation: true
       columns: true
 
-    +materialized: "{{ var('materialization_default') }}"
 
     # ===============================
     # SILVER LAYER
