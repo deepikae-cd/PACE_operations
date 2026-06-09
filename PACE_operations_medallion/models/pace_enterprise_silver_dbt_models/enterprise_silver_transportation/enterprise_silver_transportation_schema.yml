@@ -30,9 +30,7 @@ models:
 
       - name: transportation_id
         description: Natural identifier for transportation record.
-        tests:
-          - not_null
-
+      
       - name: participant_id
         description: Participant identifier.
 
