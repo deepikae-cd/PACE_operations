@@ -5,8 +5,8 @@ models:
 
     description: >
       Cleaned, deduplicated, and enriched transportation records sourced from
-      STG_TRANSPORTATION. Standardises trip attributes and computes flags for
-      trip outcomes, punctuality, SLA compliance, and operational metrics.
+      STG_TRANSPORTATION. Applies standardization, derives operational metrics,
+      and prepares data for downstream analytics and fact models.
 
     config:
       schema: enterprise_silver_transportation
@@ -19,160 +19,131 @@ models:
 
     columns:
 
-      # ───────────────────────────────
-      # Keys
-      # ───────────────────────────────
       - name: transport_sk
-        description: Surrogate key for transportation record.
-        tests:
-          - not_null
-          - unique
+        description: Surrogate key uniquely identifying each transportation record.
+        tests: [not_null, unique]
 
       - name: transportation_id
-        description: Natural identifier for transportation record.
+        description: Natural business identifier for the transportation record.
         tests:
-          - not_null
+          - not_null   
 
       - name: participant_id
-        description: Participant identifier.
+        description: Identifier of the participant associated with the trip.
 
       - name: appointment_id
-        description: Related appointment identifier.
+        description: Identifier of the related appointment, if applicable.
 
       - name: driver_id
-        description: Driver identifier.
+        description: Identifier of the assigned driver.
 
       - name: vehicle_id
-        description: Vehicle identifier.
+        description: Identifier of the vehicle used for the trip.
 
       - name: vendor_id
-        description: Vendor identifier.
+        description: Identifier of the transportation vendor.
 
       - name: center_id
-        description: PACE center identifier.
+        description: Identifier of the PACE center managing the trip.
 
-      # ───────────────────────────────
-      # Trip Details
-      # ───────────────────────────────
       - name: transport_type
-        description: Standardized transport type.
+        description: Standardized category of transportation service (e.g., Ambulance, Sedan).
 
       - name: transport_type_rank
-        description: Priority ranking of transport type.
+        description: Priority ranking assigned to transport types for reporting and sorting.
 
       - name: trip_direction
-        description: Direction of trip (OUTBOUND, RETURN).
+        description: Direction of the trip (OUTBOUND or RETURN).
 
       - name: trip_status
-        description: Standardized trip status.
+        description: Standardized lifecycle status of the transportation trip.
 
       - name: is_scheduled_flag
-        description: TRUE if trip is scheduled.
+        description: Indicates if the trip is currently scheduled.
 
       - name: is_completed_flag
-        description: TRUE if trip is completed.
+        description: Indicates if the trip has been successfully completed.
 
       - name: is_cancelled_flag
-        description: TRUE if trip is cancelled.
+        description: Indicates if the trip was cancelled.
 
       - name: is_no_show_flag
-        description: TRUE if participant did not show.
+        description: Indicates if the participant did not show up for the trip.
 
       - name: is_in_progress_flag
-        description: TRUE if trip is in progress.
+        description: Indicates if the trip is currently in progress.
 
       - name: is_unsuccessful_flag
-        description: TRUE if trip failed (cancelled or no-show).
+        description: Indicates unsuccessful trips (cancelled or no-show).
 
-      # ───────────────────────────────
-      # Cancellation
-      # ───────────────────────────────
       - name: cancellation_reason
-        description: Reason for cancellation.
+        description: Text description explaining why the trip was cancelled.
 
       - name: is_cancelled_with_reason_flag
-        description: TRUE if cancellation reason provided.
+        description: Indicates whether a cancellation reason was provided.
 
-      # ───────────────────────────────
-      # Equipment
-      # ───────────────────────────────
       - name: special_equipment_needed
-        description: Standardized equipment requirement.
+        description: Standardized equipment requirement for the trip (e.g., wheelchair lift).
 
       - name: requires_special_equipment_flag
-        description: TRUE if special equipment required.
+        description: Indicates if special equipment is required for the trip.
 
-      # ───────────────────────────────
-      # Locations
-      # ───────────────────────────────
       - name: pickup_location
-        description: Pickup location.
+        description: Normalized pickup location for the trip.
 
       - name: dropoff_location
-        description: Drop-off location.
+        description: Normalized drop-off location for the trip.
 
-      # ───────────────────────────────
-      # Timestamps & Metrics
-      # ───────────────────────────────
       - name: ride_date
-        description: Scheduled pickup timestamp.
+        description: Scheduled date and time for the trip pickup.
 
       - name: actual_pickup_time
-        description: Actual pickup timestamp.
+        description: Actual timestamp when the participant was picked up.
 
       - name: actual_dropoff_time
-        description: Actual drop-off timestamp.
+        description: Actual timestamp when the participant was dropped off.
 
       - name: pickup_delay_minutes
-        description: Delay between scheduled and actual pickup.
+        description: Difference in minutes between scheduled and actual pickup times.
 
       - name: trip_duration_minutes
-        description: Duration of trip in minutes.
+        description: Total duration of the trip in minutes.
 
       - name: is_on_time_flag
-        description: TRUE if pickup within SLA window.
+        description: Indicates if pickup occurred within acceptable SLA time window.
 
       - name: is_late_pickup_flag
-        description: TRUE if pickup delay exceeds threshold.
+        description: Indicates if pickup exceeded the allowed delay threshold.
 
       - name: is_sla_breached_flag
-        description: TRUE if SLA conditions are violated.
+        description: Indicates if SLA conditions for pickup timeliness were violated.
 
-      # ───────────────────────────────
-      # Distance
-      # ───────────────────────────────
       - name: mileage
-        description: Distance traveled.
+        description: Distance traveled during the trip in miles.
 
       - name: mileage_band
-        description: Categorized distance band.
+        description: Categorized grouping of mileage into reporting bands.
 
-      # ───────────────────────────────
-      # Date Dimensions
-      # ───────────────────────────────
       - name: trip_date
-        description: Trip date (day-level).
+        description: Date component of the trip for reporting.
 
       - name: trip_month
-        description: Trip month.
+        description: Month component of the trip for aggregation.
 
       - name: trip_day_of_week
-        description: Day of week for trip.
+        description: Day of the week the trip occurred.
 
       - name: scheduled_pickup_hour
-        description: Hour of scheduled pickup.
+        description: Hour of the day when the trip was scheduled.
 
-      # ───────────────────────────────
-      # Metadata
-      # ───────────────────────────────
       - name: source_system
-        description: Source system name.
+        description: Source system from which the data originated.
 
       - name: loaded_timestamp
-        description: Timestamp when record was loaded.
+        description: Timestamp when the record was ingested into the warehouse.
 
       - name: source_file
-        description: Source file identifier.
+        description: Source file name or identifier for lineage tracking.
 
       - name: dbt_updated_timestamp
         description: Timestamp when dbt last updated the record.
