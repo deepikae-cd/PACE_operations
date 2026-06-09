@@ -3,11 +3,9 @@ with base as (
     select
         appointment_id,
         participant_id,
-
         scheduled_date as appointment_date,
         appointment_status,
-        _loaded_at 
-
+        loaded_timestamp
     from {{ ref('enterprise_silver_appointment') }}
 
 ),
