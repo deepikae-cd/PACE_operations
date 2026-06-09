@@ -29,16 +29,7 @@ models:
     # ===============================
     # SILVER LAYER
     # ===============================
-models:
-  PACE_operations_medallion:
 
-    +persist_docs:
-      relation: true
-      columns: true
-
-    # ===============================
-    # SILVER LAYER
-    # ===============================
     pace_enterprise_silver_dbt_models:
 
       +tags: ["silver"]
