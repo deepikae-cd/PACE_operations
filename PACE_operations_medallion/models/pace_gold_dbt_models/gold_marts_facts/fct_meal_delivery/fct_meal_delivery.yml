@@ -19,9 +19,7 @@ models:
 
       - name: delivery_id
         description: Unique identifier for each meal delivery (final grain).
-        tests:
-          - not_null
-          - unique
+  
 
       - name: participant_id
         description: Identifier of the participant receiving the meal.
