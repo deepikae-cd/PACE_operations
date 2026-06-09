@@ -2,103 +2,102 @@ version: 2
 
 models:
   - name: staging_transportation
+
     description: >
       Thin staging layer for transportation data sourced from
       BRONZE_TRANSPORTATION.RAW_TRANSPORTATION.
-      Performs basic column selection and minimal filtering only.
-      No business logic applied. Designed as a lightweight view.
+      This model standardizes column names, applies minimal filtering,
+      and prepares data for downstream fact models. No business logic is applied.
 
     config:
+      materialized: view
       schema: staging_transportation
       alias: transportation
-      materialized: view
-      tags:
-        - staging
-        - transportation
+      tags: ['staging', 'transportation']
 
     columns:
 
       # ───────────────────────────────
       # Keys
       # ───────────────────────────────
-      - name: transport_id
-        description: Unique identifier for transportation record.
+      - name: transportation_id
+        description: Unique identifier for each transportation record.
         tests:
           - not_null
 
       - name: participant_id
-        description: Participant associated with trip.
+        description: Identifier for the participant associated with the trip.
         tests:
           - not_null
 
       - name: appointment_id
-        description: Related appointment identifier.
+        description: Identifier of the related appointment.
 
       - name: driver_id
-        description: Driver identifier.
+        description: Identifier for the assigned driver.
 
       - name: vehicle_id
-        description: Vehicle identifier.
+        description: Identifier for the vehicle used.
 
       - name: vendor_id
-        description: External vendor identifier.
+        description: Identifier of the external transportation vendor.
 
       - name: center_id
-        description: PACE center identifier.
+        description: Identifier for the PACE center.
 
       # ───────────────────────────────
       # Trip Details
       # ───────────────────────────────
       - name: transport_type
-        description: Type of transportation.
+        description: Type of transportation (e.g., medical, non-medical).
 
       - name: trip_direction
-        description: Direction of trip (pickup/dropoff).
+        description: Direction of the trip (pickup or dropoff).
 
-      - name: transport_status
-        description: Status of the trip.
+      - name: trip_status
+        description: Current status of the trip (e.g., scheduled, completed, cancelled).
 
       - name: cancellation_reason
-        description: Reason for cancellation (if applicable).
+        description: Reason for trip cancellation, if applicable.
 
       - name: special_equipment_needed
-        description: Indicators for special equipment requirement.
+        description: Indicates whether special equipment was required for the trip.
 
       # ───────────────────────────────
-      # Addresses
+      # Locations
       # ───────────────────────────────
-      - name: pickup_address
-        description: Pickup location.
+      - name: pickup_location
+        description: Address or location where the participant was picked up.
 
-      - name: dropoff_address
-        description: Dropoff location.
+      - name: dropoff_location
+        description: Address or location where the participant was dropped off.
 
       # ───────────────────────────────
       # Timestamps
       # ───────────────────────────────
-      - name: scheduled_pickup_time
-        description: Scheduled pickup timestamp.
+      - name: ride_date
+        description: Scheduled date and time for the pickup.
 
       - name: actual_pickup_time
-        description: Actual pickup timestamp.
+        description: Actual timestamp when the pickup occurred.
 
       - name: actual_dropoff_time
-        description: Actual drop-off timestamp.
+        description: Actual timestamp when the drop-off occurred.
 
       # ───────────────────────────────
       # Metrics
       # ───────────────────────────────
       - name: mileage
-        description: Distance covered for trip.
+        description: Total distance covered during the trip.
 
       # ───────────────────────────────
       # Metadata
       # ───────────────────────────────
       - name: source_system
-        description: Source system name.
+        description: Source system from which the data originated.
 
       - name: _loaded_at
-        description: Raw ingestion timestamp.
+        description: Timestamp when the record was ingested into the system.
 
       - name: _source_file
-        description: Source file identifier.
+        description: Name or identifier of the source file.

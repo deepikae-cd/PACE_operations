@@ -10,7 +10,7 @@ models:
       long-term assignment flags.
 
     config:
-      schema: enterprise_silver_caregiver
+      schema: enterprise_silver_caregiver_assignment
       alias: caregiver_assignment
       materialized: incremental
       unique_key: assignment_sk

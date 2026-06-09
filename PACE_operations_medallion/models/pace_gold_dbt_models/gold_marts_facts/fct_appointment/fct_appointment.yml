@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: fct_appointment
+
+    description: >
+      Fact table capturing participant appointment events.
+      Each row represents the latest state of an appointment,
+      deduplicated at the appointment_id level.
+
+    config:
+      materialized: incremental
+      schema: gold_marts_facts
+      alias: appointment
+      unique_key: appointment_id   
+
+    columns:
+
+      - name: appointment_id
+        description: Unique identifier for each appointment (final grain).
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: Identifier of the participant associated with the appointment.
+        tests:
+          - not_null
+
+      - name: appointment_date
+        description: Scheduled date and time of the appointment.
+
+      - name: completed_flag
+        description: Binary flag indicating whether the appointment was completed (1 = completed, 0 = not completed).

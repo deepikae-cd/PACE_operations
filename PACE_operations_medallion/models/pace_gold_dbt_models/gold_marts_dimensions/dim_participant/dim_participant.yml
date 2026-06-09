@@ -5,6 +5,13 @@ models:
 
     description: Current dimension table for participant
 
+    config:
+      materialized: table
+      schema: gold_marts_dimensions
+      alias: participant
+      tags: ["marts", "caregiver", "scd2", "dimension"]
+      on_schema_change: sync_all_columns
+
     columns:
 
       - name: participant_id

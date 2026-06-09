@@ -46,17 +46,8 @@ models:
       enterprise_silver_idt_clinical:
         +schema: SILVER_IDT_CLINICAL
 
-      enterprise_silver_combined:
-        +schema: SILVER_COMBINED
-
-      enterprise_silver_governance:
-        +schema: SILVER_GOVERNANCE
-
       enterprise_silver_meal_delivery:
         +schema: SILVER_MEAL_DELIVERY
-
-      enterprise_silver_notification:
-        +schema: SILVER_NOTIFICATION
 
       enterprise_silver_transportation:
         +schema: SILVER_TRANSPORTATION

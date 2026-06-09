@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: fct_participant_events
+
+    description: >
+      Fact table capturing participant lifecycle events such as
+      enrollment and disenrollment. Each row represents a participant
+      with flags indicating status changes.
+
+    config:
+      materialized: table
+      schema:  gold_marts_facts
+      alias: participant_events
+
+
+    columns:
+
+      - name: participant_id
+        description: Unique participant identifier
+        tests:
+          - not_null
+       
+
+      - name: enrollment_date
+        description: Date when participant enrolled
+
+      - name: disenrollment_date
+        description: Date when participant left the program
+
+      - name: enrolled_flag
+        description: Indicates if participant has enrollment record (1 = yes, 0 = no)
+    
+
+      - name: disenrolled_flag
+        description: Indicates if participant has disenrollment record (1 = yes, 0 = yes)

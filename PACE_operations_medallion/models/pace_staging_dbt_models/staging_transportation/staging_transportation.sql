@@ -11,8 +11,8 @@
 with source as (
 
     select
-        -- Keys
-        transport_id,
+        -- Standardized keys
+        transport_id as transportation_id,
         participant_id,
         appointment_id,
         driver_id,
@@ -20,26 +20,24 @@ with source as (
         vendor_id,
         center_id,
 
-        -- Trip descriptors (raw — no business logic here)
+        -- Standardized descriptors
         transport_type,
         trip_direction,
-        transport_status,
+        transport_status as trip_status,
         cancellation_reason,
         special_equipment_needed,
 
-        -- Addresses
-        pickup_address,
-        dropoff_address,
+        -- Standardized locations
+        pickup_address as pickup_location,
+        dropoff_address as dropoff_location,
 
-        -- Timestamps
-        scheduled_pickup_time,
+        --  Standardized timestamps
+        scheduled_pickup_time as ride_date,
         actual_pickup_time,
         actual_dropoff_time,
 
-        -- Metrics
         mileage,
 
-        -- Metadata
         source_system,
         _loaded_at,
         _source_file
@@ -50,10 +48,9 @@ with source as (
 
 filtered as (
 
-    -- Drop records that can never be meaningful downstream
     select *
     from source
-    where transport_id   is not null
+    where transportation_id is not null
       and participant_id is not null
 
 )
