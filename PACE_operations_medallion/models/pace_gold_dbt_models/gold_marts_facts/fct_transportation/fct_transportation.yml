@@ -5,37 +5,37 @@ models:
 
     description: >
       Fact table capturing transportation (ride) events for participants.
-      Each row represents a trip with pickup/dropoff details and status.
+      Each row represents the latest state of a transportation trip,
+      deduplicated at the transportation_id level.
 
     config:
       materialized: incremental
       schema: gold_marts_facts
       alias: transportation
+      unique_key: transportation_id  
 
     columns:
 
       - name: transportation_id
-        description: Unique identifier for each transportation ride
+        description: Unique identifier for each transportation ride.
         tests:
           - not_null
           - unique
 
       - name: participant_id
-        description: Participant associated with the ride
-       
+        description: Identifier of the participant associated with the trip.
 
       - name: ride_date
-        description: Date of transportation ride
+        description: Scheduled date and time of the transportation ride.
 
       - name: pickup_location
-        description: Ride pickup location
+        description: Normalized pickup location for the trip.
 
       - name: dropoff_location
-        description: Ride drop-off location
+        description: Normalized drop-off location for the trip.
 
       - name: trip_status
-        description: Status of the trip (scheduled, completed, cancelled, etc.)
+        description: Standardized lifecycle status of the transportation trip (e.g., SCHEDULED, COMPLETED, CANCELLED).
 
       - name: completed_flag
-        description: Indicates whether the trip was completed (1 = yes, 0 = no)
- 
+        description: Binary flag indicating whether the trip was completed (1 = completed, 0 = not completed).
