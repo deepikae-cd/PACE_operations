@@ -1,12 +1,11 @@
 with base as (
 
     select
-        meal_delivery_id as delivery_id,   
+        meal_delivery_id as delivery_id,
         participant_id,
-        scheduled_delivery_date as delivery_date,
-
+        meal_date as delivery_date,
         delivery_status,
-        _loaded_at
+        loaded_timestamp
 
     from {{ ref('enterprise_silver_meal_delivery') }}
 
@@ -17,7 +16,7 @@ deduplicated as (
     select *,
            row_number() over (
                partition by delivery_id
-               order by _loaded_at desc
+               order by loaded_timestamp desc   
            ) as _rn
     from base
 
