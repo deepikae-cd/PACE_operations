@@ -2,6 +2,7 @@ version: 2
 
 models:
   - name: enterprise_silver_transportation
+
     description: >
       Cleaned, deduplicated, and enriched transportation records sourced from
       STG_TRANSPORTATION. Standardises trip attributes and computes flags for
@@ -14,9 +15,7 @@ models:
       unique_key: transport_sk
       incremental_strategy: merge
       on_schema_change: sync_all_columns
-      tags:
-        - silver
-        - transportation
+      tags: ['silver', 'transportation']
 
     columns:
 
@@ -29,7 +28,7 @@ models:
           - not_null
           - unique
 
-      - name: transport_id
+      - name: transportation_id
         description: Natural identifier for transportation record.
         tests:
           - not_null
@@ -64,7 +63,7 @@ models:
       - name: trip_direction
         description: Direction of trip (OUTBOUND, RETURN).
 
-      - name: transport_status
+      - name: trip_status
         description: Standardized trip status.
 
       - name: is_scheduled_flag
@@ -104,18 +103,18 @@ models:
         description: TRUE if special equipment required.
 
       # ───────────────────────────────
-      # Addresses
+      # Locations
       # ───────────────────────────────
-      - name: pickup_address
+      - name: pickup_location
         description: Pickup location.
 
-      - name: dropoff_address
+      - name: dropoff_location
         description: Drop-off location.
 
       # ───────────────────────────────
       # Timestamps & Metrics
       # ───────────────────────────────
-      - name: scheduled_pickup_time
+      - name: ride_date
         description: Scheduled pickup timestamp.
 
       - name: actual_pickup_time
@@ -131,7 +130,7 @@ models:
         description: Duration of trip in minutes.
 
       - name: is_on_time_flag
-        description: TRUE if pickup within 15 minutes.
+        description: TRUE if pickup within SLA window.
 
       - name: is_late_pickup_flag
         description: TRUE if pickup delay exceeds threshold.
@@ -157,3 +156,23 @@ models:
       - name: trip_month
         description: Trip month.
 
+      - name: trip_day_of_week
+        description: Day of week for trip.
+
+      - name: scheduled_pickup_hour
+        description: Hour of scheduled pickup.
+
+      # ───────────────────────────────
+      # Metadata
+      # ───────────────────────────────
+      - name: source_system
+        description: Source system name.
+
+      - name: loaded_timestamp
+        description: Timestamp when record was loaded.
+
+      - name: source_file
+        description: Source file identifier.
+
+      - name: dbt_updated_timestamp
+        description: Timestamp when dbt last updated the record.
