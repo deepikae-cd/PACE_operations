@@ -11,7 +11,7 @@ models:
     config:
       materialized: incremental
       schema: gold_marts_facts
-      alias: meal_delivery
+      alias: fct_meal_delivery
       unique_key: delivery_id   
       on_schema_change: sync_all_columns
 

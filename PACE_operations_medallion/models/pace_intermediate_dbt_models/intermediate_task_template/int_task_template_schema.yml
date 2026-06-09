@@ -11,7 +11,7 @@ models:
     config:
       materialized: view
       schema: intermediate_task_template
-      alias: task_template
+      alias: int_task_template
       tags: ['intermediate', 'task', 'pace']
 
     columns:

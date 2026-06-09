@@ -21,34 +21,45 @@ clean-targets: ["target", "dbt_packages"]
 
 models:
   PACE_operations_medallion:
+
     +persist_docs:
       relation: true
       columns: true
 
-    # ================= SILVER LAYER =================
-
+    # ===============================
+    # SILVER LAYER
+    # ===============================
     pace_enterprise_silver_dbt_models:
 
-      +materialized: table
+      +tags: ["silver"]
 
       enterprise_silver_participant:
-        +schema: SILVER_PARTICIPANT
+        +schema: ENTERPRISE_SILVER_PARTICIPANT
 
       enterprise_silver_provider:
-        +schema: SILVER_PROVIDER
+        +schema: ENTERPRISE_SILVER_PROVIDER
 
       enterprise_silver_appointment:
-        +schema: SILVER_APPOINTMENT
+        +schema: ENTERPRISE_SILVER_APPOINTMENT
 
       enterprise_silver_caregiver:
-        +schema: SILVER_CAREGIVER
+        +schema: ENTERPRISE_SILVER_CAREGIVER
 
       enterprise_silver_idt_clinical:
-        +schema: SILVER_IDT_CLINICAL
+        +schema: ENTERPRISE_SILVER_IDT_CLINICAL
 
       enterprise_silver_meal_delivery:
-        +schema: SILVER_MEAL_DELIVERY
+        +schema: ENTERPRISE_SILVER_MEAL_DELIVERY
 
       enterprise_silver_transportation:
-        +schema: SILVER_TRANSPORTATION
+        +schema: ENTERPRISE_SILVER_TRANSPORTATION
 
+
+    # ===============================
+    # GOLD LAYER
+    # ===============================
+    pace_gold_dbt_models:
+
+      +tags: ["gold"]
+      +materialized: table
+     

@@ -11,7 +11,7 @@ models:
     config:
       materialized: table
       schema:  gold_marts_facts
-      alias: participant_events
+      alias: fct_participant_events
 
 
     columns:
