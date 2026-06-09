@@ -31,7 +31,7 @@ jobs:
             -e DBT_WAREHOUSE=${{ secrets.DBT_DEV_WAREHOUSE }} \
             -e DBT_DATABASE=${{ secrets.DBT_DEV_DATABASE }} \
             ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-            build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target dev
+            bash -c "dbt deps --project-dir /usr/app/PACE_operations_medallion && dbt build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target dev"
 
   dbt-staging:
     if: github.event_name == 'push'
@@ -52,7 +52,7 @@ jobs:
             -e DBT_WAREHOUSE=${{ secrets.DBT_STG_WAREHOUSE }} \
             -e DBT_DATABASE=${{ secrets.DBT_STG_DATABASE }} \
             ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-            build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target staging
+            bash -c "dbt deps --project-dir /usr/app/PACE_operations_medallion && dbt build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target staging"
 
   dbt-prod:
     if: github.event_name == 'release'
@@ -73,4 +73,4 @@ jobs:
             -e DBT_WAREHOUSE=${{ secrets.DBT_PROD_WAREHOUSE }} \
             -e DBT_DATABASE=${{ secrets.DBT_PROD_DATABASE }} \
             ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-            build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target prod
+            bash -c "dbt deps --project-dir /usr/app/PACE_operations_medallion && dbt build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target prod"
