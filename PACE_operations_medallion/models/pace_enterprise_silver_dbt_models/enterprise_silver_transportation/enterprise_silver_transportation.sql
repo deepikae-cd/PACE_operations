@@ -10,14 +10,14 @@
 */
 
 
-
 with source as (
 
-    select * 
+    select *
     from {{ ref('staging_transportation') }}
+    where transportation_id is not null   
 
     {% if is_incremental() %}
-        where _loaded_at > (select max(loaded_timestamp) from {{ this }})
+        and _loaded_at > (select max(loaded_timestamp) from {{ this }})
     {% endif %}
 
 ),
@@ -40,7 +40,7 @@ cleaned as (
         --  Surrogate key
         sha2(concat_ws('||', transportation_id, cast(_loaded_at as varchar))) as transport_sk,
 
-        -- Business keys
+        --  Business keys
         trim(upper(transportation_id)) as transportation_id,
         trim(upper(participant_id))    as participant_id,
         trim(upper(appointment_id))    as appointment_id,
@@ -49,7 +49,7 @@ cleaned as (
         trim(upper(vendor_id))         as vendor_id,
         trim(upper(center_id))         as center_id,
 
-        -- Transport type
+        --  Transport type
         case
             when upper(trim(transport_type)) in (
                 'AMBULANCE','WHEELCHAIR_VAN','RIDESHARE',
@@ -166,7 +166,7 @@ cleaned as (
             else false
         end as is_sla_breached_flag,
 
-        -- Mileage
+        --  Mileage
         case when mileage >= 0 then mileage end as mileage,
 
         case
@@ -191,8 +191,7 @@ cleaned as (
 
     from deduplicated
     where _rn = 1
-      and transportation_id is not null   
+
 )
 
 select * from cleaned
-
