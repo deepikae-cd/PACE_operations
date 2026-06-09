@@ -35,52 +35,7 @@ models:
       +tags: ["silver"]
       +schema: ENTERPRISE_SILVER
 
-      enterprise_silver_appointment:
-        +schema: ENTERPRISE_SILVER_APPOINTMENT
-
-      enterprise_silver_audit_log:
-        +schema: ENTERPRISE_SILVER_AUDIT_LOG
-
-      enterprise_silver_caregiver:
-        +schema: ENTERPRISE_SILVER_CAREGIVER
-
-      enterprise_silver_caregiver_assignment:
-        +schema: ENTERPRISE_SILVER_CAREGIVER_ASSIGNMENT
-
-      enterprise_silver_compliance_violation:
-        +schema: ENTERPRISE_SILVER_COMPLIANCE_VIOLATION
-
-      enterprise_silver_governance_rules:
-        +schema: ENTERPRISE_SILVER_GOVERNANCE_RULES
-
-      enterprise_silver_idt_clinical:
-        +schema: ENTERPRISE_SILVER_IDT_CLINICAL
-
-      enterprise_silver_meal_delivery:
-        +schema: ENTERPRISE_SILVER_MEAL_DELIVERY
-
-      enterprise_silver_medication:
-        +schema: ENTERPRISE_SILVER_MEDICATION
-
-      enterprise_silver_notification_service:
-        +schema: ENTERPRISE_SILVER_NOTIFICATION_SERVICE
-
-      enterprise_silver_organization:
-        +schema: ENTERPRISE_SILVER_ORGANIZATION
-
-      enterprise_silver_participant:
-        +schema: ENTERPRISE_SILVER_PARTICIPANT
-
-      enterprise_silver_provider:
-        +schema: ENTERPRISE_SILVER_PROVIDER
-
-      enterprise_silver_task:
-        +schema: ENTERPRISE_SILVER_TASK
-
-      enterprise_silver_transportation:
-        +schema: ENTERPRISE_SILVER_TRANSPORTATION
-
-
+    
     # ===============================
     # GOLD LAYER
     # ===============================
@@ -88,4 +43,5 @@ models:
 
       +tags: ["gold"]
       +materialized: table
+      schema: gold
      
