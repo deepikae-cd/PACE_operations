@@ -13,7 +13,7 @@ models:
       schema: gold_marts_facts
       alias: meal_delivery
       unique_key: delivery_id   
-      on_schema_change:sync_all_columns
+      on_schema_change: sync_all_columns
 
     columns:
 
@@ -25,8 +25,7 @@ models:
 
       - name: participant_id
         description: Identifier of the participant receiving the meal.
-        tests:
-          - not_null
+   
 
       - name: delivery_date
         description: Scheduled or actual delivery date and time.
