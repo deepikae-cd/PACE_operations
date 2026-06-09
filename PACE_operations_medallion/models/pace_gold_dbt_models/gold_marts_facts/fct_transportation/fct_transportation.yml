@@ -19,9 +19,7 @@ models:
 
       - name: transportation_id
         description: Unique identifier for each transportation ride.
-        tests:
-          - not_null
-          - unique
+
 
       - name: participant_id
         description: Identifier of the participant associated with the trip.

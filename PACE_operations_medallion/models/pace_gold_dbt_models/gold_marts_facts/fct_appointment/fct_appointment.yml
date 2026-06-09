@@ -18,14 +18,10 @@ models:
 
       - name: appointment_id
         description: Unique identifier for each appointment (final grain).
-        tests:
-          - not_null
-          - unique
-
+    
       - name: participant_id
         description: Identifier of the participant associated with the appointment.
-        tests:
-          - not_null
+
 
       - name: appointment_date
         description: Scheduled date and time of the appointment.

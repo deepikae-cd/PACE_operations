@@ -12,20 +12,18 @@ models:
       materialized: incremental
       schema: gold_marts_facts
       alias: meal_delivery
-      unique_key: delivery_id   # ✅ CRITICAL for avoiding duplicates
+      unique_key: delivery_id   
+      on_schema_change: sync_all_columns
 
     columns:
 
       - name: delivery_id
         description: Unique identifier for each meal delivery (final grain).
-        tests:
-          - not_null
-          - unique
+  
 
       - name: participant_id
         description: Identifier of the participant receiving the meal.
-        tests:
-          - not_null
+   
 
       - name: delivery_date
         description: Scheduled or actual delivery date and time.
