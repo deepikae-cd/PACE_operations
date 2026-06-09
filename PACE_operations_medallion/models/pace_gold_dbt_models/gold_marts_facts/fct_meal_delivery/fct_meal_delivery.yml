@@ -4,31 +4,34 @@ models:
   - name: fct_meal_delivery
 
     description: >
-      Fact table capturing meal delivery events for participants.
-      Each row represents a delivery with status and meal details.
+      Fact table capturing participant meal delivery events.
+      Each row represents the latest state of a delivery,
+      deduplicated at the delivery_id level.
 
     config:
       materialized: incremental
       schema: gold_marts_facts
       alias: meal_delivery
+      unique_key: delivery_id   # ✅ CRITICAL for avoiding duplicates
 
     columns:
 
       - name: delivery_id
-        description: Unique delivery identifier
+        description: Unique identifier for each meal delivery (final grain).
         tests:
           - not_null
           - unique
 
       - name: participant_id
-        description: Participant receiving the meal
-       
-      - name: delivery_date
-        description: Date of meal delivery
+        description: Identifier of the participant receiving the meal.
+        tests:
+          - not_null
 
-      - name: meal_type
-        description: Type of meal delivered (breakfast, lunch, etc.)
+      - name: delivery_date
+        description: Scheduled or actual delivery date and time.
+
+      - name: delivery_status
+        description: Standardized status of the delivery (e.g., DELIVERED, FAILED, CANCELLED).
 
       - name: delivered_flag
-        description: Indicates if the meal was successfully delivered (1 = yes, 0 = no)
-   
+        description: Binary flag indicating whether the meal was successfully delivered (1 = delivered, 0 = not delivered).
