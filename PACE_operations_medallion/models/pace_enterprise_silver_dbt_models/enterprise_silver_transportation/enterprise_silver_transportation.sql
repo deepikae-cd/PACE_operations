@@ -9,13 +9,12 @@
   ──────────────────────────────────────────────────────────────────────────────
 */
 
-/*
-  ENTERPRISE_SILVER_TRANSPORTATION
-*/
+
 
 with source as (
 
-    select * from {{ ref('staging_transportation') }}
+    select * 
+    from {{ ref('staging_transportation') }}
 
     {% if is_incremental() %}
         where _loaded_at > (select max(loaded_timestamp) from {{ this }})
@@ -37,10 +36,11 @@ deduplicated as (
 cleaned as (
 
     select
+
         --  Surrogate key
         sha2(concat_ws('||', transportation_id, cast(_loaded_at as varchar))) as transport_sk,
 
-        --  Business keys
+        -- Business keys
         trim(upper(transportation_id)) as transportation_id,
         trim(upper(participant_id))    as participant_id,
         trim(upper(appointment_id))    as appointment_id,
@@ -77,7 +77,7 @@ cleaned as (
             else 'OTHER'
         end as trip_direction,
 
-        --  trip_status (not transport_status)
+        --  Trip status
         case
             when upper(trim(trip_status)) in (
                 'SCHEDULED','COMPLETED','CANCELLED','NO_SHOW','IN_PROGRESS'
@@ -118,11 +118,11 @@ cleaned as (
             and upper(trim(special_equipment_needed)) != 'NONE'
         ) as requires_special_equipment_flag,
 
-        --  locations
+        --  Locations
         trim(pickup_location)  as pickup_location,
         trim(dropoff_location) as dropoff_location,
 
-        --   timestamps
+        --  Timestamps
         ride_date,
         actual_pickup_time,
         actual_dropoff_time,
@@ -166,7 +166,7 @@ cleaned as (
             else false
         end as is_sla_breached_flag,
 
-        --  Mileage
+        -- Mileage
         case when mileage >= 0 then mileage end as mileage,
 
         case
@@ -177,7 +177,7 @@ cleaned as (
             else '30+ MI'
         end as mileage_band,
 
-        --  Dates
+        --  Date dims
         date_trunc('day', ride_date)   as trip_date,
         date_trunc('month', ride_date) as trip_month,
         dayofweek(ride_date)           as trip_day_of_week,
@@ -191,7 +191,8 @@ cleaned as (
 
     from deduplicated
     where _rn = 1
-
+      and transportation_id is not null   
 )
 
 select * from cleaned
+
