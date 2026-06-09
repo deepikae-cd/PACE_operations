@@ -69,7 +69,7 @@ jobs:
             -e DBT_WAREHOUSE=${{ secrets.DBT_STG_WAREHOUSE }} \
             -e DBT_DATABASE=${{ secrets.DBT_STG_DATABASE }} \
             ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-            build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target staging
+            build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target stg
 
 
   dbt-prod:
