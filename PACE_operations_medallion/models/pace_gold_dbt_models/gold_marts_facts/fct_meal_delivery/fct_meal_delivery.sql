@@ -5,6 +5,7 @@ with base as (
         participant_id,
         meal_date as delivery_date,
         delivery_status,
+        meal_type,             
         loaded_timestamp
 
     from {{ ref('enterprise_silver_meal_delivery') }}
@@ -27,7 +28,7 @@ select
     participant_id,
     delivery_date,
     delivery_status,
-
+    meal_type,                
     case 
         when delivery_status = 'DELIVERED' then 1
         else 0
@@ -35,3 +36,4 @@ select
 
 from deduplicated
 where _rn = 1
+``
