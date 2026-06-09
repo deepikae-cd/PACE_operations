@@ -34,7 +34,7 @@ models:
 
       +tags: ["silver"]
       +schema: ENTERPRISE_SILVER
-
+      +materialized: view
     
     # ===============================
     # GOLD LAYER
@@ -43,5 +43,5 @@ models:
 
       +tags: ["gold"]
       +materialized: table
-      schema: gold
+      schema: GOLD
      
