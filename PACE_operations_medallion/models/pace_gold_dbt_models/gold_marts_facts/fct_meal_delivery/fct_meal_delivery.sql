@@ -36,4 +36,3 @@ select
 
 from deduplicated
 where _rn = 1
-``
