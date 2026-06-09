@@ -25,8 +25,7 @@ models:
 
       - name: transportation_id
         description: Natural business identifier for the transportation record.
-        tests:
-          - not_null   
+        tests: [not_null, unique]  
 
       - name: participant_id
         description: Identifier of the participant associated with the trip.
