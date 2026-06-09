@@ -1,24 +1,3 @@
-name: PACE_operations_medallion
-version: '1.0.0'
-config-version: 2
-
-profile: PACE_operations
-
-model-paths: ["models"]
-snapshot-paths: ["snapshots"]
-test-paths: ["tests"]
-seed-paths: ["seeds"]
-macro-paths: ["macros"]
-analysis-paths: ["analyses"]
-docs-paths: ["docs"]
-
-target-path: "target"
-clean-targets: ["target", "dbt_packages"]
-
-# ============================================================
-# GLOBAL DEFAULTS
-# ============================================================
-
 models:
   PACE_operations_medallion:
 
@@ -29,13 +8,12 @@ models:
     # ===============================
     # SILVER LAYER
     # ===============================
-
     pace_enterprise_silver_dbt_models:
 
       +tags: ["silver"]
       +schema: ENTERPRISE_SILVER
       +materialized: view
-    
+
     # ===============================
     # GOLD LAYER
     # ===============================
@@ -43,5 +21,4 @@ models:
 
       +tags: ["gold"]
       +materialized: table
-      schema: GOLD
-     
+      +schema: GOLD
