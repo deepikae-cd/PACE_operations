@@ -1,18 +1,21 @@
-select
+with base as (
 
-    appointment_id,
+    select *
+    from {{ ref('enterprise_silver_appointment') }}
 
-    -- Foreign keys
-    participant_id,
-    provider_id,
-    center_id,
+),
 
-    -- Metrics
-   scheduled_date as appointment_date,
-   appointment_status,
+deduplicated as (
 
-    case when appointment_status = 'completed' then 1 else 0 end as completed_flag,
-    case when appointment_status = 'no_show' then 1 else 0 end as no_show_flag,
-    current_timestamp as loaded_at
+    select *,
+           row_number() over (
+               partition by appointment_id
+               order by loaded_timestamp desc
+           ) as _rn
+    from base
 
-from {{ ref('staging_appointment') }}
+)
+
+select *
+from deduplicated
+where _rn = 1

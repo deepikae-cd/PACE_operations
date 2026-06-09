@@ -1,15 +1,21 @@
-select
+with base as (
 
+    select *
+    from {{ ref('enterprise_silver_meal_delivery') }}
 
-    meal_delivery_id as delivery_id,
-    participant_id,
+),
 
-    --  date column
-    meal_date as delivery_date,
-    meal_type,
-    case 
-        when delivery_status = 'delivered' then 1 
-        else 0 
-    end as delivered_flag
+deduplicated as (
 
-from {{ ref('staging_meal_delivery') }}
+    select *,
+           row_number() over (
+               partition by delivery_id
+               order by loaded_timestamp desc
+           ) as _rn
+    from base
+
+)
+
+select *
+from deduplicated
+where _rn = 1
