@@ -13,6 +13,7 @@ models:
       schema: gold_marts_facts
       alias: transportation
       unique_key: transportation_id  
+      incremental_strategy: merge
 
     columns:
 
