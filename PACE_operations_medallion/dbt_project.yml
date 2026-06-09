@@ -33,6 +33,7 @@ models:
     pace_enterprise_silver_dbt_models:
 
       +tags: ["silver"]
+      +schema: ENTERPRISE_SILVER
 
       enterprise_silver_appointment:
         +schema: ENTERPRISE_SILVER_APPOINTMENT
