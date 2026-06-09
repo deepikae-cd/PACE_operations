@@ -16,14 +16,6 @@ target-path: "target"
 clean-targets: ["target", "dbt_packages"]
 
 # ============================================================
-# VARIABLES (WORKS FOR DOCKER + DBT CLOUD)
-# ============================================================
-
-vars:
-  silver_schema_prefix: "{{ env_var('SILVER_SCHEMA_PREFIX', 'PACE') }}"
-  materialization_default: "{{ env_var('DBT_MATERIALIZATION', 'table') }}"
-
-# ============================================================
 # GLOBAL DEFAULTS
 # ============================================================
 
@@ -34,7 +26,6 @@ models:
       relation: true
       columns: true
 
-
     # ===============================
     # SILVER LAYER
     # ===============================
@@ -43,32 +34,32 @@ models:
       +tags: ["silver"]
 
       enterprise_silver_participant:
-        +schema: "{{ var('silver_schema_prefix') }}_ENTERPRISE_PARTICIPANT"
+        +schema: ENTERPRISE_SILVER_PARTICIPANT
 
       enterprise_silver_provider:
-        +schema: "{{ var('silver_schema_prefix') }}_SILVER_PROVIDER"
+        +schema: ENTERPRISE_SILVER_PROVIDER
 
       enterprise_silver_appointment:
-        +schema: "{{ var('silver_schema_prefix') }}_SILVER_APPOINTMENT"
+        +schema: ENTERPRISE_SILVER_APPOINTMENT
 
       enterprise_silver_caregiver:
-        +schema: "{{ var('silver_schema_prefix') }}_SILVER_CAREGIVER"
+        +schema: ENTERPRISE_SILVER_CAREGIVER
 
       enterprise_silver_idt_clinical:
-        +schema: "{{ var('silver_schema_prefix') }}_SILVER_IDT_CLINICAL"
+        +schema: ENTERPRISE_SILVER_IDT_CLINICAL
 
       enterprise_silver_meal_delivery:
-        +schema: "{{ var('silver_schema_prefix') }}_SILVER_MEAL_DELIVERY"
+        +schema: ENTERPRISE_SILVER_MEAL_DELIVERY
 
       enterprise_silver_transportation:
-        +schema: "{{ var('silver_schema_prefix') }}_SILVER_TRANSPORTATION"
+        +schema: ENTERPRISE_SILVER_TRANSPORTATION
 
 
     # ===============================
-    # GOLD LAYER (future scalable)
+    # GOLD LAYER
     # ===============================
     pace_gold_dbt_models:
 
       +tags: ["gold"]
       +materialized: table
-      +schema: "{{ target.schema }}_GOLD"
+     

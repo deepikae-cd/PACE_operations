@@ -9,8 +9,8 @@ models:
       supervisor_id, and max_participant_load.
 
     config:
-      schema: gold_marts_dimensions
-      alias: caregiver
+      schema: gold_marts
+      alias: dim_caregiver
       materialized: table
       tags: ["marts", "caregiver", "scd2", "dimension"]
       on_schema_change: sync_all_columns

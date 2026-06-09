@@ -11,7 +11,7 @@ models:
     config:
       materialized: incremental
       schema: gold_marts_facts
-      alias: transportation
+      alias: fct_transportation
       unique_key: transportation_id  
       incremental_strategy: merge
 

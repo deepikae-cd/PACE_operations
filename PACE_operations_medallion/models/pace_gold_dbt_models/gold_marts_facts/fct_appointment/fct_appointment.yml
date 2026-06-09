@@ -11,7 +11,7 @@ models:
     config:
       materialized: incremental
       schema: gold_marts_facts
-      alias: appointment
+      alias: fct_appointment
       unique_key: appointment_id   
 
     columns:

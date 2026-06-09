@@ -5,7 +5,7 @@ models:
 
     config:
       schema: gold
-      alias: task_metrics
+      alias: fct_task_metrics
       materialized: table
       tags: ["gold", "task"]
 
