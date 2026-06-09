@@ -1,7 +1,4 @@
-{{ config(
-    materialized = 'incremental',
-    unique_key = 'appointment_id'
-) }}
+
 
 with base as (
 
