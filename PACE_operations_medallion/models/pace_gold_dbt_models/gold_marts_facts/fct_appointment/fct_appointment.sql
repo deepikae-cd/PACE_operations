@@ -16,7 +16,7 @@ deduplicated as (
     select *,
            row_number() over (
                partition by appointment_id
-               order by _loaded_at desc   -
+               order by _loaded_at desc   
            ) as _rn
     from base
 
@@ -26,8 +26,6 @@ select
     appointment_id,
     participant_id,
     appointment_date,
-
-    --  business logic
     case 
         when appointment_status = 'COMPLETED' then 1
         else 0
