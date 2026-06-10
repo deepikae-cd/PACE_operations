@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: staging_family_support
+    description: >
+      Staging model for family/support data. Captures caregiver relationships
+      and whether someone can administer medications. No aggregation logic.
+
+    config:
+      schema: staging_family_support
+      alias: family_support
+      materialized: view
+      tags: ["staging", "family_support"]
+
+    columns:
+      - name: support_id
+        description: Unique identifier for support record
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: Participant receiving support
+
+      - name: relationship
+        description: Relationship of caregiver to participant (e.g. spouse, child)
+
+      - name: can_administer_meds
+        description: >
+          Raw indicator whether caregiver can administer medications.
+          Values may be unstandardized in staging.
+
+      - name: support_frequency
+        description: Frequency of support provided (if available)
+
+      - name: source_system
+        description: Originating system of the record
+
+      - name: _loaded_at
+        description: Load timestamp from ingestion
+
+      - name: _source_file
+        description: Source file identifier
