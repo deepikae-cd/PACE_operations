@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: intermediate_clinical_assessment
+    description: >
+      Intermediate model selecting the most recent clinical assessment per
+      participant. Provides latest cognitive and functional scores for analytics.
+
+    
+    config:
+      materialized: view
+      schema: intermediate_clinical_assessment
+      alias: int_clinical_assessment
+      tags: ['intermediate', 'clinical', 'analysis']
+
+
+    columns:
+      - name: participant_id
+        description: Unique identifier for participant
+        tests:
+          - not_null
+
+      - name: assessment_id
+        description: Unique identifier of the selected latest assessment
+        tests:
+          - not_null
+
+      - name: assessment_date
+        description: Timestamp of the latest assessment
+        tests:
+          - not_null
+
+      - name: cognitive_score
+        description: Most recent cognitive score (e.g., MoCA/MMSE)
+
+      - name: functional_score
+        description: Most recent functional independence score

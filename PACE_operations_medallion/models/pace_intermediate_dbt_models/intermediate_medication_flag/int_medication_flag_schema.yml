@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: int_medication_flag
+    description: >
+      Intermediate model that identifies participants with high-risk,
+      timed medications. Produces a participant-level flag used in cohort
+      selection for medication dispenser sizing.
+
+    config:
+      materialized: view
+      schema: intermediate_medication_flag
+      alias: int_medication_flag
+      tags: ['intermediate', 'medication', 'analysis']
+
+    columns:
+      - name: participant_id
+        description: Unique identifier for participant
+        tests:
+          - not_null
+          - unique
+
+      - name: has_high_risk_timed_med
+        description: >
+          Indicator (1/0) showing whether participant has at least one
+          medication meeting high-risk and timed administration criteria
+        
