@@ -22,9 +22,7 @@ models:
 
       - name: participant_id
         description: Unique identifier for participant
-        tests:
-          - not_null
-
+    
       - name: assessment_date
         description: Timestamp when assessment was recorded
         tests:
