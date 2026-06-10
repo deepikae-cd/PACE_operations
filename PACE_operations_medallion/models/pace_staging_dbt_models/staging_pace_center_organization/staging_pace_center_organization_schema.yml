@@ -6,7 +6,7 @@ models:
 
     config:
       schema: staging_pace_center_organization 
-      alias: pace_center
+      alias: pace_center_organization 
       materialized: view
       tags: ["staging", "pace_center"]
 

@@ -121,3 +121,23 @@ sources:
 
       - name: RAW_PACE_CENTER
         description: "PACE center details including facility-level operational and geographic information"
+
+  - name: bronze_clinical_assessment
+    description: "Raw Clinical Assessment domain capturing participant cognitive and functional evaluations"
+    schema: BRONZE_CLINICAL_ASSESSMENT
+    tables:
+      - name: RAW_CLINICAL_ASSESSMENT
+        description: >
+          Clinical assessment records including cognitive and functional scores
+          collected over time. Used for participant acuity evaluation and
+          downstream care decision analytics.
+
+  - name: bronze_family_support
+    description: "Raw Family Support domain capturing caregiver availability and support context"
+    schema: BRONZE_FAMILY_SUPPORT
+    tables:
+      - name: RAW_FAMILY_SUPPORT
+        description: >
+          Family and caregiver support records indicating whether a caregiver
+          is available and capable of administering medications or assisting
+          participants with daily care needs.

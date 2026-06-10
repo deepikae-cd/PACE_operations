@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: staging_clinical_assessment
+    description: >
+      Staging model for clinical assessment data. Thin layer over bronze,
+      with minimal casting and filtering. No business logic applied.
+
+      
+    config:
+      schema: staging_clinical_assessment 
+      alias: clinical_assessment 
+      materialized: view
+      tags: ["staging", "clinical"]
+
+    columns:
+      - name: assessment_id
+        description: Unique identifier for each clinical assessment
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: Unique identifier for participant
+    
+      - name: assessment_date
+        description: Timestamp when assessment was recorded
+        tests:
+          - not_null
+
+      - name: cognitive_score
+        description: Raw cognitive score (e.g., MoCA/MMSE), cast to numeric
+
+      - name: functional_score
+        description: Functional independence score (ADL/IADL)
+
+      - name: assessment_type
+        description: Type of assessment performed
+
+      - name: clinician_id
+        description: Identifier of clinician who performed the assessment
+
+      - name: source_system
+        description: Originating system of the record
+
+      - name: _loaded_at
+        description: Timestamp when record was loaded into bronze
+
+      - name: _source_file
+        description: File name from which record was ingested

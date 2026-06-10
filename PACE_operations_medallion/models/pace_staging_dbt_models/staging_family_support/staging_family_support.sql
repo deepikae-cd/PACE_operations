@@ -1,8 +1,8 @@
 /*
-  STAGING_PACE_CENTER
+  STAGING_FAMILY_SUPPORT
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_organization', 'RAW_PACE_CENTER') }}
-  Purpose : Thin staging layer — select, rename, and basic normalization only.
+  Source  : {{ source('bronze_family_support', 'RAW_FAMILY_SUPPORT') }}
+  Purpose : Thin staging layer — select, rename, and basic null filtering only.
             No business logic. Materialised as view to avoid storage cost.
   ──────────────────────────────────────────────────────────────────────────────
 */
@@ -11,26 +11,29 @@ with source as (
 
     select
         -- Keys
-        trim(upper(pace_center_id)) as pace_center_id,
+        support_id,
+        participant_id,
 
-        -- Descriptors
-        trim(center_name)            as center_name,
-        trim(region)                 as region,
+        -- Descriptors (raw)
+        relationship,
+        can_administer_meds,
+        support_frequency,
 
         -- Metadata
-        _loaded_at                   as loaded_at,
-        current_timestamp            as stg_loaded_at
+        source_system,
+        _loaded_at,
+        _source_file
 
-    from {{ source('bronze_organization', 'RAW_PACE_CENTER') }}
+    from {{ source('bronze_family_support', 'RAW_FAMILY_SUPPORT') }}
 
 ),
 
 filtered as (
 
-    -- Drop unusable records
     select *
     from source
-    where pace_center_id is not null
+    where support_id     is not null
+      and participant_id is not null
 
 )
 
