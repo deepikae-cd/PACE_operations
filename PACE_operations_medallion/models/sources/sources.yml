@@ -121,3 +121,13 @@ sources:
 
       - name: RAW_PACE_CENTER
         description: "PACE center details including facility-level operational and geographic information"
+
+    
+  - name: bronze_health
+    tables:
+      - name: BRONZE_CLINICAL_ASSESSMENT
+
+  - name: bronze_social
+    tables:
+      - name: BRONZE_FAMILY_SUPPORT
+
