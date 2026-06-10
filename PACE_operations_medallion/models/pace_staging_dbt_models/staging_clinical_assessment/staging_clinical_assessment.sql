@@ -1,7 +1,7 @@
 /*
   STAGING_CLINICAL_ASSESSMENT
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_clinical_assessment', 'BRONZE_CLINICAL_ASSESSMENT') }}
+  Source  : {{ source('bronze_clinical_assessment', 'RAW_BRONZE_CLINICAL_ASSESSMENT') }}
   Purpose : Thin staging layer — select, rename, and basic null filtering only.
             No business logic. Materialised as view to avoid storage cost.
   ──────────────────────────────────────────────────────────────────────────────
@@ -30,7 +30,7 @@ with source as (
         _loaded_at,
         _source_file
 
-    from {{ source('bronze_clinical_assessment', 'BRONZE_CLINICAL_ASSESSMENT') }}
+    from {{ source('bronze_clinical_assessment', 'RAW_BRONZE_CLINICAL_ASSESSMENT') }}
 
 ),
 
