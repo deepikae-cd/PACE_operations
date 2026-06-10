@@ -44,4 +44,4 @@ filtered as (
 
 )
 
-select * from filtered;
+select * from filtered
