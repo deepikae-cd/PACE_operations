@@ -24,7 +24,7 @@ with source as (
         _loaded_at,
         _source_file
 
-    from {{ source('BRONZE_FAMILY_SUPPORT', 'RAW_BRONZE_FAMILY_SUPPORT') }}
+    from {{ source('bronze_family_support', 'RAW_BRONZE_FAMILY_SUPPORT') }}
 
 ),
 
