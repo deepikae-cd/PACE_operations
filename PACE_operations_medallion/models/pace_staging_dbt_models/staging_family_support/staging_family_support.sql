@@ -1,7 +1,7 @@
 /*
   STAGING_FAMILY_SUPPORT
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_family_support', 'RAW_BRONZE_FAMILY_SUPPORT') }}
+  Source  : {{ source('bronze_family_support', 'RAW_FAMILY_SUPPORT') }}
   Purpose : Thin staging layer — select, rename, and basic null filtering only.
             No business logic. Materialised as view to avoid storage cost.
   ──────────────────────────────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ with source as (
         _loaded_at,
         _source_file
 
-    from {{ source('bronze_family_support', 'RAW_BRONZE_FAMILY_SUPPORT') }}
+    from {{ source('bronze_family_support', 'RAW_FAMILY_SUPPORT') }}
 
 ),
 
