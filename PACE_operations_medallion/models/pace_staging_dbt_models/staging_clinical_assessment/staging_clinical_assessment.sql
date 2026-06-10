@@ -30,7 +30,7 @@ with source as (
         _loaded_at,
         _source_file
 
-    from {{ source('bronze_health', 'BRONZE_CLINICAL_ASSESSMENT') }}
+    from {{ source('bronze_clinical_assessment', 'BRONZE_CLINICAL_ASSESSMENT') }}
 
 ),
 
