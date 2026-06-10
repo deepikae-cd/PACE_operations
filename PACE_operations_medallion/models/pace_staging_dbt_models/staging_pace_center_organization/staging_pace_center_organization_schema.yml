@@ -1,12 +1,12 @@
 version: 2
 
 models:
-  - name: staging_pace_center  
+  - name: staging_pace_center_organization
     description: "Staging model for PACE center data cleaned from RAW_PACE_CENTER"
 
     config:
-      schema: staging_pace_center 
-      alias: pace_center 
+      schema: staging_pace_center_organization 
+      alias: pace_center
       materialized: view
       tags: ["staging", "pace_center"]
 
