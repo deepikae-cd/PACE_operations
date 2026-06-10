@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: intermediate_medication_flag
+  - name: int_medication_flag
     description: >
       Intermediate model that identifies participants with high-risk,
       timed medications. Produces a participant-level flag used in cohort
@@ -23,6 +23,5 @@ models:
       - name: has_high_risk_timed_med
         description: >
           Indicator (1/0) showing whether participant has at least one
-          medication with risk_class = 'high' and
-          administration_complexity = 'timed'
-     
+          medication meeting high-risk and timed administration criteria
+        

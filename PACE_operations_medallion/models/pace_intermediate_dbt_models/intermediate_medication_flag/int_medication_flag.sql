@@ -1,24 +1,47 @@
 /*
   INT_MEDICATION_FLAG
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ ref('staging_medication') }}
-  Purpose : Identify participants with at least one HIGH-RISK TIMED medication.
-            Builds reusable participant-level flag for downstream analytics.
-            No cohort filtering here.
+  Purpose : Derive medication risk and complexity flags using available fields
+            from staging (drug_class, frequency).
   ──────────────────────────────────────────────────────────────────────────────
 */
 
 with base as (
 
     select
-        -- Keys
         participant_id,
 
-        -- Normalize only what's needed for logic (allowed in intermediate)
-        lower(trim(risk_class))                as risk_class,
-        lower(trim(administration_complexity)) as administration_complexity
+        lower(trim(drug_class)) as drug_class,
+        lower(trim(frequency))  as frequency
 
     from {{ ref('staging_medication') }}
+
+),
+
+derived as (
+
+    select
+        participant_id,
+
+        /* ✅ Derive risk_class (proxy logic) */
+        case
+            when drug_class like '%anticoagulant%'
+              or drug_class like '%insulin%'
+              or drug_class like '%opioid%'
+            then 'high'
+            else 'low'
+        end as derived_risk_class,
+
+        /* ✅ Derive administration complexity */
+        case
+            when frequency like '%daily%'
+              or frequency like '%twice%'
+              or frequency like '%every%'
+            then 'timed'
+            else 'prn'
+        end as derived_administration_complexity
+
+    from base
 
 ),
 
@@ -28,13 +51,12 @@ flagged as (
         participant_id,
 
         case
-            when risk_class = 'high'
-             and administration_complexity = 'timed'
-            then 1
-            else 0
+            when derived_risk_class = 'high'
+             and derived_administration_complexity = 'timed'
+            then 1 else 0
         end as is_high_risk_timed
 
-    from base
+    from derived
 
 ),
 
@@ -42,8 +64,6 @@ aggregated as (
 
     select
         participant_id,
-
-        -- participant qualifies if ANY medication meets criteria
         max(is_high_risk_timed) as has_high_risk_timed_med
 
     from flagged
