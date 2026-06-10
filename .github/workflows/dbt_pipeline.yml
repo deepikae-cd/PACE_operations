@@ -3,12 +3,15 @@ name: dbt CI/CD Pipeline
 on:
   pull_request:
     branches: [ main ]
-
   push:
     branches: [ main ]
-
   release:
     types: [ created ]
+
+# ✅ Prevent parallel runs (CRITICAL)
+concurrency:
+  group: dbt-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
 
@@ -20,16 +23,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ✅ Step 1: Install packages
-      - name: dbt deps (dev)
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/usr/app \
-            ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-            deps --project-dir /usr/app/PACE_operations_medallion
-
-      # ✅ Step 2: Run build
-      - name: dbt build (dev)
+      # ✅ Run everything in ONE container
+      - name: dbt dev pipeline
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/usr/app \
@@ -40,8 +35,14 @@ jobs:
             -e DBT_WAREHOUSE=${{ secrets.DBT_DEV_WAREHOUSE }} \
             -e DBT_DATABASE=${{ secrets.DBT_DEV_DATABASE }} \
             ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-            build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target dev
-
+            bash -c "
+              dbt debug --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target dev && \
+              dbt deps --project-dir /usr/app/PACE_operations_medallion && \
+              dbt build --threads 2 --fail-fast --debug \
+                --project-dir /usr/app/PACE_operations_medallion \
+                --profiles-dir /usr/app \
+                --target dev
+            "
 
   dbt-staging:
     if: github.event_name == 'push'
@@ -51,14 +52,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: dbt deps (staging)
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/usr/app \
-            ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-            deps --project-dir /usr/app/PACE_operations_medallion
-
-      - name: dbt build (staging)
+      - name: dbt staging pipeline
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/usr/app \
@@ -69,8 +63,14 @@ jobs:
             -e DBT_WAREHOUSE=${{ secrets.DBT_STG_WAREHOUSE }} \
             -e DBT_DATABASE=${{ secrets.DBT_STG_DATABASE }} \
             ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-            build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target stg
-
+            bash -c "
+              dbt debug --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target stg && \
+              dbt deps --project-dir /usr/app/PACE_operations_medallion && \
+              dbt build --threads 2 --fail-fast --debug \
+                --project-dir /usr/app/PACE_operations_medallion \
+                --profiles-dir /usr/app \
+                --target stg
+            "
 
   dbt-prod:
     if: github.event_name == 'release'
@@ -80,14 +80,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: dbt deps (prod)
-        run: |
-          docker run --rm \
-            -v ${{ github.workspace }}:/usr/app \
-            ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-            deps --project-dir /usr/app/PACE_operations_medallion
-
-      - name: dbt build (prod)
+      - name: dbt prod pipeline
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/usr/app \
@@ -98,4 +91,11 @@ jobs:
             -e DBT_WAREHOUSE=${{ secrets.DBT_PROD_WAREHOUSE }} \
             -e DBT_DATABASE=${{ secrets.DBT_PROD_DATABASE }} \
             ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-            build --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target prod
+            bash -c "
+              dbt debug --project-dir /usr/app/PACE_operations_medallion --profiles-dir /usr/app --target prod && \
+              dbt deps --project-dir /usr/app/PACE_operations_medallion && \
+              dbt build --threads 2 --fail-fast --debug \
+                --project-dir /usr/app/PACE_operations_medallion \
+                --profiles-dir /usr/app \
+                --target prod
+            "
