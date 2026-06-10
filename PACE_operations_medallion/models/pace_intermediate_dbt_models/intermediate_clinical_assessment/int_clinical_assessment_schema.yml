@@ -11,7 +11,7 @@ models:
       materialized: view
       schema: intermediate_clinical_assessment
       alias: int_clinical_assessment
-      tags: ['intermediate', 'clinical_assessment', 'analysis']
+      tags: ['intermediate', 'clinical', 'analysis']
 
 
     columns:
