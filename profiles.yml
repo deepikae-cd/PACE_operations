@@ -14,7 +14,6 @@ PACE_operations:
       warehouse: DEV_PACE_TRANSFORM_WH
       schema: DEV
 
-      # ✅ CRITICAL FIXES
       threads: 2
       client_session_keep_alive: false
       connect_retries: 1
@@ -32,7 +31,6 @@ PACE_operations:
       warehouse: STG_PACE_TRANSFORM_WH
       schema: STAGING
 
-      # ✅ CRITICAL FIXES
       threads: 2
       client_session_keep_alive: false
       connect_retries: 1
