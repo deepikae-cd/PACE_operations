@@ -1,7 +1,7 @@
 /*
   STAGING_FAMILY_SUPPORT
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ source('bronze_social', 'BRONZE_FAMILY_SUPPORT') }}
+  Source  : {{ source('bronze_family_support', 'BRONZE_FAMILY_SUPPORT') }}
   Purpose : Thin staging layer — select, rename, and basic null filtering only.
             No business logic. Materialised as view to avoid storage cost.
   ──────────────────────────────────────────────────────────────────────────────
