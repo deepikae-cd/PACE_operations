@@ -14,13 +14,12 @@ PACE_operations:
       warehouse: DEV_PACE_TRANSFORM_WH
       schema: DEV
 
-
-      threads: 6
+      # ✅ CRITICAL FIXES
+      threads: 2
       client_session_keep_alive: false
-      connect_retries: 3
-      connect_timeout: 30
-      retry_on_database_errors: true
-
+      connect_retries: 1
+      connect_timeout: 15
+      retry_on_database_errors: false
 
     stg:
       type: snowflake
@@ -33,13 +32,12 @@ PACE_operations:
       warehouse: STG_PACE_TRANSFORM_WH
       schema: STAGING
 
-
-      threads: 6
+      # ✅ CRITICAL FIXES
+      threads: 2
       client_session_keep_alive: false
-      connect_retries: 3
-      connect_timeout: 30
-      retry_on_database_errors: true
-
+      connect_retries: 1
+      connect_timeout: 15
+      retry_on_database_errors: false
 
     prod:
       type: snowflake
@@ -52,8 +50,9 @@ PACE_operations:
       warehouse: PROD_PACE_TRANSFORM_WH
       schema: PROD
 
-      threads: 6
+      
+      threads: 2
       client_session_keep_alive: false
-      connect_retries: 3
-      connect_timeout: 30
-      retry_on_database_errors: true
+      connect_retries: 1
+      connect_timeout: 15
+      retry_on_database_errors: false
