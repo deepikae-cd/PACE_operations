@@ -1,5 +1,4 @@
-/*
-  ENTERPRISE_SILVER_CAREGIVER_ASSIGNMENT
+/*enterprise_silver_caregiver_assignment
   ──────────────────────────────────────────────────────────────────────────────
   Source  : {{ ref('staging_caregiver_assignment') }}
   Purpose : Cleanse, deduplicate and enrich caregiver assignment records.
