@@ -7,10 +7,11 @@
 
 select
     count(*) as total_participants,
-    sum(eligible_flag) as total_candidates,
+
+    coalesce(sum(eligible_flag), 0) as total_candidates,
 
     round(
-        100.0 * sum(eligible_flag) / nullif(count(*), 0),
+        100.0 * coalesce(sum(eligible_flag), 0) / nullif(count(*), 0),
         2
     ) as candidate_percentage
 
