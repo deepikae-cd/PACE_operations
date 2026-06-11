@@ -8,33 +8,26 @@ PACE_operations:
       account: "{{ env_var('DBT_ACCOUNT') }}"
       user: "{{ env_var('DBT_USER') }}"
       password: "{{ env_var('DBT_PASSWORD') }}"
-
-      role: PACE_ROLE_DBT_TRANSFORM_DEV
-      database: DEV_PACE_DW
-      warehouse: DEV_PACE_TRANSFORM_WH
+      role: "{{ env_var('DEV_DBT_ROLE') }}"
+      database: "{{ env_var('DEV_DBT_DATABASE') }}"
+      warehouse: "{{ env_var('DEV_DBT_WAREHOUSE') }}"
       schema: DEV
-
       threads: 2
-      client_session_keep_alive: false
       connect_retries: 1
-      connect_timeout: 15
       retry_on_database_errors: false
 
-    stg:
+
+    staging:
       type: snowflake
       account: "{{ env_var('DBT_ACCOUNT') }}"
       user: "{{ env_var('DBT_USER') }}"
       password: "{{ env_var('DBT_PASSWORD') }}"
-
-      role: PACE_ROLE_DBT_TRANSFORM_STG
-      database: STG_PACE_DW
-      warehouse: STG_PACE_TRANSFORM_WH
+      role: "{{ env_var('STG_DBT_ROLE') }}"   
+      database: "{{ env_var('STG_DBT_DATABASE') }}"
+      warehouse: "{{ env_var('STG_DBT_WAREHOUSE') }}"
       schema: DBT_DEEPIKA
-
       threads: 2
-      client_session_keep_alive: false
       connect_retries: 1
-      connect_timeout: 15
       retry_on_database_errors: false
 
     prod:
@@ -42,15 +35,10 @@ PACE_operations:
       account: "{{ env_var('DBT_ACCOUNT') }}"
       user: "{{ env_var('DBT_USER') }}"
       password: "{{ env_var('DBT_PASSWORD') }}"
-
-      role: PACE_ROLE_DBT_TRANSFORM_PROD
-      database: PROD_PACE_DW
-      warehouse: PROD_PACE_TRANSFORM_WH
-      schema: PROD
-
-      
+      role: "{{ env_var('PROD_DBT_ROLE') }}"
+      database: "{{ env_var('PROD_DBT_DATABASE') }}"
+      warehouse: "{{ env_var('PROD_DBT_WAREHOUSE') }}"
+      schema: DBT_PROD
       threads: 2
-      client_session_keep_alive: false
       connect_retries: 1
-      connect_timeout: 15
       retry_on_database_errors: false
