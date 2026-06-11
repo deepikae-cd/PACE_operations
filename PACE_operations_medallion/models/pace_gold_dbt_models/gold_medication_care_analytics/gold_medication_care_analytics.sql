@@ -1,5 +1,5 @@
 /*
-  GOLD_MEDICATION_DISPENSER_CANDIDATES
+  GOLD_MEDICATION__CARE_ANALYTICS
   ──────────────────────────────────────────────────────────────────────────────
   Purpose : Identify participants eligible for automated medication dispensers
             based on cognitive status, medication risk, and family support.
@@ -18,15 +18,15 @@ with base as (
 
         coalesce(fs.can_administer_meds, 0) as can_administer_meds
 
-    from {{ ref('silver_participant') }} p
+    from {{ ref('enterprise_silver_participant') }} p
 
-    join {{ ref('silver_latest_assessment') }} ca
+    join {{ ref('enterprise_silver_clinical_assessment') }} ca
         on p.participant_id = ca.participant_id
 
-    join {{ ref('silver_medication_flag') }} m
+    join {{ ref('enterprise_silver_medication_flag') }} m
         on p.participant_id = m.participant_id
 
-    left join {{ ref('silver_family_support_status') }} fs
+    left join {{ ref('enterprise_silver_family_support_status') }} fs
         on p.participant_id = fs.participant_id
 
 ),
