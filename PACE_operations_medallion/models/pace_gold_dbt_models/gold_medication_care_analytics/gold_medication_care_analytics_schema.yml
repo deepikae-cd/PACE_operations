@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: gold_medication_care_analytics
+    description: >
+      Final cohort identifying participants eligible for automated medication
+      dispensers. Combines clinical, medication, and family support data.
+
+    config:
+      materialized: table
+      schema: gold_medication_care_analytics
+      alias: medication_care_dispenser_candidates
+      tags: ['gold', 'medication_dispenser', 'cohort']
+
+    columns:
+      - name: participant_id
+        description: Unique identifier for participant
+        tests:
+          - not_null
+          - unique
+
+      - name: cognitive_score
+        description: Latest cognitive assessment score
+
+      - name: functional_score
+        description: Latest functional score
+
+      - name: has_high_risk_timed_med
+        description: Indicator for high-risk timed medication
+  
+
+      - name: can_administer_meds
+        description: Indicator if caregiver can administer meds
+      
+      - name: eligible_flag
+        description: >
+          Final eligibility indicator for medication dispenser (1 = eligible)
+   
+
+      - name: priority_band
+        description: Priority classification for device allocation
+
+ 
