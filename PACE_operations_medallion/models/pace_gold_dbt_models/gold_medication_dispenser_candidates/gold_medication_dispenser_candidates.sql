@@ -1,5 +1,5 @@
 /*
-  GOLD_MEDICATION__CARE_ANALYTICS
+  GOLD_MEDICATION__DISPENSER_CANDIDATES
   ──────────────────────────────────────────────────────────────────────────────
   Purpose : Identify participants eligible for automated medication dispensers
             based on cognitive status, medication risk, and family support.
