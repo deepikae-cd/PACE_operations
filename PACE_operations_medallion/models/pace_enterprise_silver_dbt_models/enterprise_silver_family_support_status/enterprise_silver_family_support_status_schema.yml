@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: enterprise_silver_family_support_status
+    description: >
+      Silver model providing participant-level family support aggregation.
+      Indicates whether any caregiver can administer medications.
+
+    config:
+      materialized: view
+      schema: enterprise_silver_family_support_status
+      alias: family_support_status
+      tags: ['silver', 'family_support', 'caregiver']
+
+    columns:
+      - name: participant_id
+        description: Unique identifier for participant
+     
+
+      - name: can_administer_meds
+        description: >
+          Indicator (1/0) showing whether participant has a caregiver
+          capable of administering medications
+   
