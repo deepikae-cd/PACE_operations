@@ -29,7 +29,7 @@ PACE_operations:
       role: PACE_ROLE_DBT_TRANSFORM_STG
       database: STG_PACE_DW
       warehouse: STG_PACE_TRANSFORM_WH
-      schema: STAGING
+      schema: DBT_DEEPIKA
 
       threads: 2
       client_session_keep_alive: false
