@@ -11,7 +11,7 @@ on:
 
 jobs:
 
-  # ✅ DEV (PR → full run + test)
+  #  DEV
   dbt-dev:
     name: dbt Dev
     runs-on: ubuntu-latest
@@ -41,7 +41,7 @@ jobs:
               dbt test --target dev --profiles-dir /usr/app"
 
 
-  # ✅ STAGING (merge → full run + test)
+  #  STAGING
   dbt-staging:
     name: dbt Staging
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
               dbt test --target staging --profiles-dir /usr/app"
 
 
-  # ✅ PROD (manual trigger → full run + test)
+  #  PROD
   dbt-prod:
     name: dbt Production
     runs-on: ubuntu-latest
