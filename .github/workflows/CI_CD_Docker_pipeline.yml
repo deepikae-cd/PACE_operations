@@ -11,10 +11,12 @@ on:
 
 jobs:
 
+  # ✅ DEV (runs on PR)
   dbt-dev:
     name: dbt Dev
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4
@@ -30,13 +32,17 @@ jobs:
           -e DBT_ROLE=${{ secrets.DEV_DBT_ROLE }} \
           -e DBT_DATABASE=${{ secrets.DEV_DBT_DATABASE }} \
           -e DBT_WAREHOUSE=${{ secrets.DEV_DBT_WAREHOUSE }} \
+          --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-          sh -c "dbt deps && dbt build --target dev --fail-fast"
+          -c "dbt deps && dbt build --target dev --fail-fast"
 
+
+  # ✅ STAGING (runs on push to main)
   dbt-staging:
     name: dbt Staging
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4
@@ -52,13 +58,17 @@ jobs:
           -e DBT_ROLE=${{ secrets.STG_DBT_ROLE }} \
           -e DBT_DATABASE=${{ secrets.STG_DBT_DATABASE }} \
           -e DBT_WAREHOUSE=${{ secrets.STG_DBT_WAREHOUSE }} \
+          --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-          sh -c "dbt deps && dbt build --target staging --fail-fast"
+          -c "dbt deps && dbt build --target staging --fail-fast"
 
+
+  # ✅ PROD (manual trigger)
   dbt-prod:
     name: dbt Production
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v4
@@ -74,5 +84,6 @@ jobs:
           -e DBT_ROLE=${{ secrets.PROD_DBT_ROLE }} \
           -e DBT_DATABASE=${{ secrets.PROD_DBT_DATABASE }} \
           -e DBT_WAREHOUSE=${{ secrets.PROD_DBT_WAREHOUSE }} \
+          --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-          sh -c "dbt deps && dbt build --target prod --fail-fast"
+          -c "dbt deps && dbt build --target prod --fail-fast"
