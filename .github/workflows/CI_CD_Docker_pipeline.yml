@@ -34,7 +34,7 @@ jobs:
           -e DBT_WAREHOUSE=${{ secrets.DEV_DBT_WAREHOUSE }} \
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-          -c "dbt deps && dbt build --target dev --fail-fast"
+          -c "dbt deps && dbt build --target dev --profiles-dir /usr/app --fail-fast"
 
 
   # ✅ STAGING (runs on push to main)
@@ -60,7 +60,7 @@ jobs:
           -e DBT_WAREHOUSE=${{ secrets.STG_DBT_WAREHOUSE }} \
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-          -c "dbt deps && dbt build --target staging --fail-fast"
+          -c "dbt deps && dbt build --target staging --profiles-dir /usr/app --fail-fast"
 
 
   # ✅ PROD (manual trigger)
@@ -86,4 +86,4 @@ jobs:
           -e DBT_WAREHOUSE=${{ secrets.PROD_DBT_WAREHOUSE }} \
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-          -c "dbt deps && dbt build --target prod --fail-fast"
+          -c "dbt deps && dbt build --target prod --profiles-dir /usr/app --fail-fast"
