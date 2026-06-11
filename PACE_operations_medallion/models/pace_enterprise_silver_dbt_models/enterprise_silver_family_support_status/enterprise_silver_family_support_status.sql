@@ -8,4 +8,4 @@
 select
     participant_id,
     cast(can_administer_meds as integer) as can_administer_meds
-from {{ ref('int_family_support_status') }};
+from {{ ref('int_family_support_status') }}
