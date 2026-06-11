@@ -12,7 +12,7 @@ PACE_operations:
       database: "{{ env_var('DEV_DBT_DATABASE') }}"
       warehouse: "{{ env_var('DEV_DBT_WAREHOUSE') }}"
       schema: DEV
-      threads: 2
+      threads: 4
       connect_retries: 1
       retry_on_database_errors: false
 
@@ -26,7 +26,7 @@ PACE_operations:
       database: "{{ env_var('STG_DBT_DATABASE') }}"
       warehouse: "{{ env_var('STG_DBT_WAREHOUSE') }}"
       schema: DBT_DEEPIKA
-      threads: 2
+      threads: 4
       connect_retries: 1
       retry_on_database_errors: false
 
@@ -39,6 +39,6 @@ PACE_operations:
       database: "{{ env_var('PROD_DBT_DATABASE') }}"
       warehouse: "{{ env_var('PROD_DBT_WAREHOUSE') }}"
       schema: DBT_PROD
-      threads: 2
+      threads: 4
       connect_retries: 1
       retry_on_database_errors: false
