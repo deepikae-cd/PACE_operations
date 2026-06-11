@@ -11,9 +11,9 @@ on:
 
 jobs:
 
-  # ✅ DEV (runs on PR → Slim CI)
+  # ✅ DEV (PR → full run + test)
   dbt-dev:
-    name: dbt Dev (Slim CI)
+    name: dbt Dev
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     timeout-minutes: 30
@@ -21,15 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ✅ Download manifest from last staging run
-      - name: Download dbt manifest
-        uses: actions/download-artifact@v4
-        with:
-          name: dbt-manifest
-          path: PACE_operations_medallion/target
-        continue-on-error: true   # ✅ fallback if first run
-
-      - name: Run dbt (DEV Slim CI)
+      - name: Run dbt (dev)
         run: |
           docker run --rm \
           -v ${{ github.workspace }}:/usr/app \
@@ -42,16 +34,14 @@ jobs:
           -e DEV_DBT_WAREHOUSE=${{ secrets.DEV_DBT_WAREHOUSE }} \
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-          -c "if [ -f target/manifest.json ]; then \
-                dbt deps && dbt build --target dev --profiles-dir /usr/app --select state:modified+ --state target --fail-fast; \
-              else \
-                echo 'No previous state found → running full build'; \
-                dbt deps && dbt build --target dev --profiles-dir /usr/app --fail-fast; \
-              fi"
+          -c "echo 'Running dbt run (DEV)...' && \
+              dbt deps && \
+              dbt run --target dev --profiles-dir /usr/app --fail-fast && \
+              echo 'Running dbt test (DEV)...' && \
+              dbt test --target dev --profiles-dir /usr/app"
 
 
-
-  # ✅ STAGING (runs on push → full build + save manifest)
+  # ✅ STAGING (merge → full run + test)
   dbt-staging:
     name: dbt Staging
     runs-on: ubuntu-latest
@@ -74,18 +64,14 @@ jobs:
           -e STG_DBT_WAREHOUSE=${{ secrets.STG_DBT_WAREHOUSE }} \
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-          -c "dbt deps && dbt build --target staging --profiles-dir /usr/app --fail-fast"
-
-      # ✅ Save manifest for Slim CI
-      - name: Upload dbt manifest
-        uses: actions/upload-artifact@v4
-        with:
-          name: dbt-manifest
-          path: PACE_operations_medallion/target/manifest.json
+          -c "echo 'Running dbt run (STAGING)...' && \
+              dbt deps && \
+              dbt run --target staging --profiles-dir /usr/app --fail-fast && \
+              echo 'Running dbt test (STAGING)...' && \
+              dbt test --target staging --profiles-dir /usr/app"
 
 
-
-  # ✅ PROD (manual trigger)
+  # ✅ PROD (manual trigger → full run + test)
   dbt-prod:
     name: dbt Production
     runs-on: ubuntu-latest
@@ -108,4 +94,8 @@ jobs:
           -e PROD_DBT_WAREHOUSE=${{ secrets.PROD_DBT_WAREHOUSE }} \
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-          -c "dbt deps && dbt build --target prod --profiles-dir /usr/app --fail-fast"
+          -c "echo 'Running dbt run (PROD)...' && \
+              dbt deps && \
+              dbt run --target prod --profiles-dir /usr/app --fail-fast && \
+              echo 'Running dbt test (PROD)...' && \
+              dbt test --target prod --profiles-dir /usr/app"
