@@ -29,9 +29,9 @@ jobs:
           -e DBT_ACCOUNT=${{ secrets.DEV_DBT_ACCOUNT }} \
           -e DBT_USER=${{ secrets.DEV_DBT_USER }} \
           -e DBT_PASSWORD=${{ secrets.DEV_DBT_PASSWORD }} \
-          -e DBT_ROLE=${{ secrets.DEV_DBT_ROLE }} \
-          -e DBT_DATABASE=${{ secrets.DEV_DBT_DATABASE }} \
-          -e DBT_WAREHOUSE=${{ secrets.DEV_DBT_WAREHOUSE }} \
+          -e DEV_DBT_ROLE=${{ secrets.DEV_DBT_ROLE }} \
+          -e DEV_DBT_DATABASE=${{ secrets.DEV_DBT_DATABASE }} \
+          -e DEV_DBT_WAREHOUSE=${{ secrets.DEV_DBT_WAREHOUSE }} \
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
           -c "dbt deps && dbt build --target dev --profiles-dir /usr/app --fail-fast"
@@ -55,9 +55,9 @@ jobs:
           -e DBT_ACCOUNT=${{ secrets.STG_DBT_ACCOUNT }} \
           -e DBT_USER=${{ secrets.STG_DBT_USER }} \
           -e DBT_PASSWORD=${{ secrets.STG_DBT_PASSWORD }} \
-          -e DBT_ROLE=${{ secrets.STG_DBT_ROLE }} \
-          -e DBT_DATABASE=${{ secrets.STG_DBT_DATABASE }} \
-          -e DBT_WAREHOUSE=${{ secrets.STG_DBT_WAREHOUSE }} \
+          -e STG_DBT_ROLE=${{ secrets.STG_DBT_ROLE }} \
+          -e STG_DBT_DATABASE=${{ secrets.STG_DBT_DATABASE }} \
+          -e STG_DBT_WAREHOUSE=${{ secrets.STG_DBT_WAREHOUSE }} \
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
           -c "dbt deps && dbt build --target staging --profiles-dir /usr/app --fail-fast"
@@ -81,9 +81,9 @@ jobs:
           -e DBT_ACCOUNT=${{ secrets.PROD_DBT_ACCOUNT }} \
           -e DBT_USER=${{ secrets.PROD_DBT_USER }} \
           -e DBT_PASSWORD=${{ secrets.PROD_DBT_PASSWORD }} \
-          -e DBT_ROLE=${{ secrets.PROD_DBT_ROLE }} \
-          -e DBT_DATABASE=${{ secrets.PROD_DBT_DATABASE }} \
-          -e DBT_WAREHOUSE=${{ secrets.PROD_DBT_WAREHOUSE }} \
+          -e PROD_DBT_ROLE=${{ secrets.PROD_DBT_ROLE }} \
+          -e PROD_DBT_DATABASE=${{ secrets.PROD_DBT_DATABASE }} \
+          -e PROD_DBT_WAREHOUSE=${{ secrets.PROD_DBT_WAREHOUSE }} \
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
           -c "dbt deps && dbt build --target prod --profiles-dir /usr/app --fail-fast"
