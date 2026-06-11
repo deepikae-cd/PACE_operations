@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: enterprise_silver_clinical_assessment
+    description: >
+      Silver model providing the most recent clinical assessment per participant.
+      Serves as the trusted source for cognitive and functional scores.
+
+    config:
+      materialized: view
+      schema: enterprise_silver_clinical_assessment
+      alias: clinical_assessment
+      tags: ['silver', 'clinical', 'assessment']
+
+    columns:
+      - name: participant_id
+        description: Unique identifier for participant
+        
+
+      - name: assessment_id
+        description: Unique identifier for the latest assessment
+      
+
+      - name: assessment_date
+        description: Timestamp of most recent assessment
+     
+
+      - name: cognitive_score
+        description: Latest cognitive score (e.g., MoCA/MMSE)
+
+      - name: functional_score
+        description: Latest functional independence score
