@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: intermediate_clinical_assessment
+  - name: int_clinical_assessment
     description: >
       Intermediate model selecting the most recent clinical assessment per
       participant. Provides latest cognitive and functional scores for analytics.
@@ -9,8 +9,8 @@ models:
     
     config:
       materialized: view
-      schema: intermediate_clinical_assessment
-      alias: int_clinical_assessment
+      schema: int_clinical_assessment
+      alias: clinical_assessment
       tags: ['intermediate', 'clinical', 'analysis']
 
 

@@ -1,15 +1,15 @@
 version: 2
 
 models:
-  - name: intermediate_family_support_status
+  - name: int_family_support_status
     description: >
       Intermediate model aggregating family support data to a participant level.
       Indicates whether any caregiver can administer medications.
 
     config:
       materialized: view
-      schema: intermediate_family_support_status
-      alias: int_family_support_status
+      schema: int_family_support_status
+      alias: family_support_status
       tags: ['intermediate', 'family', 'support']
 
     columns:

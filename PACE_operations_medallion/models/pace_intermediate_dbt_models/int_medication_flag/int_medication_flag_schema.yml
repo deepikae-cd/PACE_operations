@@ -9,8 +9,8 @@ models:
 
     config:
       materialized: view
-      schema: intermediate_medication_flag
-      alias: int_medication_flag
+      schema: int_medication_flag
+      alias: medication_flag
       tags: ['intermediate', 'medication', 'analysis']
 
     columns:
