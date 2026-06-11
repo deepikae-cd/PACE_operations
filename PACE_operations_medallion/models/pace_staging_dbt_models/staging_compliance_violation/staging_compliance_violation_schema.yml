@@ -10,7 +10,7 @@ models:
       No business logic applied. Designed as a lightweight view.
 
     config:
-      schema: staging_governance
+      schema: staging_compliance_violation
       alias: compliance_violation
       materialized: view
       tags: ["staging", "governance"]
