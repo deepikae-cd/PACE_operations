@@ -24,7 +24,7 @@ with base as (
         program_year,
         task_category,
         actual_duration_minutes
-    from {{ ref('int_homecare_task_breakdown') }}
+    from {{ ref('intermediate_homecare_task_breakdown') }}
 
 ),
 
