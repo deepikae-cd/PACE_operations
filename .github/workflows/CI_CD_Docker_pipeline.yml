@@ -11,9 +11,9 @@ on:
 
 jobs:
 
-  # ✅ DEV (runs on PR)
+  # ✅ DEV (runs on PR → Slim CI)
   dbt-dev:
-    name: dbt Dev
+    name: dbt Dev (Slim CI)
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     timeout-minutes: 30
@@ -21,7 +21,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run dbt (dev)
+      # ✅ Download manifest from last staging run
+      - name: Download dbt manifest
+        uses: actions/download-artifact@v4
+        with:
+          name: dbt-manifest
+          path: PACE_operations_medallion/target
+        continue-on-error: true   # ✅ fallback if first run
+
+      - name: Run dbt (DEV Slim CI)
         run: |
           docker run --rm \
           -v ${{ github.workspace }}:/usr/app \
@@ -34,10 +42,16 @@ jobs:
           -e DEV_DBT_WAREHOUSE=${{ secrets.DEV_DBT_WAREHOUSE }} \
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
-          -c "dbt deps && dbt build --target dev --profiles-dir /usr/app --fail-fast"
+          -c "if [ -f target/manifest.json ]; then \
+                dbt deps && dbt build --target dev --profiles-dir /usr/app --select state:modified+ --state target --fail-fast; \
+              else \
+                echo 'No previous state found → running full build'; \
+                dbt deps && dbt build --target dev --profiles-dir /usr/app --fail-fast; \
+              fi"
 
 
-  # ✅ STAGING (runs on push to main)
+
+  # ✅ STAGING (runs on push → full build + save manifest)
   dbt-staging:
     name: dbt Staging
     runs-on: ubuntu-latest
@@ -61,6 +75,14 @@ jobs:
           --entrypoint bash \
           ghcr.io/dbt-labs/dbt-snowflake:1.9.latest \
           -c "dbt deps && dbt build --target staging --profiles-dir /usr/app --fail-fast"
+
+      # ✅ Save manifest for Slim CI
+      - name: Upload dbt manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-manifest
+          path: PACE_operations_medallion/target/manifest.json
+
 
 
   # ✅ PROD (manual trigger)
