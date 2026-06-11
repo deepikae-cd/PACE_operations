@@ -11,7 +11,7 @@ on:
 
 jobs:
 
-  # ✅ DEV (PR → full run + test)
+  #  DEV
   dbt-dev:
     name: dbt Dev
     runs-on: ubuntu-latest
@@ -40,8 +40,16 @@ jobs:
               echo 'Running dbt test (DEV)...' && \
               dbt test --target dev --profiles-dir /usr/app"
 
+      #  Upload logs
+      - name: Upload dbt logs (dev)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-dev-logs
+          path: PACE_operations_medallion/logs/
+          retention-days: 7
 
-  # ✅ STAGING (merge → full run + test)
+
+  #  STAGING
   dbt-staging:
     name: dbt Staging
     runs-on: ubuntu-latest
@@ -70,8 +78,16 @@ jobs:
               echo 'Running dbt test (STAGING)...' && \
               dbt test --target staging --profiles-dir /usr/app"
 
+      #  Upload logs
+      - name: Upload dbt logs (staging)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-staging-logs
+          path: PACE_operations_medallion/logs/
+          retention-days: 7
 
-  # ✅ PROD (manual trigger → full run + test)
+
+  #  PROD
   dbt-prod:
     name: dbt Production
     runs-on: ubuntu-latest
@@ -99,3 +115,11 @@ jobs:
               dbt run --target prod --profiles-dir /usr/app --fail-fast && \
               echo 'Running dbt test (PROD)...' && \
               dbt test --target prod --profiles-dir /usr/app"
+
+      #  Upload logs
+      - name: Upload dbt logs (prod)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt-prod-logs
+          path: PACE_operations_medallion/logs/
+          retention-days: 7
