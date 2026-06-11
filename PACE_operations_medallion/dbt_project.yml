@@ -16,9 +16,20 @@ target-path: "target"
 clean-targets: ["target", "dbt_packages"]
 
 # ============================================================
+# BEHAVIOR FLAGS (to suppress dbt Cloud popup)
+# ============================================================
+flags:
+  skip_nodes_if_on_run_start_fails: false
+  state_modified_compare_more_unrendered_values: false
+  require_yaml_configuration_for_mf_time_spines: false
+  require_batched_execution_for_custom_microbatch_strategy: false
+  require_nested_cumulative_type_params: false
+  validate_macro_args: false
+  require_all_warnings_handled_by_warn_error: false
+
+# ============================================================
 # GLOBAL DEFAULTS
 # ============================================================
-
 models:
   PACE_operations_medallion:
 
