@@ -1,14 +1,14 @@
 version: 2
 
 models:
-  - name: gold_medication_care_analytics
+  - name: gold_medication_dispenser_candidates
     description: >
       Final cohort identifying participants eligible for automated medication
       dispensers. Combines clinical, medication, and family support data.
 
     config:
       materialized: table
-      schema: gold_medication_care_analytics
+      schema: gold_medication_dispenser_candidates
       alias: medication_dispenser_candidates
       tags: ['gold', 'medication_dispenser', 'cohort']
 

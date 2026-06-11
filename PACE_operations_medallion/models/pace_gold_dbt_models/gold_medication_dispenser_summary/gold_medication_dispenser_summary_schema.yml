@@ -8,7 +8,7 @@ models:
 
     config:
       materialized: table
-      schema: gold_medication_care_analytics
+      schema: gold_medication_dispenser_summary
       alias: medication_dispenser_summary
       tags: ['gold', 'medication_dispenser', 'summary']
 
