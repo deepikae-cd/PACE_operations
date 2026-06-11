@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: gold_medication_dispenser_summary
+    description: >
+      Aggregated summary of medication dispenser demand for operational
+      decision-making and capacity planning.
+
+    config:
+      materialized: table
+      schema: gold_medication_care_analytics
+      alias: medication_dispenser_summary
+      tags: ['gold', 'medication_dispenser', 'summary']
+
+    columns:
+      - name: total_participants
+        description: Total participants evaluated
+        tests:
+          - not_null
+
+      - name: total_candidates
+        description: Number of participants eligible for dispensers
+        tests:
+          - not_null
+
+      - name: candidate_percentage
+        description: Percentage of participants eligible
