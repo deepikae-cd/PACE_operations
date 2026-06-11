@@ -9,7 +9,7 @@ models:
     config:
       materialized: table
       schema: gold_medication_care_analytics
-      alias: medication_care_dispenser_candidates
+      alias: medication_dispenser_candidates
       tags: ['gold', 'medication_dispenser', 'cohort']
 
     columns:
