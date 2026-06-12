@@ -25,4 +25,4 @@ select
     source_system,
     loaded_at
 
-from {{ ref('staging_careplan_activity') }};
+from {{ ref('staging_careplan_activity') }}
