@@ -1,8 +1,8 @@
 version: 2
 
 models:
-  - name: enterprise_silver_care_plan_activity
-    description: >
+  - name: enterprise_silver_careplan_activity
+    description: 
       Silver model providing trusted care plan activity data.
       Acts as the bridge between participant activities, tasks, and centers.
       Enables linking task execution data to PACE centers for analytics.

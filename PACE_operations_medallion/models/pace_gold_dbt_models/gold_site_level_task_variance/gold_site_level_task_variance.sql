@@ -17,7 +17,7 @@ select
 
 from {{ ref('enterprise_silver_task') }} t
 
-join {{ ref('enterprise_silver_care_plan_activity') }} cpa
+join {{ ref('enterprise_silver_careplan_activity') }} cpa
     on t.care_plan_activity_id = cpa.care_plan_activity_id
 
 join {{ ref('enterprise_silver_pace_center') }} c
