@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: enterprise_silver_pace_center
+    description: >
+      Silver model providing trusted PACE center data. Acts as the canonical
+      dimension for site-level analytics and reporting across the platform.
+
+    config:
+      materialized: view
+      schema: enterprise_silver_core
+      tags:
+        - silver
+        - organization
+        - center
+
+    columns:
+      - name: center_id
+        description: Unique identifier for PACE center
+        tests:
+          - not_null
+          - unique
+
+      - name: center_name
+        description: Name of the PACE center
+        tests:
+          - not_null
+
+      - name: region
+        description: Geographic region of the center
+
+      - name: loaded_at
+        description: Timestamp when record was ingested
