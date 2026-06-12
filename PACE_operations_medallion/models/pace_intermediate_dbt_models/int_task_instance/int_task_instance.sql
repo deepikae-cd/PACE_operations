@@ -1,5 +1,5 @@
 /*
-  INT_TASK_INSTANCE_CLEANED
+  INT_TASK_INSTANCE
   ──────────────────────────────────────────────────────────────────────────────
   Purpose : Clean task duration and ensure only valid records are used for
             downstream analytics.
