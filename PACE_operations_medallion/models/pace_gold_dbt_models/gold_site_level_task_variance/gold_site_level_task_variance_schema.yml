@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: gold_site_level_task_variance
+    description: >
+      Gold model analyzing variation in task duration across PACE centers
+      and task types. Supports operational dashboards to identify efficiency
+      gaps, outliers, and standardization opportunities.
+
+    config:
+      materialized: table
+      schema: gold_site_level_task_variance
+      alias: site_level_task_variance
+      tags: ['gold', 'operations', 'task_variance', 'analytics']
+
+    columns:
+      - name: center_id
+        description: Unique identifier for PACE center
+        tests:
+          - not_null
+
+      - name: task_type
+        description: Type/category of task performed (e.g., medication, bathing)
+  
+
+      - name: avg_time
+        description: Average duration (minutes) for the task at the center
+
+
+      - name: min_time
+        description: Minimum observed duration (minutes) for the task at the center
+
+      - name: max_time
+        description: Maximum observed duration (minutes) for the task at the center
+
+ 

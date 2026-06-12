@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: enterprise_silver_careplan_activity
+    description: 
+      Silver model providing trusted care plan activity data.
+      Acts as the bridge between participant activities, tasks, and centers.
+      Enables linking task execution data to PACE centers for analytics.
+
+    config:
+      materialized: view
+      schema: enterprise_silver_careplan_activity
+      alias: careplan_activity
+      tags: ['silver', 'care_plan', 'activity']
+
+    columns:
+      - name: care_plan_activity_id
+        description: Unique identifier for care plan activity
+        tests:
+          - not_null
+          - unique
+
+
+      - name: participant_id
+        description: Participant associated with the care activity
+
+      - name: activity_type
+        description: Type/category of care plan activity
+
+      - name: source_system
+        description: Source system from which the record originated
+
+      - name: loaded_at
+        description: Timestamp when record was ingested into the system
+

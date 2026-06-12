@@ -2,25 +2,36 @@ version: 2
 
 models:
   - name: gold_task_metrics
+    description: >
+      Aggregated daily task metrics used for reporting and dashboards.
+      Provides insights into task volume and duration patterns.
 
     config:
-      schema: gold
-      alias: fct_task_metrics
+      schema: gold_task_metrics
+      alias: task_metrics
       materialized: table
-      tags: ["gold", "task"]
+      tags:
+        - gold
+        - task
+        - metrics
 
     columns:
       - name: task_date
-        tests: [not_null]
+        description: Date of task execution
+        tests:
+          - not_null
 
       - name: total_tasks
-        description: "Total tasks per day"
-
+        description: Total number of tasks per day
+ 
       - name: avg_duration
-        description: "Average task duration"
+        description: Average task duration (minutes)
+      
 
       - name: max_duration
-        description: "Longest task duration"
+        description: Maximum task duration (minutes)
+     
 
       - name: min_duration
-        description: "Shortest task duration"
+        description: Minimum task duration (minutes)
+     
