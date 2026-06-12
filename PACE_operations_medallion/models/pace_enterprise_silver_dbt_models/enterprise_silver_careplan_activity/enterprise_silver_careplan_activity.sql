@@ -3,8 +3,8 @@
 Model       : enterprise_silver_care_plan_activity
 Layer       : Silver
 Description :
-  Trusted care plan activity dataset providing linkage between participants,
-  tasks, and centers.
+  Trusted care plan activity dataset providing linkage between participants
+  and care activities. Does NOT include center mapping.
 
 Grain:
   One row per care_plan_activity_id
@@ -14,19 +14,15 @@ Grain:
 select
 
     -- Keys
-    trim(upper(care_plan_activity_id)) as care_plan_activity_id,
-
-    -- Critical for your use case
-    trim(upper(center_id))             as center_id,
-
-    -- Optional useful fields
+    care_plan_activity_id,
     participant_id,
+
+    -- Business fields
+    program_year,
     activity_type,
 
     -- Metadata
     source_system,
-    _loaded_at as loaded_at
+    loaded_at
 
-from {{ ref('staging_careplan_activity') }}
-
-where care_plan_activity_id is not null
+from {{ ref('staging_careplan_activity') }};
