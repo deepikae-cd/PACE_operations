@@ -7,7 +7,7 @@
 
 select
     -- Dimensions
-    c.center_id,
+    t.center_id,
     t.task_category as task_type,
 
     -- Metrics
@@ -17,12 +17,6 @@ select
 
 from {{ ref('enterprise_silver_task') }} t
 
-join {{ ref('enterprise_silver_careplan_activity') }} cpa
-    on t.care_plan_activity_id = cpa.care_plan_activity_id
-
-join {{ ref('enterprise_silver_pace_center') }} c
-    on cpa.center_id = c.center_id
-
 group by
-    c.center_id,
+    t.center_id,
     t.task_category
