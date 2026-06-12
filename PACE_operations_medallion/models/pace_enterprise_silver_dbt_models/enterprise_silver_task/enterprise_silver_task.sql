@@ -1,40 +1,34 @@
 /*
 ===============================================================================
-Model       : enterprise_silver_task_with_center
+Model       : enterprise_silver_task
 Layer       : Silver
 Description :
-  Enriches task execution data with PACE center information by linking
-  task instances to care plan activities.
-
-  This model enables site-level analytics by attaching center_id to each
-  task execution record, making it suitable for aggregation in Gold layer.
+  Integrated task execution dataset enriched with task template and
+  center information. Serves as the canonical source for task analytics.
 
 Grain:
   One row per task_instance_id
 
-Inputs:
-  - enterprise_silver_task
-  - enterprise_silver_careplan_activity
-
-Key Features:
-  - Adds center_id to task data for site-level reporting
-  - Preserves task-level granularity
-  - Retains task classification (task_name, task_category)
-  - Enables downstream models such as:
-        • gold_site_level_task_variance
-        • gold_home_care_task_breakdown
-
-Usage:
-  - Power BI dashboards (site efficiency, task comparison)
-  - Operational analytics (center-wise performance)
-  - Task standardization analysis
-
-Notes:
-  - left join ensures task records are not dropped if care_plan_activity is missing
-  - center_id may be NULL if mapping is unavailable (data quality check recommended)
-
 ===============================================================================
 */
+
+with task as (
+
+    select * from {{ ref('staging_task_instance') }}
+
+),
+
+template as (
+
+    select * from {{ ref('staging_task_template') }}
+
+),
+
+care_plan as (
+
+    select * from {{ ref('enterprise_silver_careplan_activity') }}
+
+)
 
 select
 
@@ -43,20 +37,23 @@ select
     t.care_plan_activity_id,
     t.task_template_id,
 
-    -- Center ✅ CRITICAL for site analytics
+    -- ✅ Center (critical for Gold)
     cpa.center_id,
 
-    -- Task details
-    t.task_name,
-    t.task_category,
+    -- Task enrichment
+    tt.task_name,
+    tt.task_category,
 
     -- Metrics
-    t.duration_minutes,
+    t.actual_duration_minutes as duration_minutes,
 
     -- Time
     t.performed_at
 
-from {{ ref('enterprise_silver_task') }} t
+from task t
 
-left join {{ ref('enterprise_silver_careplan_activity') }} cpa
+left join template tt
+    on t.task_template_id = tt.task_template_id
+
+left join care_plan cpa
     on t.care_plan_activity_id = cpa.care_plan_activity_id
