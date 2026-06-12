@@ -21,11 +21,11 @@ models:
 
       - name: task_template_id
         description: Task type reference
-      
+  
 
       - name: duration_minutes
         description: Cleaned task duration in minutes
-    
+       
 
       - name: performed_at
         description: Timestamp of task execution
@@ -33,4 +33,3 @@ models:
       - name: center_id
         description: Identifier of center (if joined downstream)
 
-  
