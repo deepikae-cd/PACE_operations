@@ -1,62 +1,23 @@
-/*
-===========================================================
-Model:        enterprise_silver_task
-Layer:        Silver (Staging → Silver)
-Source:
-              - staging_task_instance
-              - staging_task_template
+select
 
+    -- Keys
+    t.task_instance_id,
+    t.care_plan_activity_id,
+    t.task_template_id,
 
-Description:
-    Integrates task execution data with task template metadata
-    to produce a unified, analytics-ready task dataset.
+    -- Center ✅ CRITICAL
+    cpa.center_id,
 
-Business Logic:
-    - Joins task instance with task template using task_template_id
-    - Enriches task records with task name and category
-    - Preserves execution-level granularity
+    -- Task details
+    t.task_name,
+    t.task_category,
 
-Grain:
-    One record per task_instance_id
+    -- Metrics
+    t.duration_minutes,
 
-Dependencies:
-    - ref('staging_task_instance')
-    - ref('staging_task_template')
+    t.performed_at
 
-===========================================================
-*/
+from {{ ref('enterprise_silver_task') }} t
 
-WITH instance AS (
-
-    SELECT * FROM {{ ref('staging_task_instance') }}
-
-),
-
-template AS (
-
-    SELECT * FROM {{ ref('staging_task_template') }}
-
-),
-
-joined AS (
-
-    SELECT
-        i.task_instance_id,
-        i.task_template_id,
-
-        t.task_name,
-        t.task_category,
-
-        i.actual_duration_minutes,
-        i.performed_at,
-
-        i.source_system
-
-    FROM instance i
-    LEFT JOIN template t
-        ON i.task_template_id = t.task_template_id
-
-)
-
-SELECT *
-FROM joined
+left join {{ ref('enterprise_silver_care_plan_activity') }} cpa
+    on t.care_plan_activity_id = cpa.care_plan_activity_id
