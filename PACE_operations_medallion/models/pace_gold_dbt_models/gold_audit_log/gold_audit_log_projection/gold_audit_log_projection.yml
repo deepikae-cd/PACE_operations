@@ -137,3 +137,5 @@ models:
 
       - name: gold_loaded_at
         description: Timestamp when record was processed in gold layer
+
+        
