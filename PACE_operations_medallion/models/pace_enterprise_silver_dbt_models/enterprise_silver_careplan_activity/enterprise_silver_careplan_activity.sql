@@ -27,6 +27,6 @@ select
     source_system,
     _loaded_at as loaded_at
 
-from {{ ref('staging_care_plan_activity') }}
+from {{ ref('staging_careplan_activity') }}
 
 where care_plan_activity_id is not null
