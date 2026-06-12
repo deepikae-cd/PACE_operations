@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: enterprise_silver_task_instance
+    description: >
+      Silver model providing trusted task execution data with clean duration values.
+      Serves as the base for operational analytics and reporting.
+
+    config:
+      materialized: view
+      schema: enterprise_silver_task_instance
+      alias: task_instance
+      tags: ['silver', 'task', 'operations']
+
+    columns:
+      - name: task_instance_id
+        description: Unique task execution record
+        tests:
+          - not_null
+          - unique
+
+      - name: task_template_id
+        description: Task type reference
+      
+
+      - name: duration_minutes
+        description: Cleaned task duration in minutes
+    
+
+      - name: performed_at
+        description: Timestamp of task execution
+
+      - name: center_id
+        description: Identifier of center (if joined downstream)
+
+  
