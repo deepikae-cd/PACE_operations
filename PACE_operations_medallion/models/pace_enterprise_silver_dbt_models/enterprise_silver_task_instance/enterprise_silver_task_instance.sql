@@ -1,7 +1,7 @@
 /*
 ===============================================================================
 Model       : enterprise_silver_task_instance
-Layer       : silver
+Layer       : Silver
 Description :
   Trusted task execution dataset enriched with task template attributes
   and PACE center information for analytics.
@@ -18,8 +18,8 @@ select
     ti.care_plan_activity_id,
     ti.task_template_id,
 
-    -- ✅ Correct center mapping (through participant)
-    p.pace_center_id as center_id,
+    -- ✅ FIXED: use correct column name from participant
+    p.center_id,
 
     -- Metrics
     ti.actual_duration_minutes as duration_minutes,
