@@ -9,7 +9,8 @@ models:
 
     config:
       materialized: view
-      schema: enterprise_silver_core
+      schema: enterprise_silver_careplan_activity
+      alias: careplan_activity
       tags: ['silver', 'care_plan', 'activity']
 
     columns:
