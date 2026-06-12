@@ -1,11 +1,15 @@
 /*
-  ENTERPRISE_SILVER_TASK_INSTANCE
-  ──────────────────────────────────────────────────────────────────────────────
-  Purpose : Trusted task execution dataset enriched with task template attributes
-            and ready for analytics.
+===============================================================================
+Model       : enterprise_silver_task_instance
+Layer       : Silver
+Description :
+  Trusted task execution dataset enriched with task template attributes
+  and PACE center information for analytics.
 
-  Grain   : One row per task_instance_id
-  ──────────────────────────────────────────────────────────────────────────────
+Grain:
+  One row per task_instance_id
+
+===============================================================================
 */
 
 select
@@ -15,6 +19,9 @@ select
     ti.care_plan_activity_id,
     ti.task_template_id,
 
+    -- ✅ Center (CRITICAL for site analytics)
+    cpa.center_id,
+
     -- Metrics
     ti.actual_duration_minutes as duration_minutes,
 
@@ -22,11 +29,14 @@ select
     ti.performed_at,
 
     -- Task enrichment
-    tt.task_name,
-    tt.task_category,
+    ti.task_name,
+    ti.task_category,
 
     -- Metadata
     ti.source_system,
     ti.loaded_at
 
 from {{ ref('int_task_template') }} ti
+
+left join {{ ref('enterprise_silver_careplan_activity') }} cpa
+    on ti.care_plan_activity_id = cpa.care_plan_activity_id
