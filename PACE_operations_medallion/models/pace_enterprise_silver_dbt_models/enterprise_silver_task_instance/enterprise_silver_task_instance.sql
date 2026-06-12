@@ -1,14 +1,13 @@
 /*
 ===============================================================================
 Model       : enterprise_silver_task_instance
-Layer       : Silver
+Layer       : silver
 Description :
   Trusted task execution dataset enriched with task template attributes
   and PACE center information for analytics.
 
 Grain:
   One row per task_instance_id
-
 ===============================================================================
 */
 
@@ -19,8 +18,8 @@ select
     ti.care_plan_activity_id,
     ti.task_template_id,
 
-    -- ✅ Center (CRITICAL for site analytics)
-    cpa.center_id,
+    -- ✅ Correct center mapping (through participant)
+    p.pace_center_id as center_id,
 
     -- Metrics
     ti.actual_duration_minutes as duration_minutes,
@@ -40,3 +39,6 @@ from {{ ref('int_task_template') }} ti
 
 left join {{ ref('enterprise_silver_careplan_activity') }} cpa
     on ti.care_plan_activity_id = cpa.care_plan_activity_id
+
+left join {{ ref('enterprise_silver_participant') }} p
+    on cpa.participant_id = p.participant_id
