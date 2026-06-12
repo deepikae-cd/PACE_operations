@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: int_task_instance
+    description: >
+      Intermediate मॉडल that filters and standardizes task instance data.
+      Only valid duration records are retained for downstream analytics.
+
+    config:
+      materialized: view
+      schema: int_task_instance
+      alias: task_instance
+      tags: ['intermediate', 'task', 'cleaning']
+
+    columns:
+      - name: task_instance_id
+        description: Unique identifier for task instance
+        tests:
+          - not_null
+          - unique
+
+      - name: care_plan_activity_id
+        description: Identifier linking task to care plan activity
+      
+
+      - name: task_template_id
+        description: Identifier linking task to template
+      
+
+      - name: actual_duration_minutes
+        description: Duration of task execution in minutes
+     
+
+      - name: performed_at
+        description: Timestamp when task was performed
+
