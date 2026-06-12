@@ -27,11 +27,11 @@ aggregated AS (
 
         COUNT(*) AS total_tasks,
 
-        AVG(actual_duration_minutes) AS avg_duration,
+        AVG(duration_minutes) AS avg_duration,
 
-        MAX(actual_duration_minutes) AS max_duration,
+        MAX(duration_minutes) AS max_duration,
 
-        MIN(actual_duration_minutes) AS min_duration
+        MIN(duration_minutes) AS min_duration
 
     FROM base
     GROUP BY 1
