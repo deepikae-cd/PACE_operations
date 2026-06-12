@@ -8,7 +8,8 @@ models:
 
     config:
       materialized: view
-      schema: enterprise_silver_core
+      schema: enterprise_silver_pace_center
+      alias: pace_center
       tags:
         - silver
         - organization
