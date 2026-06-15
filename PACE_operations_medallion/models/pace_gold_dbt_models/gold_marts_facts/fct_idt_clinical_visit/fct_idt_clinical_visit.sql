@@ -45,4 +45,4 @@ select
 
     current_timestamp as dbt_updated_timestamp
 
-from {{ ref('enterprise_silver_clinical_visit') }}
+from {{ ref('enterprise_silver_idt_clinical') }}
