@@ -13,6 +13,6 @@ select
         else 'LOW_RISK'
     end as risk_level
 
-from {{ ref('fact_idt_clinical_visit') }}
+from {{ ref('fct_idt_clinical_visit') }}
 
 group by participant_id
