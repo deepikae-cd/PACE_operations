@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: mart_caregiver_daily
+  - name: gold_caregiver_daily
     description: >
       Daily aggregated caregiver activity metrics derived from the caregiver activity fact table.
       This model enables time-series analysis, workload tracking, and operational reporting.
@@ -20,8 +20,8 @@ models:
 
     config:
       materialized: table
-      schema: gold_marts
-      alias: mart_caregiver_daily
+      schema: gold_caregiver_daily
+      alias: caregiver_daily
 
     columns:
 
