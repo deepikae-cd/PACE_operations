@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: gold_hospitalization_risk
+    description: >
+      Participant-level risk stratification model based on clinical visits.
+
+      Grain:
+        One row per participant.
+
+      Description:
+        This model identifies participants at risk of hospitalization using
+        high-acuity visits, missed follow-ups, and abnormal vitals.
+
+      Key Features:
+        - Tracks hospital (ER) visits
+        - Identifies missed follow-ups
+        - Flags respiratory risk (low O2)
+        - Assigns risk levels for intervention
+
+      Risk Levels:
+        - HIGH_RISK: Frequent hospital visits
+        - MEDIUM_RISK: Missed follow-ups
+        - LOW_RISK: Stable participants
+
+      Primary Use Cases:
+        - UC-17: Hospitalization prevention analytics
+        - Care management prioritization
+        - Risk-based interventions
+
+    config:
+      materialized: table
+      schema: gold_hospitalization_risk
+      alias: hospitalization_risk
+
+    columns:
+
+      - name: participant_id
+        description: >
+          Unique identifier of the participant.
+        tests:
+          - not_null
+     
+
+      - name: hospital_visits
+        description: >
+          Number of visits in high-acuity settings (ER/Hospital).
+
+      - name: missed_followups
+        description: >
+          Count of follow-ups that are overdue.
+
+      - name: respiratory_risk
+        description: >
+          Number of visits with low oxygen saturation.
+
+      - name: risk_level
+        description: >
+          Risk classification assigned to the participant (HIGH, MEDIUM, LOW).
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp when the record was last updated by dbt.
