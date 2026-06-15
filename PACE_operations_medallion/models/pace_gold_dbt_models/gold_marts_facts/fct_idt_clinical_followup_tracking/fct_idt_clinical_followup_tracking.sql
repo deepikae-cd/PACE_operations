@@ -1,5 +1,5 @@
 /*
-  MART_FOLLOWUP_TRACKING
+  FCT_IDT_CLINICAL_FOLLOWUP_TRACKING
   ------------------------------------------------------------------------------
   Purpose:
     Tracks follow-up activity and compliance for participants based on
