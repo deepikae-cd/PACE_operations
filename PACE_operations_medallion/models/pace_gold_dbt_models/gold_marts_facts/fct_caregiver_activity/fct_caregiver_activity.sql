@@ -2,18 +2,11 @@
   FACT_CAREGIVER_ACTIVITY
   ------------------------------------------------------------------------------
   Purpose:
-    Gold fact table capturing caregiver activity based on task execution
-    and caregiver assignment.
+    Gold fact combining caregiver assignments with task execution.
 
   Grain:
-    One row per caregiver per task_instance
-
-  Notes:
-    - Uses only verified columns from Silver layer
-    - Transportation excluded (can be added later safely)
-    - Designed to compile without column errors
-  ------------------------------------------------------------------------------
-*/
+    One row per caregiver per care_plan_activity_id
+------------------------------------------------------------------------------*/
 
 with task_instance as (
 
@@ -33,7 +26,7 @@ with task_instance as (
 caregiver_assignment as (
 
     select
-        ca.task_instance_id,
+        ca.care_plan_activity_id,   
         ca.caregiver_id
     from {{ ref('enterprise_silver_caregiver_assignment') }} ca
 
@@ -77,4 +70,4 @@ select
 from task_instance ti
 
 join caregiver_assignment ca
-    on ti.task_instance_id = ca.task_instance_id
+    on ti.care_plan_activity_id = ca.care_plan_activity_id  
