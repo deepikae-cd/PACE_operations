@@ -21,6 +21,13 @@ models:
         - Operational dashboards (center-level, caregiver-level)
         - Quality and utilization reporting
 
+    config:
+      materialized: incremental
+      schema: gold_marts_facts
+      alias: fct_caregiver_activity
+      unique_key: caregiver_activity_sk   
+      on_schema_change: sync_all_columns
+
     columns:
 
       - name: caregiver_activity_sk
