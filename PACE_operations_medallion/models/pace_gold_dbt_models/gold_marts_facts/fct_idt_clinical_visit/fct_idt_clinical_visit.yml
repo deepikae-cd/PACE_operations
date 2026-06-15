@@ -27,7 +27,7 @@ models:
 
     config:
       materialized: table
-      schema: gold_facts
+      schema: gold_marts_facts
       alias: fct_idt_clinical_visit
 
     columns:
