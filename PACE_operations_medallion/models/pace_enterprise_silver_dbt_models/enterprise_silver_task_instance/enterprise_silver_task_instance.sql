@@ -18,7 +18,7 @@ select
     ti.care_plan_activity_id,
     ti.task_template_id,
 
-    -- ✅ FIXED: use correct column name from participant
+    -- use correct column name from participant
     p.center_id,
 
     -- Metrics
