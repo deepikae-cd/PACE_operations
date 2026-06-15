@@ -1,5 +1,5 @@
 /*
-  FACT_IDT_CLINICAL_VISIT
+  FCT_IDT_CLINICAL_VISIT
   ------------------------------------------------------------------------------
   Purpose:
     Fact table capturing clinical visits performed by providers and IDT team.
