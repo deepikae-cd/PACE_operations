@@ -1,23 +1,18 @@
 /*
   FACT_CAREGIVER_ACTIVITY
-  ──────────────────────────────────────────────────────────────────────────────
+  ------------------------------------------------------------------------------
   Purpose:
-    Consolidates caregiver activity using task execution, caregiver assignment,
-    and transportation data.
+    Gold fact table capturing caregiver activity based on task execution
+    and caregiver assignment.
 
   Grain:
-    One record per caregiver per task_instance
-
-  Sources:
-    - enterprise_silver_task_instance
-    - enterprise_silver_caregiver_assignment
-    - enterprise_silver_transportation
+    One row per caregiver per task_instance
 
   Notes:
-    - Uses duration_minutes (already computed in Silver)
-    - Uses performed_at as event timestamp
-    - No participant_id directly available in this layer
-  ──────────────────────────────────────────────────────────────────────────────
+    - Uses only verified columns from Silver layer
+    - Transportation excluded (can be added later safely)
+    - Designed to compile without column errors
+  ------------------------------------------------------------------------------
 */
 
 with task_instance as (
@@ -38,24 +33,15 @@ with task_instance as (
 caregiver_assignment as (
 
     select
-        task_instance_id,
-        caregiver_id
-    from {{ ref('enterprise_silver_caregiver_assignment') }}
-
-),
-
-transport as (
-
-    select
-        task_instance_id,
-        travel_minutes
-    from {{ ref('enterprise_silver_transportation') }}
+        ca.task_instance_id,
+        ca.caregiver_id
+    from {{ ref('enterprise_silver_caregiver_assignment') }} ca
 
 )
 
 select
 
-    /* ───────── Keys ───────── */
+    /* ---------- Keys ---------- */
 
     sha2(concat_ws('||',
         ca.caregiver_id,
@@ -67,28 +53,24 @@ select
     ti.care_plan_activity_id,
     ti.center_id,
 
-    /* ───────── Time ───────── */
+    /* ---------- Time ---------- */
 
     ti.performed_at,
 
-    /* ───────── Task context ───────── */
+    /* ---------- Task Info ---------- */
 
     ti.task_name,
     ti.task_category,
 
-    /* ───────── Metrics ───────── */
+    /* ---------- Metrics ---------- */
 
     ti.duration_minutes as task_minutes,
-    coalesce(tr.travel_minutes, 0) as travel_minutes,
 
-    (ti.duration_minutes + coalesce(tr.travel_minutes, 0)) as total_time_minutes,
+    /* ---------- Flags ---------- */
 
-    /* ───────── Flags ───────── */
-
-    (tr.travel_minutes is null) as is_travel_missing_flag,
     (ti.duration_minutes > 480) as is_long_task_flag,
 
-    /* ───────── Metadata ───────── */
+    /* ---------- Metadata ---------- */
 
     current_timestamp() as dbt_updated_timestamp
 
@@ -96,6 +78,3 @@ from task_instance ti
 
 join caregiver_assignment ca
     on ti.task_instance_id = ca.task_instance_id
-
-left join transport tr
-    on ti.task_instance_id = tr.task_instance_id
