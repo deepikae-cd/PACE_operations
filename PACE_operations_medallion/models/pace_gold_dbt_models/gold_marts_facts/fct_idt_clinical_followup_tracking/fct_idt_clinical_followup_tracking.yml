@@ -1,0 +1,58 @@
+version: 2
+
+models:
+  - name: fct_idt_clinical_followup_tracking
+    description: >
+      Participant-level follow-up tracking metrics derived from clinical visits.
+
+      Grain:
+        One row per participant per center.
+
+      Description:
+        This model monitors follow-up requirements and overdue cases to support
+        compliance tracking, care coordination, and audit readiness.
+
+      Key Metrics:
+        - Total follow-up events
+        - Required follow-ups
+        - Overdue follow-ups
+
+      Primary Use Cases:
+        - UC-7: Audit response and compliance tracking
+        - UC-13: Participant lifecycle monitoring
+        - Care coordination and operational dashboards
+
+    config:
+      materialized: table
+      schema: gold_marts_facts
+      alias: fct_idt_clinical_followup_tracking
+
+    columns:
+
+      - name: participant_id
+        description: >
+          Unique identifier of the participant receiving care.
+        tests:
+          - not_null
+       
+
+      - name: center_id
+        description: >
+          Identifier of the care center.
+        
+
+      - name: total_followups
+        description: >
+          Total number of clinical visits considered for follow-up tracking.
+
+      - name: required_followups
+        description: >
+          Number of visits where follow-up was required.
+
+      - name: overdue_followups
+        description: >
+          Number of follow-ups that are overdue based on due date.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp when the record was last updated by dbt.
