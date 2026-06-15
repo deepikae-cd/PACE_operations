@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: gold_caregiver_performance
+    description: >
+      Aggregated caregiver performance metrics derived from caregiver activity facts.
+      This model supports operational reporting and dashboarding by summarizing
+      workload and task-level performance.
+
+      Grain:
+        One row per caregiver per center.
+
+      Key Metrics:
+        - Total number of tasks performed
+        - Total caregiving time
+        - Average task duration
+        - Count of long-duration tasks
+
+      Primary Use Cases:
+        - Caregiver productivity analysis
+        - Workload balancing
+        - Performance monitoring dashboards
+
+    config:
+      materialized: incremental
+      schema: gold_caregiver_performance
+      alias: caregiver_performance
+      unique_key: caregiver_id
+      on_schema_change: sync_all_columns
+
+    columns:
+
+      - name: caregiver_id
+        description: Unique identifier for caregiver
+        tests:
+          - not_null
+
+
+      - name: center_id
+        description: Identifier of care center
+
+      - name: total_tasks
+        description: Total number of tasks performed by caregiver
+
+      - name: total_task_minutes
+        description: Total minutes spent on caregiving tasks
+
+      - name: avg_task_minutes
+        description: Average duration per task in minutes
+
+      - name: long_task_count
+        description: Number of tasks exceeding defined duration threshold
+
+      - name: dbt_updated_timestamp
+        description: Timestamp when the record was last updated
