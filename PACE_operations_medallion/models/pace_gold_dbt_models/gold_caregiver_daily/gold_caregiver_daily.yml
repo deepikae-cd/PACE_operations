@@ -1,0 +1,58 @@
+version: 2
+
+models:
+  - name: mart_caregiver_daily
+    description: >
+      Daily aggregated caregiver activity metrics derived from the caregiver activity fact table.
+      This model enables time-series analysis, workload tracking, and operational reporting.
+
+      Grain:
+        One row per caregiver per center per activity_date.
+
+      Key Metrics:
+        - Daily task count
+        - Daily caregiving time (minutes)
+
+      Primary Use Cases:
+        - Caregiver workload trends
+        - Daily operational monitoring
+        - Weekly/monthly performance analysis
+
+    config:
+      materialized: table
+      schema: gold_marts
+      alias: mart_caregiver_daily
+
+    columns:
+
+      - name: caregiver_id
+        description: >
+          Unique identifier of the caregiver performing tasks.
+        tests:
+          - not_null
+          
+
+      - name: center_id
+        description: >
+          Identifier of the care center where activity was performed.
+        tests:
+          - not_null
+
+      - name: activity_date
+        description: >
+          Date on which caregiver activity was recorded.
+          Derived from performed_at timestamp.
+        tests:
+          - not_null
+
+      - name: daily_tasks
+        description: >
+          Total number of tasks performed by the caregiver on the given date.
+
+      - name: daily_task_minutes
+        description: >
+          Total caregiving time (in minutes) for the caregiver on the given date.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp indicating when the record was last updated by dbt.

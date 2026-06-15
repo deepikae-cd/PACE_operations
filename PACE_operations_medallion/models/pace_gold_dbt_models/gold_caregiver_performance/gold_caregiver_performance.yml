@@ -26,7 +26,6 @@ models:
       schema: gold_caregiver_performance
       alias: caregiver_performance
       unique_key: caregiver_id
-      on_schema_change: sync_all_columns
 
     columns:
 
