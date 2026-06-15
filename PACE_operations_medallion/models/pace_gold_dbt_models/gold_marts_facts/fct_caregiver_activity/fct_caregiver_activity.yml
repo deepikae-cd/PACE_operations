@@ -1,0 +1,90 @@
+version: 2
+
+models:
+  - name: fct_caregiver_activity
+    description: >
+      Gold-level fact table that captures caregiver activity at the task instance level.
+      This model links caregiver assignments to task execution using participant mapping
+      through care plan activities.
+
+      Grain:
+        One row per caregiver per task_instance.
+
+      Key Features:
+        - Tracks caregiving effort (task duration)
+        - Associates caregivers to participants indirectly via care_plan_activity
+        - Enables workload, performance, and operational analytics
+
+      Primary Use Cases:
+        - Caregiver workload analysis
+        - Task performance monitoring
+        - Operational dashboards (center-level, caregiver-level)
+        - Quality and utilization reporting
+
+    config:
+      materialized: incremental
+      schema: gold_marts_facts
+      alias: fct_caregiver_activity
+      unique_key: caregiver_activity_sk   
+      on_schema_change: sync_all_columns
+
+    columns:
+
+      - name: caregiver_activity_sk
+        description: >
+          Surrogate key uniquely identifying each caregiver-task activity record.
+          Generated using caregiver_id and task_instance_id.
+        tests:
+          - unique
+          - not_null
+
+      - name: caregiver_id
+        description: >
+          Unique identifier of the caregiver performing the task.
+          Links to dim_caregiver for caregiver attributes.
+    
+
+      - name: task_instance_id
+        description: >
+          Unique identifier of the executed task instance.
+          Represents the lowest grain of task activity.
+  
+      - name: center_id
+        description: >
+          Identifier of the care center where the task was performed.
+          Useful for site-level reporting and aggregation.
+
+      - name: performed_at
+        description: >
+          Timestamp when the task activity was performed.
+          Used for time-series analysis and trend reporting.
+
+      - name: task_name
+        description: >
+          Descriptive name of the task performed (e.g., medication administration,
+          vitals check, etc.).
+
+      - name: task_category
+        description: >
+          Category of the task (e.g., clinical, non-clinical, transportation-related).
+          Useful for grouping and analytics.
+
+      - name: task_minutes
+        description: >
+          Total time spent performing the caregiving task, in minutes.
+          Derived from the Silver layer (precomputed).
+
+      - name: is_active_flag
+        description: >
+          Indicates whether the caregiver assignment was active at the time of linkage.
+          Derived from caregiver assignment logic.
+
+      - name: is_long_task_flag
+        description: >
+          Flag indicating unusually long tasks.
+          TRUE if task duration exceeds 480 minutes (8 hours), otherwise FALSE.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp when this record was last updated by dbt.
+          Useful for auditing and incremental processing.

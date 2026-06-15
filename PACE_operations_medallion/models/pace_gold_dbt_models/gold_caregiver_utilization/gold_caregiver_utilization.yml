@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: gold_caregiver_utilization
+    description: >
+      Aggregated caregiver utilization metrics derived from caregiver activity.
+      This model provides insights into caregiver workload and efficiency.
+
+      Grain:
+        One row per caregiver per center.
+
+      Key Metrics:
+        - Total tasks performed
+        - Total caregiving time (minutes)
+        - Average task duration
+
+      Primary Use Cases:
+        - Caregiver utilization analysis
+        - Workload optimization
+        - Performance monitoring dashboards
+
+    config:
+      materialized: table
+      schema: gold_caregiver_utilization
+      alias: caregiver_utilization
+
+    columns:
+
+      - name: caregiver_id
+        description: >
+          Unique identifier of the caregiver.
+        tests:
+          - not_null
+  
+
+      - name: center_id
+        description: >
+          Identifier of the care center where the caregiver operates.
+        tests:
+          - not_null
+
+      - name: total_tasks
+        description: >
+          Total number of tasks completed by the caregiver.
+
+      - name: total_task_minutes
+        description: >
+          Total time spent on caregiving activities (in minutes).
+
+      - name: avg_task_minutes
+        description: >
+          Average time spent per task (in minutes).
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp when the record was last updated by dbt.

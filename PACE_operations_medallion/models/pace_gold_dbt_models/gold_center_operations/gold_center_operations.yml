@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: gold_center_operations
+    description: >
+      Center-level aggregated metrics derived from caregiver activity data.
+      This model supports operational reporting, capacity planning, and
+      executive dashboards.
+
+      Grain:
+        One row per center.
+
+      Key Metrics:
+        - Total number of caregivers
+        - Total tasks executed
+        - Total workload in minutes
+
+      Primary Use Cases:
+        - Capacity planning
+        - Center performance tracking
+        - Resource allocation decisions
+
+    config:
+      materialized: incremental
+      schema: gold_center_operations
+      alias: center_operations
+      unique_key: center_id
+      on_schema_change: sync_all_columns
+
+    columns:
+
+      - name: center_id
+        description: Identifier of care center
+        tests:
+          - not_null
+
+      - name: total_caregivers
+        description: Number of unique caregivers assigned to the center
+
+      - name: total_tasks
+        description: Total number of tasks completed at the center
+
+      - name: total_task_minutes
+        description: Total caregiving workload in minutes
+
+      - name: dbt_updated_timestamp
+        description: Timestamp when the record was last updated
