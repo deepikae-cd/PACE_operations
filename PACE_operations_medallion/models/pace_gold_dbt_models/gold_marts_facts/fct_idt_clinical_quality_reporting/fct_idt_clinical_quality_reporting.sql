@@ -13,6 +13,6 @@ select
 
     current_timestamp as dbt_updated_timestamp
 
-from {{ ref('fact_idt_clinical_visit') }}
+from {{ ref('fct_idt_clinical_visit') }}
 
 group by center_id
