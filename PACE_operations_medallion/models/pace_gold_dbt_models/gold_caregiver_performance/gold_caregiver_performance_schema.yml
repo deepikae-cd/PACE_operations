@@ -22,7 +22,7 @@ models:
         - Performance monitoring dashboards
 
     config:
-      materialized: incremental
+      materialized: table
       schema: gold_caregiver_performance
       alias: caregiver_performance
       unique_key: caregiver_id
