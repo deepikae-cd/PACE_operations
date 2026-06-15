@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: gold_caregiver_weekly
+    description: >
+      Weekly aggregated caregiver activity metrics derived from the
+      mart_caregiver_daily model.
+
+      This model summarizes caregiving workload at a weekly level,
+      enabling trend analysis, performance tracking, and operational reporting.
+
+      Grain:
+        One row per caregiver per center per week.
+
+      Key Metrics:
+        - Weekly task count
+        - Weekly caregiving time (minutes)
+
+      Primary Use Cases:
+        - Weekly performance analysis
+        - Trend monitoring and seasonality insights
+        - Workload planning and forecasting
+
+    config:
+      materialized: table
+      schema: gold_caregiver_weekly
+      alias: caregiver_weekly
+
+    columns:
+
+      - name: caregiver_id
+        description: >
+          Unique identifier of the caregiver.
+        tests:
+          - not_null
+    
+
+      - name: center_id
+        description: >
+          Identifier of the care center where activity occurred.
+        tests:
+          - not_null
+
+      - name: week_start_date
+        description: >
+          Start date of the week (derived using date_trunc on activity_date).
+          Used for grouping and time-series analysis.
+        tests:
+          - not_null
+
+      - name: weekly_tasks
+        description: >
+          Total number of tasks performed by the caregiver during the week.
+
+      - name: weekly_task_minutes
+        description: >
+          Total caregiving time (in minutes) accumulated during the week.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp indicating when the record was last updated by dbt.
