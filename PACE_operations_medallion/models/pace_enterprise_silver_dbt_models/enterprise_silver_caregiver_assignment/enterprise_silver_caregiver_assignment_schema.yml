@@ -11,6 +11,7 @@ models:
 
     config:
       schema: enterprise_silver_caregiver_assignment
+      alias: caregiver_assignment
       materialized: incremental
       unique_key: assignment_sk
       incremental_strategy: merge
