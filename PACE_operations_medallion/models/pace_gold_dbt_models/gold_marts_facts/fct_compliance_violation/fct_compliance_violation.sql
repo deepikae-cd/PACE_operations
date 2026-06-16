@@ -1,5 +1,5 @@
 /*
-  FACT_COMPLIANCE_VIOLATION
+  FCT_COMPLIANCE_VIOLATION
   ──────────────────────────────────────────────────────────────────────────────
   Source  :
     - {{ ref('staging_compliance_violation') }}

@@ -1,7 +1,7 @@
 /*
   GOLD_COMPLIANCE_DASHBOARD
   ──────────────────────────────────────────────────────────────────────────────
-  Source  : {{ ref('fact_compliance_violation') }}
+  Source  : {{ ref('fct_compliance_violation') }}
   Purpose : Business-ready aggregated compliance metrics for dashboards.
 
   Grain   : entity_id + rule_category
