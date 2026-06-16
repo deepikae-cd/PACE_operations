@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: gold_compliance_dashboard
+    description: >
+      Aggregated compliance metrics for business dashboards and reporting.
+
+    config:
+      materialized: table
+      schema: gold_compliance_dashboard
+      alias: compliance_dashboard
+      tags:  ['gold', 'compliance', 'rules', 'governance']
+
+    columns:
+
+      - name: entity_id
+        tests:
+          - not_null
+
+      - name: rule_category
+        tests:
+          - not_null
+
+      - name: total_violations
+        tests:
+          - not_null
+
+      - name: open_violation_rate
+        description: Percentage of violations that are open
+
+      - name: high_severity_rate
+        description: Percentage of high severity violations
