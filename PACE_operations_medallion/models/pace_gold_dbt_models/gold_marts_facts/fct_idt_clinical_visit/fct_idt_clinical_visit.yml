@@ -1,0 +1,120 @@
+version: 2
+
+models:
+  - name: fct_idt_clinical_visit
+    description: >
+      Fact table capturing clinical visits performed by providers and IDT team.
+
+      Grain:
+        One row per visit_id.
+
+      Description:
+        This model provides a consolidated view of clinical encounters including
+        visit attributes, diagnosis information, procedures, vitals, and follow-up activity.
+
+      Key Features:
+        - Captures visit-level clinical activity
+        - Includes diagnosis and procedure metrics
+        - Tracks vitals completeness and abnormality flags
+        - Supports follow-up tracking and overdue analysis
+
+      Primary Use Cases:
+        - IDT daily activity tracking (UC-12)
+        - Follow-up compliance and audit reporting (UC-7)
+        - Clinical quality and vitals monitoring (UC-16)
+        - Hospitalization risk analytics (UC-17)
+        - Site-level operational insights (UC-6)
+
+    config:
+      materialized: table
+      schema: gold_marts_facts
+      alias: fct_idt_clinical_visit
+
+    columns:
+
+      - name: visit_sk
+        description: Surrogate key for the clinical visit record
+        tests:
+          - not_null
+          - unique
+
+      - name: visit_id
+        description: Business identifier for the clinical visit
+     
+
+      - name: participant_id
+        description: Identifier of the participant receiving care
+  
+
+      - name: provider_id
+        description: Identifier of the clinical provider conducting the visit
+
+      - name: caregiver_id
+        description: Identifier of the caregiver associated with the visit
+     
+
+      - name: center_id
+        description: Care center where the visit was performed
+
+      - name: visit_date
+        description: Date of the clinical visit
+        tests:
+          - not_null
+
+      - name: visit_type
+        description: Standardized visit type (assessment, follow-up, urgent, etc.)
+
+      - name: location_type
+        description: Location of visit (center, home, ER, hospital, etc.)
+
+      - name: visit_duration_minutes
+        description: Duration of the visit in minutes
+
+      # Clinical metrics
+      - name: primary_diagnosis_code
+        description: ICD-10 primary diagnosis code for the visit
+
+      - name: primary_diagnosis_chapter
+        description: Derived ICD-10 chapter grouping
+
+      - name: secondary_diagnosis_count
+        description: Count of secondary diagnoses recorded
+
+      - name: procedure_count
+        description: Number of procedures performed during the visit
+
+      # Flags
+      - name: is_high_acuity_location_flag
+        description: Indicates visit occurred in ER or hospital (high acuity)
+
+      - name: is_long_visit_flag
+        description: TRUE if visit duration exceeds 60 minutes
+
+      - name: has_procedures_flag
+        description: Indicates whether procedures were recorded
+
+      - name: is_vitals_complete_flag
+        description: TRUE if all required vitals were captured
+
+      - name: is_heart_rate_abnormal_flag
+        description: TRUE if heart rate is outside normal range
+
+      - name: is_temperature_abnormal_flag
+        description: TRUE if temperature is outside normal range
+
+      - name: is_o2_low_flag
+        description: TRUE if oxygen saturation is below threshold
+
+      # Follow-up
+      - name: follow_up_required
+        description: Indicates if follow-up is required
+
+      - name: follow_up_due_date
+        description: Calculated due date for follow-up
+
+      - name: is_follow_up_overdue_flag
+        description: TRUE if follow-up is overdue
+
+      # Metadata
+      - name: dbt_updated_timestamp
+        description: Timestamp when the record was last updated

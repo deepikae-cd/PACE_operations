@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: fct_idt_clinical_daily_operations
+    description: >
+      Daily activity metrics for IDT providers derived from clinical visit data.
+
+      Grain:
+        One row per provider per center per activity_date.
+
+      Description:
+        This model summarizes provider workload and clinical intensity
+        at a daily level, enabling operational monitoring and trend analysis.
+
+      Key Metrics:
+        - Daily visit count
+        - Total visit duration (minutes)
+        - High-acuity visit count (ER/Hospital)
+
+      Primary Use Cases:
+        - UC-12: IDT day-to-day transactional activity
+        - Provider workload tracking
+        - Operational dashboards and performance monitoring
+
+    config:
+      materialized: table
+      schema: gold_mart_facts
+      alias: fct_idt_clinical_daily_operations
+
+    columns:
+
+      - name: provider_id
+        description: >
+          Unique identifier of the clinical provider.
+        tests:
+          - not_null
+
+      - name: center_id
+        description: >
+          Identifier of the care center.
+    
+
+      - name: activity_date
+        description: >
+          Date of the clinical activity (derived from visit_date).
+    
+
+      - name: daily_visits
+        description: >
+          Total number of clinical visits performed by the provider on that day.
+
+      - name: total_minutes
+        description: >
+          Total duration of visits (in minutes) for the provider on that day.
+
+      - name: high_acuity_visits
+        description: >
+          Number of visits conducted in high-acuity settings such as ER or hospital.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp when the record was last updated by dbt.

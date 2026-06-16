@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: fct_idt_clinical_quality_reporting
+    description: >
+      Center-level clinical quality metrics derived from clinical visit data.
+
+      Grain:
+        One row per center.
+
+      Description:
+        This model evaluates clinical quality by analyzing vitals completeness
+        and abnormal vital sign indicators across care centers.
+
+      Key Metrics:
+        - Total clinical visits
+        - Vitals completeness
+        - Abnormal heart rate, temperature, and oxygen levels
+        - Percentage of visits with complete vitals
+
+      Primary Use Cases:
+        - UC-16: Quality measure reporting
+        - Clinical audit and compliance
+        - Center-level performance monitoring
+
+    config:
+      materialized: table
+      schema: gold_marts_facts
+      alias: fct_idt_clinical_quality_reporting
+
+    columns:
+
+      - name: center_id
+        description: >
+          Identifier of the care center.
+        tests:
+          - not_null
+
+      - name: total_visits
+        description: >
+          Total number of clinical visits at the center.
+
+      - name: complete_vitals
+        description: >
+          Number of visits with complete vitals recorded.
+
+      - name: abnormal_hr
+        description: >
+          Number of visits with abnormal heart rate.
+
+      - name: abnormal_temp
+        description: >
+          Number of visits with abnormal temperature.
+
+      - name: low_o2
+        description: >
+          Number of visits where oxygen saturation is below threshold.
+
+      - name: vitals_completeness_pct
+        description: >
+          Percentage of visits with complete vitals.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp when the record was last updated by dbt.
