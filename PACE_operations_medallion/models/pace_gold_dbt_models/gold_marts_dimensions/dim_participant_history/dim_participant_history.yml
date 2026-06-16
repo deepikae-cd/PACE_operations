@@ -12,7 +12,7 @@ models:
     config:
       materialized: table
       schema: gold_marts_dimensions
-      alias: participant_history
+      alias: dim_participant_history
       tags: ["marts", "participant", "history", "scd2", "dimension"]
       on_schema_change: sync_all_columns
 
