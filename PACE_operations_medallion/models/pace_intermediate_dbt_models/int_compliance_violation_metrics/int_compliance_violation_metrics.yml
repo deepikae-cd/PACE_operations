@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: int_compliance_violation_metrics
+    description: >
+      Aggregated compliance violation metrics at entity and rule-category level.
+      Provides counts of total, open, and high-severity violations.
+
+    config:
+      materialized: table  
+      tags: ['governance', 'compliance', 'int']
+      schema: int_compliance_violation_metrics
+      alias: compliance_violation_metrics
+
+    columns:
+
+      - name: entity_id
+        description: Unique identifier of the entity where violation occurred
+        tests:
+          - not_null
+
+      - name: rule_category
+        description: Category of the governance rule
+        tests:
+          - not_null
+
+      - name: total_violations
+        description: Total number of violations for the entity and category
+        tests:
+          - not_null
+
+      - name: open_violations
+        description: Count of violations that are currently open
+
+      - name: high_severity_violations
+        description: Count of violations marked as high severity
