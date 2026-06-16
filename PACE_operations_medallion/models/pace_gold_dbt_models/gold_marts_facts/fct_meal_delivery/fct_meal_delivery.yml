@@ -11,8 +11,7 @@ models:
       materialized: table   
       alias: fct_meal_delivery
       schema: gold_marts_facts
-      on_schema_change: sync_all_columns
-      cluster_by: ['delivery_date', 'participant_id']
+
 
     columns:
 
