@@ -1,35 +1,91 @@
 version: 2
 
 models:
-  - name: fct_meal_delivery
 
+  - name: fct_meal_delivery
     description: >
-      Fact table capturing participant meal delivery events.
-      Each row represents the latest state of a delivery,
-      deduplicated at the delivery_id level.
+      Fact table capturing meal delivery events with operational KPIs,
+      compliance flags, and participant outcomes.
 
     config:
       materialized: incremental
       schema: gold_marts_facts
       alias: fct_meal_delivery
-      unique_key: delivery_id   
+      unique_key: meal_delivery_sk
       on_schema_change: sync_all_columns
+      cluster_by: ['delivery_date', 'participant_id']
 
     columns:
 
+      - name: meal_delivery_sk
+        description: "Surrogate key uniquely identifying each delivery record."
+        tests:
+          - unique
+          - not_null
+
       - name: delivery_id
-        description: Unique identifier for each meal delivery (final grain).
-  
+        description: "Natural business identifier of the meal delivery."
+        tests:
+          - not_null
 
       - name: participant_id
-        description: Identifier of the participant receiving the meal.
-   
+        description: "Unique participant receiving the meal."
+        tests:
+          - not_null
 
-      - name: delivery_date
-        description: Scheduled or actual delivery date and time.
+      - name: delivery_caregiver_id
+        description: "Caregiver responsible for delivery."
+
+      - name: vendor_id
+        description: "Vendor responsible for delivery if external."
+
+      - name: meal_type
+        description: "Type of meal (BREAKFAST, LUNCH, DINNER, SNACK)."
 
       - name: delivery_status
-        description: Standardized status of the delivery (e.g., DELIVERED, FAILED, CANCELLED).
+        description: "Delivery outcome status."
+
+      - name: delivery_type
+        description: "Type of delivery (HOME_DELIVERY, CENTER_SERVED, etc.)."
+
+      - name: temperature_on_delivery
+        description: "Temperature category of meal upon delivery."
+
+      - name: delivery_date
+        description: "Scheduled delivery date."
+
+      - name: delivered_at
+        description: "Actual timestamp when meal was delivered."
+
+      - name: calorie_count
+        description: "Calories in delivered meal."
+
+      - name: hours_after_meal_date
+        description: "Delay in hours between scheduled and actual delivery."
+
+      - name: is_delivered_flag
+        description: "True if meal was successfully delivered."
+
+      - name: is_late_delivery_flag
+        description: "True if delivery exceeded SLA threshold."
+
+      - name: is_delivery_compliant_flag
+        description: "Indicates adherence to delivery compliance rules."
+
+      - name: is_temperature_noncompliant_flag
+        description: "True if temperature on delivery is invalid."
+
+      - name: is_refused_flag
+        description: "True if meal was refused."
+
+      - name: is_accepted_flag
+        description: "True if participant accepted the meal."
 
       - name: delivered_flag
-        description: Binary flag indicating whether the meal was successfully delivered (1 = delivered, 0 = not delivered).
+        description: "Binary version of delivery flag for reporting compatibility."
+
+      - name: loaded_timestamp
+        description: "Timestamp when record was ingested."
+
+      - name: dbt_loaded_at
+        description: "Timestamp when dbt processed the record."
