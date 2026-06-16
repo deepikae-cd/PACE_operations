@@ -2,28 +2,19 @@
   MODEL: FCT_MEAL_DELIVERY
   ───────────────────────────────────────────────────────────────
   PURPOSE:
-    This model creates the core fact table for meal delivery events.
-    It captures delivery outcomes, operational KPIs, and compliance metrics.
+    Builds a fact table for meal delivery events for analytics and reporting.
 
   GRAIN:
     1 row per delivery_id (latest record only)
 
   LOGIC:
-    1. Source data from enterprise_silver_meal_delivery
-    2. Incremental load based on loaded_timestamp
-    3. Deduplicate using row_number (latest per delivery_id)
-    4. Generate surrogate key
-    5. Standardize KPI flags and metrics
-
-  USED FOR:
-    - Delivery performance dashboards
-    - Compliance reporting
-    - Caregiver/vendor analysis
-    - SLA tracking (late deliveries)
+    1. Read from enterprise_silver_meal_delivery
+    2. Deduplicate using latest loaded_timestamp
+    3. Generate surrogate key
+    4. Standardize KPI flags
 
   NOTES:
-    - Incremental logic ensures only new data is processed
-    - Clustered for Snowflake performance optimization
+    - Rebuilds fully on every run
 */
 
 with source_data as (
@@ -49,7 +40,7 @@ with source_data as (
         calorie_count,
         hours_after_meal_date,
 
-        -- KPI flags from silver layer
+        -- KPI Flags (from silver)
         is_delivered_flag,
         is_not_delivered_flag,
         is_refused_flag,
@@ -65,18 +56,13 @@ with source_data as (
 
     from {{ ref('enterprise_silver_meal_delivery') }}
 
-    {% if is_incremental() %}
-        -- Only process new records
-        where loaded_timestamp > (select max(loaded_timestamp) from {{ this }})
-    {% endif %}
-
 ),
 
 deduplicated as (
 
     /*
-      Deduplicate records:
-      Keep latest record per delivery_id based on loaded_timestamp
+      Deduplicate:
+      Keep latest record per delivery_id
     */
     select
         *,
@@ -90,36 +76,30 @@ deduplicated as (
 
 select
 
-    /*
-      Surrogate Key:
-      Ensures uniqueness across versions of the same delivery_id
-    */
+    -- ✅ Surrogate Key
     sha2(concat_ws('||', delivery_id, cast(loaded_timestamp as varchar))) as meal_delivery_sk,
 
-    -- Business Keys
+    -- ✅ Business Keys
     delivery_id,
     participant_id,
     delivery_caregiver_id,
     vendor_id,
 
-    -- Dimensions
+    -- ✅ Dimensions
     meal_type,
     delivery_status,
     delivery_type,
     temperature_on_delivery,
 
-    -- Dates
+    -- ✅ Dates
     delivery_date,
     delivered_at,
 
-    -- Metrics
+    -- ✅ Metrics
     calorie_count,
     hours_after_meal_date,
 
-    /*
-      KPI FLAGS:
-      Defaulted to FALSE for consistency
-    */
+    -- ✅ KPI FLAGS (default false)
     coalesce(is_delivered_flag, false) as is_delivered_flag,
     coalesce(is_not_delivered_flag, false) as is_not_delivered_flag,
     coalesce(is_refused_flag, false) as is_refused_flag,
@@ -130,15 +110,13 @@ select
     coalesce(is_accepted_flag, false) as is_accepted_flag,
     coalesce(is_participant_refused_flag, false) as is_participant_refused_flag,
 
-    /*
-      Backward compatibility metric
-    */
+    -- ✅ Simple binary metric
     case
         when delivery_status = 'DELIVERED' then 1
         else 0
     end as delivered_flag,
 
-    -- Metadata
+    -- ✅ Metadata
     loaded_timestamp,
     current_timestamp() as dbt_loaded_at
 
