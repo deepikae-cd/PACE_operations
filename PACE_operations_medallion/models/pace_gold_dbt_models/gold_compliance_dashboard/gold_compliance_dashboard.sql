@@ -11,7 +11,7 @@
 with base as (
 
     select *
-    from {{ ref('fact_compliance_violation') }}
+    from {{ ref('fct_compliance_violation') }}
 
 )
 
