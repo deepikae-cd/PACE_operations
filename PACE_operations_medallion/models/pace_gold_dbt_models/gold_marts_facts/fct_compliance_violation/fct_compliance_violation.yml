@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: fct_compliance_violation
+    description: >
+      Fact table capturing individual compliance violation events.
+      Each record represents a single violation linked to an entity
+      and a governance rule, enriched with severity and status flags.
+
+    config:
+      materialized: table
+      tags: ['governance', 'fact']
+      schema: gold_marts_facts
+      alias: fct_compliance_violation
+
+
+    columns:
+
+      - name: violation_id
+        description: Unique identifier for each compliance violation event
+        tests:
+          - not_null
+          - unique
+
+      - name: entity_id
+        description: Identifier of the entity (e.g., participant, provider, center) where the violation occurred
+        tests:
+          - not_null
+
+      - name: rule_sk
+        description: Surrogate key linking to the governance rule dimension
+     
+      - name: rule_id
+        description: Natural key of the rule associated with the violation
+
+      - name: center_id
+        description: Identifier of the center/location associated with the violation
+
+      - name: is_open_flag
+        description: Indicates whether the violation is currently open (1 = open, 0 = closed)
+
+      - name: is_high_flag
+        description: Indicates whether the violation is classified as high severity (1 = high, 0 = other)
+
+      - name: violation_date
+        description: Date when the violation occurred
+
+      - name: resolved_at
+        description: Timestamp when the violation was resolved (if applicable)
