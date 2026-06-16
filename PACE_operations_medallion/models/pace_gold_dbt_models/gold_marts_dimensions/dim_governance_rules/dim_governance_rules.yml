@@ -1,0 +1,81 @@
+version: 2
+
+models:
+  - name: dim_governance_rules
+    description: >
+      Conformed dimension table for governance rules.
+      Contains standardized attributes and enforcement classifications.
+
+    config:
+      materialized: table
+      schema: gold_marts_dimensions
+      alias: dim_governance_rules
+      tags: ["marts", "governance", "scd2", "dimension" ,"rules"]
+     
+
+    columns:
+
+      - name: rule_sk
+        description: Surrogate key uniquely identifying each rule record
+        tests:
+          - not_null
+          - unique
+
+      - name: rule_id
+        description: Natural key of the governance rule from source system
+        tests:
+          - not_null
+
+      - name: rule_name
+        description: Human-readable name of the governance rule
+
+      - name: rule_description
+        description: Detailed explanation of what the rule enforces
+
+      - name: rule_category
+        description: Standardized category of the rule (e.g., HIPAA, CMS, INTERNAL)
+        tests:
+          - not_null
+
+      - name: rule_subcategory
+        description: Standardized subcategory for finer classification of rule
+
+      - name: applies_to_domain
+        description: Business domain where the rule applies (e.g., PARTICIPANT, BILLING)
+
+      - name: enforcement_level
+        description: Type of enforcement applied when rule is violated
+
+      - name: enforcement_rank
+        description: Numeric ranking of enforcement severity (1 = most strict)
+
+      - name: is_hard_block_flag
+        description: Indicates rule strictly blocks operations when violated
+
+      - name: is_soft_warning_flag
+        description: Indicates rule issues warnings but allows operation
+
+      - name: is_audit_only_flag
+        description: Indicates rule is only tracked for audit purposes
+
+      - name: is_regulatory_flag
+        description: Indicates rule is mandated by external regulatory bodies
+
+      - name: rule_status
+        description: Current lifecycle status of the rule
+
+
+      - name: is_currently_enforceable_flag
+        description: Indicates if rule is active and valid for enforcement today
+
+      - name: is_expiring_soon_flag
+        description: Indicates rule will expire within the next 30 days
+
+      - name: rule_age_days
+        description: Number of days since the rule became effective
+
+      - name: effective_date
+        description: Date when the rule became effective
+
+      - name: expiry_date
+        description: Date when the rule expires or becomes invalid
