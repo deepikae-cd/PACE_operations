@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: gold_hospitalization_risk_summary
+    description: >
+      Summary model providing distribution of participant risk levels.
+
+      Grain:
+        One row representing the total population.
+
+      Description:
+        This model aggregates risk classifications to provide a high-level
+        overview of participant risk distribution for hospitalization and
+        care management planning.
+
+      Key Metrics:
+        - Total participants
+        - High-risk participants
+        - Medium-risk participants
+        - Low-risk participants
+
+      Primary Use Cases:
+        - UC-17: Hospitalization prevention analytics
+        - Executive reporting
+        - Risk monitoring dashboards
+
+    config:
+      materialized: table
+      schema: gold_hospitalization_risk_summary
+      alias: hospitalization_risk_summary
+
+    columns:
+
+      - name: total_participants
+        description: >
+          Total number of participants in the population.
+
+      - name: high_risk
+        description: >
+          Number of participants classified as HIGH_RISK.
+
+      - name: medium_risk
+        description: >
+          Number of participants classified as MEDIUM_RISK.
+
+      - name: low_risk
+        description: >
+          Number of participants classified as LOW_RISK.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp when the record was last updated by dbt.
