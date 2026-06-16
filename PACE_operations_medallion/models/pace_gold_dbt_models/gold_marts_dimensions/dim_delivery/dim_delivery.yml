@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: dim_delivery
+    description: >
+      Dimension table capturing distinct delivery attributes from meal delivery data.
+      Supports analytics on delivery performance, types, and compliance tracking.
+
+    config:
+      materialized: table
+      schema: gold_marts_dimensions   
+      alias: dim_delivery
+      tags: ["marts", "delivery", "dimension"]
+      on_schema_change: sync_all_columns
+
+    columns:
+      - name: delivery_status
+        description: Status of the delivery (e.g., delivered, missed, cancelled)
+
+      - name: delivery_type
+        description: Type/category of delivery (e.g., standard, express, scheduled)
+
+      - name: is_delivery_compliant_flag
+        description: Indicates whether delivery meets defined compliance requirements
