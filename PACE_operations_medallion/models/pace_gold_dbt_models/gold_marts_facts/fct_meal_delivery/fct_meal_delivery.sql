@@ -1,5 +1,5 @@
 /*
-  MODEL: FACT_MEAL_DELIVERY
+  MODEL: FCT_MEAL_DELIVERY
   ───────────────────────────────────────────────────────────────
   PURPOSE:
     This model creates the core fact table for meal delivery events.
