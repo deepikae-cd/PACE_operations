@@ -1,0 +1,87 @@
+version: 2
+
+models:
+
+  - name: gold_notification_issues
+    description: >
+      Gold-layer monitoring table that captures notifications exhibiting
+      operational or delivery issues. This model is used for alerting,
+      SLA tracking, and root cause analysis of failed or delayed notifications.
+
+      Records include notifications that:
+      - Failed delivery
+      - Required multiple retries
+      - Were delayed beyond SLA thresholds
+      - Were not sent despite being scheduled
+
+    config:
+      materialized: table
+      tags: ['gold', 'monitoring', 'alerts']
+
+    columns:
+
+      - name: notification_id
+        description: >
+          Unique identifier for the notification. Represents the natural key
+          from the source system and is expected to be unique within this table
+          as only the latest deduplicated record is retained.
+        tests:
+          - not_null
+          - unique
+
+      - name: center_id
+        description: >
+          Identifier of the care center or facility associated with
+          the notification. Used for operational segmentation and reporting.
+
+      - name: channel
+        description: >
+          Communication channel used to send the notification
+          (e.g., SMS, EMAIL, IN_APP).
+
+      - name: delivery_status
+        description: >
+          Standardized delivery status indicating the outcome of the notification
+          (e.g., DELIVERED, FAILED, BOUNCED, SENT, READ).
+
+      - name: retry_count
+        description: >
+          Number of retry attempts made to deliver the notification.
+          High values indicate persistent delivery failures or system instability.
+
+      - name: send_delay_minutes
+        description: >
+          Time difference in minutes between scheduled send time and actual send time.
+          Used to monitor SLA adherence.
+
+      - name: is_failed_flag
+        description: >
+          Boolean flag indicating whether the notification delivery failed.
+          True when delivery_status is FAILED or BOUNCED.
+
+      - name: is_high_retry_flag
+        description: >
+          Boolean flag indicating excessive retry attempts (>= 3 retries),
+          signaling delivery reliability issues.
+
+      - name: is_stuck_flag
+        description: >
+          Boolean flag indicating notifications that were scheduled but never sent,
+          even after the scheduled timestamp has passed.
+
+      - name: is_late_send_flag
+        description: >
+          Boolean flag indicating notifications sent later than the acceptable SLA
+          threshold (typically > 15 minutes delay).
+
+      - name: scheduled_send_at
+        description: >
+          Timestamp representing when the notification was intended to be sent.
+
+      - name: sent_at
+        description: >
+          Timestamp when the notification was actually sent.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp indicating when the record was last processed by dbt.

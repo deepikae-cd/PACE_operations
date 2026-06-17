@@ -1,0 +1,14 @@
+ - name: gold_notification_engagement
+    description: "Aggregated engagement metrics across notification types and categories."
+    config:
+      materialized: table
+      tags: ['gold', 'engagement']
+
+    columns:
+      - name: notification_type
+        tests: [not_null]
+
+      - name: read_rate
+        description: "Read rate of delivered notifications."
+
+
