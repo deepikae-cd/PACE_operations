@@ -1,65 +1,85 @@
 /*
 ===============================================================================
-Model: fct_tasks
+Model: fact_tasks
 Purpose:
-  Core fact table capturing task-level activity across participants,
-  caregivers, and centers.
+  Core fact table capturing task execution events enriched with task metadata.
 
 Grain:
-  One row per task instance
+  One row per task_instance_id
+
+Inputs:
+  - staging_task_instance (execution details)
+  - staging_task_template (task metadata)
+
+Key Features:
+  - Joins task executions with template metadata
+  - Computes task duration
+  - Standardizes keys
+  - Adds classification fields for analytics
 
 ===============================================================================
 */
 
-with source as (
+with task_instance as (
 
     select *
-    from {{ ref('staging_task') }}
+    from {{ ref('staging_task_instance') }}
 
 ),
 
-deduplicated as (
+task_template as (
 
-    select *,
-           row_number() over (
-               partition by task_id
-               order by _loaded_at desc
-           ) as _rn
-    from source
+    select *
+    from {{ ref('staging_task_template') }}
+
+),
+
+joined as (
+
+    select
+
+        -- Keys
+        ti.task_instance_id        as task_id,
+        ti.care_plan_activity_id,
+        ti.task_template_id,
+
+        -- Template enrichment
+        tt.task_name,
+        tt.task_category,
+
+        -- Metrics
+        ti.actual_duration_minutes,
+        ti.performed_at,
+
+        -- Derived time fields
+        date_trunc('day', ti.performed_at) as performed_date,
+
+        -- Flags
+        (ti.actual_duration_minutes is not null) as is_completed_flag,
+
+        -- Metadata
+        ti.source_system,
+        ti.loaded_at,
+        ti.source_file,
+
+        current_timestamp() as dbt_updated_timestamp
+
+    from task_instance ti
+    left join task_template tt
+        on ti.task_template_id = tt.task_template_id
 
 ),
 
 final as (
 
     select
+        *,
+        
+        -- Optional normalization for analytics
+        coalesce(task_category, 'UNKNOWN') as task_category_clean,
+        coalesce(task_name, 'UNKNOWN') as task_name_clean
 
-        -- Keys
-        trim(upper(task_id)) as task_id,
-        trim(upper(participant_id)) as participant_id,
-        trim(upper(caregiver_id)) as caregiver_id,
-        trim(upper(center_id)) as center_id,
-
-        -- Attributes
-        trim(upper(task_type)) as task_type,
-        trim(upper(task_status)) as task_status,
-
-        -- Timestamps
-        scheduled_at,
-        started_at,
-        completed_at,
-
-        -- Metrics
-        datediff('minute', started_at, completed_at) as task_duration_minutes,
-
-        -- Flags
-        (task_status = 'COMPLETED') as is_completed_flag,
-
-        -- Metadata
-        _loaded_at as loaded_timestamp,
-        current_timestamp() as dbt_updated_timestamp
-
-    from deduplicated
-    where _rn = 1
+    from joined
 
 )
 
