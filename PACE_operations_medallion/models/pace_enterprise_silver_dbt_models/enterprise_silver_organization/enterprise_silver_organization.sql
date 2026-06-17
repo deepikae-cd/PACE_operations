@@ -1,5 +1,5 @@
 /*
-  ENTERPRISE_SILVER_ORGANIZATION_SERVICE_AREA
+  ENTERPRISE_SILVER_ORGANIZATION
   ──────────────────────────────────────────────────────────────────────────────
   Source  : {{ ref('staging_organization') }}
   Purpose : Cleanse, deduplicate and enrich organization and service area
