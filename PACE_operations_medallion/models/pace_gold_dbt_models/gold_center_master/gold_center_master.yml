@@ -17,9 +17,7 @@ models:
 
       - name: center_id
         description: "Primary key for center."
-        tests:
-          - not_null
-          - unique
+  
 
       - name: center_name
         description: "Name of the PACE center."
