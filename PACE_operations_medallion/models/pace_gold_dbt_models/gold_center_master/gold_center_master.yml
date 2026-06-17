@@ -1,0 +1,32 @@
+version: 2
+
+models:
+
+  - name: gold_center_master
+    description: >
+      Unified dimension combining PACE center and organization attributes.
+      Provides a single source of truth for all center-level reporting.
+
+    config:
+      materialized: table
+      schema: gold_center_master
+      alias: center_master
+      tags: ['gold', 'dimension', 'center']
+
+    columns:
+
+      - name: center_id
+        description: "Primary key for center."
+  
+
+      - name: center_name
+        description: "Name of the PACE center."
+
+      - name: organization_id
+        description: "Owning organization identifier."
+
+      - name: region
+        description: "Region where the center operates."
+
+      - name: center_full_address
+        description: "Full formatted address."

@@ -1,0 +1,41 @@
+version: 2
+
+models:
+
+  - name: gold_organization_performance
+    description: >
+      Organization-level KPI table aggregating metrics across all centers
+      and service areas. Used for executive reporting, compliance tracking,
+      and operational monitoring.
+
+    config:
+      materialized: table
+      schema: gold_organization_performance
+      alias: organization_performance
+      tags: ['gold', 'organization', 'kpi']
+
+    columns:
+
+      - name: organization_id
+        description: "Unique identifier for the organization."
+        tests:
+          - not_null
+          - unique
+
+      - name: total_centers
+        description: "Number of centers under the organization."
+
+      - name: total_service_areas
+        description: "Number of service areas covered."
+
+      - name: total_enrolled
+        description: "Total enrolled participants across centers."
+
+      - name: utilization_rate
+        description: "Enrollment vs capacity ratio."
+
+      - name: avg_quality_rating
+        description: "Average quality rating across centers."
+
+      - name: accreditation_status
+        description: "Current accreditation status."

@@ -1,0 +1,35 @@
+version: 2
+
+models:
+
+  - name: gold_center_utilization
+    description: >
+      Center-level capacity and enrollment metrics derived from
+      organizational service area data. Supports planning,
+      utilization tracking, and capacity management.
+
+    config:
+      materialized: table
+      schema: gold_center_utilization
+      alias: center_utilization
+      tags: ['gold', 'center', 'capacity']
+
+    columns:
+
+      - name: center_id
+        description: "Standardized PACE center identifier."
+        tests:
+          - not_null
+          - unique
+
+      - name: enrollment_capacity
+        description: "Maximum number of participants allowed at the center."
+
+      - name: enrolled_count
+        description: "Current number of enrolled participants."
+
+      - name: utilization_rate
+        description: "Ratio of enrolled participants to total capacity."
+
+      - name: capacity_status
+        description: "Categorized capacity status (LOW, MODERATE, NEAR_CAPACITY, AT_CAPACITY)."
