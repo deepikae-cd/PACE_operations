@@ -1,0 +1,45 @@
+version: 2
+
+models:
+
+  - name: gold_clinical_performance
+    description: >
+      Aggregated daily clinical performance metrics at the center level.
+      Captures visit volumes, durations, and follow-up patterns to support
+      operational monitoring, SLA tracking, and care delivery optimization.
+
+    config:
+      materialized: table
+      schema: gold_clinical_performance
+      alias: clinical_performance
+      tags: ['gold', 'clinical', 'performance', 'kpi']
+
+    columns:
+
+      - name: center_id
+        description: "Unique identifier for the care center."
+        tests:
+          - not_null
+
+      - name: visit_date
+        description: "Date of clinical activity (aggregation grain)."
+        tests:
+          - not_null
+
+      - name: total_visits
+        description: "Total number of clinical visits performed."
+
+      - name: avg_visit_duration
+        description: "Average visit duration in minutes."
+
+      - name: long_visit_count
+        description: "Number of visits exceeding expected duration thresholds."
+
+      - name: follow_up_count
+        description: "Number of visits requiring follow-up."
+
+      - name: follow_up_rate
+        description: "Percentage of visits requiring follow-up."
+
+      - name: dbt_updated_timestamp
+        description: "Timestamp when the record was last updated."
