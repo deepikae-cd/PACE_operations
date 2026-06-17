@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: gold_medication_safety
+    description: "Participant-level medication safety indicators."
+
+    config:
+      materialized: table
+      schema: gold_medication_safety
+      alias: medication_safety
+
+    columns:
+      - name: participant_id
+        tests: [not_null]
+
+      - name: total_medications
+        description: "Total medications for participant."
+
+      - name: controlled_med_count
+        description: "Controlled substance count."
+
+      - name: interaction_alerts_count
+        description: "Interaction alerts count."
