@@ -24,7 +24,7 @@
 with base as (
 
     select *
-    from {{ ref('enterprise_silver_notification') }}
+    from {{ ref('enterprise_silver_notification_service') }}
 
 ),
 
