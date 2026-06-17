@@ -4,35 +4,44 @@ models:
 
   - name: gold_meal_delivery_performance
     description: >
-      Aggregated mart providing daily delivery performance metrics derived
-      from meal delivery fact data. Enables operational monitoring,
-      SLA tracking, and executive reporting.
+      Gold-layer aggregated table providing daily meal delivery performance metrics.
+      Supports operational reporting, SLA monitoring, and executive dashboards.
 
     config:
       materialized: table
       schema: gold_meal_delivery_performance
       alias: meal_delivery_performance
-    
+
     columns:
 
       - name: delivery_date
-        description: "Date of meal delivery (grain of the model)."
+        description: "Date of meal delivery (model grain)."
         tests:
           - not_null
           - unique
 
       - name: total_deliveries
-        description: "Total number of meal deliveries for the given day."
+        description: "Total number of meal deliveries for the given date."
 
       - name: delivered_count
-        description: "Count of successfully delivered meals."
+        description: "Total number of successfully delivered meals."
 
       - name: avg_delay
         description: >
-          Average delay in hours between scheduled delivery time
-          and actual delivery.
+          Average delay (in hours) between scheduled delivery time
+          and actual delivery time.
 
       - name: late_deliveries
         description: >
-          Number of deliveries that exceeded SLA threshold
+          Count of deliveries that exceeded SLA threshold
           (late deliveries).
+
+      - name: delivery_success_rate
+        description: >
+          Ratio of delivered meals to total deliveries.
+          Represents delivery success percentage.
+
+      - name: late_delivery_rate
+        description: >
+          Ratio of late deliveries to total deliveries.
+          Represents SLA violation percentage.
