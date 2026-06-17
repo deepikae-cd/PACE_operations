@@ -1,13 +1,13 @@
 version: 2
 
 models:
-  - name: dim_meal_delivery   # update if your model file name differs
+  - name: dim_meal   # update if your model file name differs
     description: Dimension table for meal delivery attributes
 
     config:
       materialized: table
       schema: gold_marts_dimensions 
-      alias: dim_meal_delivery
+      alias: dim_meal
       tags: ["marts", "meal_delivery", "dimension"]
       on_schema_change: sync_all_columns
 
