@@ -14,6 +14,8 @@ models:
 
     config:
       materialized: table
+      schema: gold_notification_by_entity
+      alias: notification_by_entity
       tags: ['gold', 'entity', 'analytics']
 
     columns:

@@ -16,6 +16,8 @@ models:
 
     config:
       materialized: table
+      schema: gold_notification_issues
+      alias: notification_issues
       tags: ['gold', 'monitoring', 'alerts']
 
     columns:
