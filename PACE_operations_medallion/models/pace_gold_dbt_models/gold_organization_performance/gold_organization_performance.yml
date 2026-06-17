@@ -1,0 +1,38 @@
+version: 2
+
+models:
+
+  - name: gold_organization_performance
+    description: >
+      Aggregated performance metrics at the organization level,
+      combining multiple centers into a single KPI view.
+
+    config:
+      materialized: table
+      schema: gold_organization_performance
+      alias: organization_performance
+      tags: ['gold', 'organization', 'kpi']
+
+    columns:
+
+      - name: organization_id
+        description: "Unique organization identifier."
+        tests: [not_null, unique]
+
+      - name: total_centers
+        description: "Number of centers under the organization."
+
+      - name: total_enrolled
+        description: "Total enrolled participants."
+
+      - name: total_capacity
+        description: "Total capacity across centers."
+
+      - name: utilization_rate
+        description: "Enrollment vs capacity ratio."
+
+      - name: avg_quality_rating
+        description: "Average quality rating across centers."
+
+      - name: accreditation_status
+        description: "Current accreditation status."
