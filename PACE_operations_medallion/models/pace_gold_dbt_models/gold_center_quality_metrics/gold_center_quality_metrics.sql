@@ -13,7 +13,7 @@ Grain:
 with base as (
 
     select *
-    from {{ ref('enterprise_silver_organization_service_area') }}
+    from {{ ref('enterprise_silver_organization') }}
 
 ),
 
