@@ -1,0 +1,103 @@
+version: 2
+
+models:
+
+  - name: fct_tasks
+    description: >
+      Core fact table capturing task execution events across participants,
+      caregivers, and care plans. Each record represents a single task instance
+      performed as part of a care activity.
+
+      This dataset serves as the foundational layer for all task-related analytics
+      including:
+      - Task volume and distribution analysis
+      - Care plan execution tracking
+      - Operational efficiency monitoring
+      - Task duration and variance analytics
+
+      The model enriches task execution data with template metadata to provide
+      meaningful classification (task name, category) for reporting and analysis.
+
+    config:
+      materialized: table
+      alias: fct_tasks
+      schema: gold_marts_facts
+      unique_key: task_id
+      tags: ['fact', 'tasks', 'core', 'operations']
+
+    columns:
+
+      - name: task_id
+        description: >
+          Unique identifier for the task instance. Represents the grain
+          of the table (1 row = 1 task execution event).
+        tests:
+          - not_null
+          - unique
+
+      - name: care_plan_activity_id
+        description: >
+          Identifier linking the task to a specific care plan activity.
+          Enables traceability from care plan → task execution.
+
+      - name: task_template_id
+        description: >
+          Identifier referencing the task template used to generate this task.
+          Used to enrich task metadata such as name and category.
+
+      - name: task_name
+        description: >
+          Human-readable name of the task derived from the task template.
+          Used for reporting and dashboard display.
+
+      - name: task_category
+        description: >
+          Category classification of the task (e.g., MEDICATION, VISIT,
+          CARE_ACTIVITY). Enables grouping and segmentation.
+          
+      - name: actual_duration_minutes
+        description: >
+          Duration of task execution in minutes. Represents the actual
+          time spent performing the task.
+
+      - name: performed_at
+        description: >
+          Timestamp indicating when the task was performed.
+
+      - name: performed_date
+        description: >
+          Date (derived from performed_at) used for time-based aggregation
+          and reporting.
+
+      - name: is_completed_flag
+        description: >
+          Boolean flag indicating whether the task was completed.
+          True when actual_duration_minutes is present.
+
+      - name: task_category_clean
+        description: >
+          Standardized task category with fallback value 'UNKNOWN'
+          for missing or invalid values. Recommended field for grouping.
+
+      - name: task_name_clean
+        description: >
+          Standardized task name with fallback value 'UNKNOWN'.
+          Ensures consistent reporting and avoids null values.
+
+      - name: source_system
+        description: >
+          Source system from which the task data originated.
+
+      - name: loaded_at
+        description: >
+          Original ingestion timestamp from the source system.
+
+      - name: source_file
+        description: >
+          Identifier for the file or batch from which the record was ingested.
+          Used for lineage and audit tracking.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp indicating when the record was last processed
+          during the dbt run. Used for data freshness monitoring.

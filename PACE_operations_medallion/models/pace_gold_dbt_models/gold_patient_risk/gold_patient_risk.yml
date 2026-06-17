@@ -1,0 +1,43 @@
+version: 2
+
+models:
+
+  - name: gold_patient_risk
+    description: >
+      Identifies high-risk participants based on abnormal clinical indicators
+      captured during visits. Aggregates risk signals such as abnormal vitals
+      to support early intervention and hospitalization prevention strategies.
+
+    config:
+      materialized: table
+      schema: gold_patient_risk
+      alias: patient_risk
+      tags: ['gold', 'clinical', 'risk', 'analytics']
+
+    columns:
+
+      - name: participant_id
+        description: "Unique identifier for the participant."
+        tests:
+          - not_null
+          - unique
+
+      - name: hr_abnormal_count
+        description: "Count of visits with abnormal heart rate."
+
+      - name: temp_abnormal_count
+        description: "Count of visits with abnormal temperature."
+
+      - name: o2_low_count
+        description: "Count of visits with low oxygen saturation."
+
+      - name: total_visits
+        description: "Total number of visits for the participant."
+
+      - name: total_risk_events
+        description: >
+          Total number of abnormal clinical events across visits,
+          used as a combined risk indicator.
+
+      - name: dbt_updated_timestamp
+        description: "Timestamp of last dbt processing."

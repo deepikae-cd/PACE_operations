@@ -1,0 +1,39 @@
+version: 2
+
+models:
+
+  - name: gold_visit_performance
+    description: >
+      Provides aggregated visit-level performance metrics at the center
+      and day level. Enables monitoring of care delivery throughput and
+      follow-up requirements.
+
+    config:
+      materialized: table
+      schema: gold_visit_performance
+      alias: visit_performance
+      tags: ['gold', 'visits', 'operations']
+
+    columns:
+
+      - name: center_id
+        description: "Identifier of the care center."
+
+      - name: visit_day
+        description: "Date of visit aggregation."
+       
+
+      - name: total_visits
+        description: "Total number of visits conducted."
+
+      - name: avg_visit_duration
+        description: "Average visit duration in minutes."
+
+      - name: follow_up_required_count
+        description: "Number of visits requiring follow-up."
+
+      - name: follow_up_rate
+        description: "Percentage of visits requiring follow-up."
+
+      - name: dbt_updated_timestamp
+        description: "Timestamp when record was last updated."
