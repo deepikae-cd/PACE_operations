@@ -1,0 +1,34 @@
+version: 2
+
+models:
+
+  - name: fct_tasks
+    description: >
+      Core fact table capturing task-level operational activity.
+
+    config:
+      materialized: table
+      schema: gold_marts_facts
+      alias: fct_tasks
+      unique_key: task_id
+      tags: ['fact', 'tasks']
+
+    columns:
+
+      - name: task_id
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: "Associated participant."
+
+      - name: caregiver_id
+        description: "Assigned caregiver."
+
+      - name: center_id
+        description: "PACE center."
+
+      - name: task_type
+        description: "Type of task."
+
+      - name: task_duration_minutes
+        description: "Task duration in minutes."
