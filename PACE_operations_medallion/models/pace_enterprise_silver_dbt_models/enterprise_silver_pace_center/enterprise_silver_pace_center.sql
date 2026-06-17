@@ -33,4 +33,4 @@ select
     -- Metadata
     loaded_at
 
-from {{ ref('staging_pace_center_organization') }}
+from {{ ref('staging_pace_center') }}
