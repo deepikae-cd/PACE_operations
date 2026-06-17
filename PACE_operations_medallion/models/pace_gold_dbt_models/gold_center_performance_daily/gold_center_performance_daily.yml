@@ -1,0 +1,45 @@
+version: 2
+
+models:
+
+  - name: gold_center_performance_daily
+    description: >
+      Daily aggregated KPIs for notification performance at the center level.
+      Used for operational dashboards and SLA monitoring.
+
+    config:
+      materialized: table
+      schema: gold_center_performance_daily
+      alias: center_performance_daily
+      tags: ['gold', 'center', 'kpi']
+
+    columns:
+
+      - name: metric_date
+        description: "Date of notification activity."
+        tests: [not_null]
+
+      - name: center_id
+        description: "PACE center identifier."
+        tests: [not_null]
+
+      - name: total_notifications
+        description: "Total notifications sent per day."
+
+      - name: delivered_count
+        description: "Successfully delivered notifications."
+
+      - name: failed_count
+        description: "Failed notifications."
+
+      - name: read_count
+        description: "Read notifications."
+
+      - name: delivery_rate
+        description: "Delivered / total notifications."
+
+      - name: failure_rate
+        description: "Failed / total notifications."
+
+      - name: read_rate
+        description: "Read / delivered notifications."

@@ -1,0 +1,38 @@
+version: 2
+
+models:
+
+  - name: gold_center_utilization
+    description: >
+      Provides center-level capacity, enrollment, and utilization metrics.
+      Used for planning and operational optimization.
+
+    config:
+      materialized: table
+      schema: gold_center_utilization
+      alias: center_utilization
+      tags: ['gold', 'center', 'capacity']
+
+    columns:
+
+      - name: center_id
+        description: "PACE center identifier."
+        tests: [not_null, unique]
+
+      - name: enrollment_capacity
+        description: "Maximum allowed enrollment."
+
+      - name: enrolled_count
+        description: "Number of currently enrolled participants."
+
+      - name: population_served
+        description: "Population covered by center."
+
+      - name: eligible_population
+        description: "Total eligible population."
+
+      - name: utilization_rate
+        description: "Enrolled / capacity."
+
+      - name: enrollment_conversion_rate
+        description: "Enrolled / eligible population."
