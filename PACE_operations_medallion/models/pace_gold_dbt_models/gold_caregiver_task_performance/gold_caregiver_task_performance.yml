@@ -1,0 +1,52 @@
+version: 2
+
+models:
+
+  - name: gold_caregiver_task_performance
+    description: >
+      Gold-layer aggregated table providing caregiver-level task performance metrics.
+      Enables workload analysis, efficiency tracking, and operational reporting
+      at caregiver and center level.
+
+    config:
+      materialized: table
+      schema: gold_caregiver_task_performance
+      alias: caregiver_task_performance
+      cluster_by: ['center_id', 'caregiver_id']
+
+    columns:
+
+      - name: caregiver_id
+        description: "Unique identifier of caregiver performing tasks."
+        tests:
+          - not_null
+
+      - name: center_id
+        description: "Identifier of the center where tasks are performed."
+        tests:
+          - not_null
+
+      - name: total_tasks
+        description: "Total number of tasks completed by the caregiver."
+
+      - name: total_task_minutes
+        description: "Total time spent on tasks (in minutes)."
+
+      - name: avg_task_minutes
+        description: "Average time taken per task."
+
+      - name: long_tasks_count
+        description: "Number of tasks exceeding defined duration thresholds."
+
+      - name: avg_minutes_per_task
+        description: >
+          Derived metric representing average minutes per task
+          (computed as total_task_minutes / total_tasks).
+
+      - name: long_task_rate
+        description: >
+          Percentage of tasks classified as long tasks
+          (long_tasks_count / total_tasks).
+
+      - name: dbt_updated_timestamp
+        description: "Timestamp indicating when the model was last refreshed."
