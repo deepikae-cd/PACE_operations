@@ -22,6 +22,8 @@ models:
 
     config:
       materialized: table
+      schema: gold_caregiver_efficiency
+      alias: caregiver_efficiency
       tags: ['gold', 'caregiver', 'efficiency', 'operations']
 
     columns:
