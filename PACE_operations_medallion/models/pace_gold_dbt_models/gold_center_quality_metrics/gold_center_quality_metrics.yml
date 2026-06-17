@@ -1,0 +1,31 @@
+version: 2
+
+models:
+
+  - name: gold_center_quality_metrics
+    description: >
+      Center-level quality and compliance metrics including ratings,
+      audit recency, and regulatory signals.
+
+    config:
+      materialized: table
+      schema: gold_center_quality_metrics
+      alias: center_quality_metrics
+      tags: ['gold', 'quality']
+
+    columns:
+
+      - name: center_id
+        tests: [not_null, unique]
+
+      - name: avg_quality_rating
+        description: "Average quality score for the center."
+
+      - name: quality_rating_tier
+        description: "Categorized quality rating."
+
+      - name: is_cms_audit_overdue_flag
+        description: "CMS audit overdue indicator."
+
+      - name: is_state_audit_overdue_flag
+        description: "State audit overdue indicator."
