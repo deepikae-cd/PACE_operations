@@ -1,0 +1,50 @@
+version: 2
+
+models:
+
+  - name: gold_medication_adherence
+    description: >
+      Gold-layer aggregated table capturing participant-level medication adherence
+      and continuity metrics. Helps identify refill risks, stale prescriptions,
+      and gaps in medication adherence.
+
+    config:
+      materialized: table
+      schema: gold_medication_adherence
+      alias: medication_adherence
+
+    columns:
+
+      - name: participant_id
+        description: "Unique identifier of the participant."
+        tests:
+          - not_null
+
+      - name: total_meds
+        description: "Total number of medications prescribed."
+
+      - name: active_meds
+        description: "Number of medications currently active."
+
+      - name: refill_due_soon
+        description: "Count of medications that are approaching refill deadline."
+
+      - name: exhausted_refills
+        description: "Count of medications with no remaining refills."
+
+      - name: stale_active_meds
+        description: >
+          Number of medications marked active but already expired,
+          indicating data or adherence issues.
+
+      - name: refill_risk_rate
+        description: >
+          Percentage of medications that are at risk of running out soon,
+          based on refill_due_soon.
+
+      - name: stale_rate
+        description: >
+          Percentage of stale active medications relative to total medications.
+
+      - name: dbt_updated_timestamp
+        description: "Timestamp indicating last model refresh."

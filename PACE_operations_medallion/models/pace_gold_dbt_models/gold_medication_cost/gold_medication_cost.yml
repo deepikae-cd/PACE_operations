@@ -1,0 +1,41 @@
+version: 2
+
+models:
+
+  - name: gold_medication_cost
+    description: >
+      Gold-layer aggregated table providing participant-level medication cost analytics.
+      Enables financial monitoring, cost optimization, and identification of high-cost
+      medication patterns across the population.
+
+    config:
+      materialized: table
+      schema: gold_medication_cost
+      alias: medication_cost
+
+    columns:
+
+      - name: participant_id
+        description: "Unique identifier of the participant."
+        tests:
+          - not_null
+
+      - name: total_medications
+        description: "Total number of medications prescribed to the participant."
+
+      - name: total_cost
+        description: "Total cost of all medications for the participant."
+
+      - name: avg_cost
+        description: "Average cost per medication."
+
+      - name: high_cost_meds
+        description: "Number of medications classified as HIGH cost tier."
+
+      - name: high_cost_rate
+        description: >
+          Percentage of medications that fall into the HIGH cost tier,
+          indicating financial burden.
+
+      - name: dbt_updated_timestamp
+        description: "Timestamp indicating when the model was last refreshed."

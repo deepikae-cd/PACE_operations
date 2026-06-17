@@ -1,0 +1,44 @@
+version: 2
+
+models:
+
+  - name: gold_medication_site_variance
+    description: >
+      Gold-layer model providing center-level medication analytics to identify
+      variation in prescribing patterns, cost distribution, and formulary adherence
+      across sites.
+
+    config:
+      materialized: table
+      schema: gold_medication_site_variance
+      alias: medication_site_variance
+
+
+    columns:
+
+      - name: center_id
+        description: "Identifier of the care center."
+        tests:
+          - not_null
+
+      - name: total_medications
+        description: "Total medications prescribed across the center."
+
+      - name: avg_cost
+        description: "Average medication cost within the center."
+
+      - name: off_formulary_count
+        description: >
+          Number of medications that are not part of the approved formulary.
+
+      - name: high_risk_count
+        description: >
+          Count of high-risk controlled substances prescribed at the center.
+
+      - name: off_formulary_rate
+        description: >
+          Percentage of medications that fall outside the formulary,
+          indicating cost or compliance issues.
+
+      - name: dbt_updated_timestamp
+        description: "Timestamp when the model was last updated."
