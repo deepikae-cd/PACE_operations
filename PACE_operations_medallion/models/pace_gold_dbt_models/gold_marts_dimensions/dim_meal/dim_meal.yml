@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: dim_meal   # update if your model file name differs
+    description: Dimension table for meal delivery attributes
+
+    config:
+      materialized: table
+      schema: gold_marts_dimensions 
+      alias: dim_meal
+      tags: ["marts", "meal_delivery", "dimension"]
+      on_schema_change: sync_all_columns
+
+    columns:
+      - name: meal_type
+        description: Type of meal provided (e.g., breakfast, lunch, dinner, snack)
+
+      - name: dietary_restriction
+        description: Dietary restriction associated with the meal (e.g., vegan, gluten-free)
+
+      - name: calorie_range
+        description: Calorie range category for the meal
+
+      - name: is_clinical_dietary_need_flag
+        description: Indicates if the meal meets a clinical dietary requirement
