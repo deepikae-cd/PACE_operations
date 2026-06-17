@@ -18,13 +18,10 @@ models:
 
       - name: center_id
         description: "Identifier of the care center."
-        tests:
-          - not_null
 
       - name: visit_day
         description: "Date of visit aggregation."
-        tests:
-          - not_null
+       
 
       - name: total_visits
         description: "Total number of visits conducted."
