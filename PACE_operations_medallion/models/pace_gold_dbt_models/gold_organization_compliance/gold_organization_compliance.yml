@@ -1,0 +1,28 @@
+version: 2
+
+models:
+
+  - name: gold_organization_compliance
+    description: >
+      Tracks accreditation, contracts, and audit compliance
+      at the organization level.
+
+    config:
+      materialized: table
+      schema: gold_organization_compliance
+      alias: organization_compliance
+      tags: ['gold', 'compliance']
+
+    columns:
+
+      - name: organization_id
+        tests: [not_null, unique]
+
+      - name: accreditation_status
+        description: "Accreditation state."
+
+      - name: is_expired
+        description: "Accreditation expired flag."
+
+      - name: cms_audit_overdue
+        description: "CMS audit overdue flag."
