@@ -1,0 +1,24 @@
+version: 2
+
+models:
+
+  - name: gold_center_comparison
+    description: >
+      Compares centers within the same organization using key KPIs.
+
+    config:
+      materialized: table
+      schema: gold_center_comparison
+      alias: center_comparison
+      tags: ['gold', 'comparison']
+
+    columns:
+
+      - name: center_id
+        tests: [not_null, unique]
+
+      - name: organization_id
+        description: "Owning organization."
+
+      - name: utilization_rank
+        description: "Rank within organization."
