@@ -1,0 +1,44 @@
+version: 2
+
+models:
+
+  - name: fct_visits
+    description: >
+      Core fact table capturing caregiver visit events. Each record represents
+      a completed or scheduled visit linking caregivers, participants,
+      and centers.
+
+      Supports:
+      - Care delivery tracking
+      - Visit duration analytics
+      - Operational efficiency monitoring
+
+    config:
+      materialized: table
+      schema: gold_marts_facts
+      alias: fct_visits
+      unique_key: visit_id
+      tags: ['fact', 'visits']
+
+    columns:
+
+      - name: visit_id
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: "Participant receiving care."
+
+      - name: caregiver_id
+        description: "Caregiver performing visit."
+
+      - name: center_id
+        description: "Associated center."
+
+      - name: visit_type
+        description: "Type of visit (e.g., HOME, CLINIC)."
+
+      - name: visit_duration_minutes
+        description: "Visit duration."
+
+      - name: visit_date
+        description: "Date of visit."
