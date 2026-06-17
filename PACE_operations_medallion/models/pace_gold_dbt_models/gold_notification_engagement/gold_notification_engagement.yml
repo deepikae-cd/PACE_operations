@@ -1,0 +1,46 @@
+version: 2
+
+models:
+
+  - name: gold_notification_engagement
+    description: >
+      Gold-layer aggregated dataset that measures user engagement with notifications
+      across notification types, categories, and delivery channels.
+
+      This model is used for product analytics, user behavior analysis,
+      and communication effectiveness tracking. It helps answer questions such as:
+      - Which notification types have the highest engagement?
+      - How quickly users read notifications?
+      - Which channels perform best for user interaction?
+
+    config:
+      materialized: table
+      schema: gold_notification_engagement
+      alias: notification_engagement
+      tags: ['gold', 'engagement', 'analytics']
+
+    columns:
+
+      - name: notification_type
+        description: >
+          Standardized type of notification (e.g., APPOINTMENT_REMINDER,
+          CARE_ALERT, LAB_RESULT). Used to segment engagement performance
+          across different communication types.
+        tests:
+          - not_null
+
+      - name: notification_category
+        description: >
+          High-level classification of notification (e.g., CLINICAL,
+          OPERATIONAL, COMPLIANCE, SYSTEM). Enables category-level analysis.
+
+      - name: channel
+        description: >
+          Communication channel used to deliver the notification
+          (e.g., SMS, EMAIL, PHONE, IN_APP, PORTAL).
+
+      - name: total_notifications
+        description: >
+          Total number of notifications generated for the given
+          type, category, and channel combination.
+

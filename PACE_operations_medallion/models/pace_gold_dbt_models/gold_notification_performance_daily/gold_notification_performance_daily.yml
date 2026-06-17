@@ -1,0 +1,38 @@
+version: 2
+
+models:
+
+  - name: gold_notification_performance_daily
+    description: "Daily aggregated notification performance KPIs by center and channel."
+    config:
+      materialized: table
+      schema: gold_notification_performance_daily
+      alias: notification_performance_daily
+      tags: ['gold', 'kpi']
+
+    columns:
+      - name: notification_date
+        description: "Date of notification send event."
+
+      - name: center_id
+        description: "Care center identifier."
+
+      - name: channel
+        description: "Delivery channel (SMS, EMAIL, etc.)"
+
+      - name: total_notifications
+        description: "Total notifications sent."
+
+      - name: delivery_rate
+        description: "Percentage of successfully delivered notifications."
+        tests:
+          - not_null
+
+      - name: failure_rate
+        description: "Percentage of failed notifications."
+
+      - name: read_rate
+        description: "Percentage of read notifications."
+
+
+ 

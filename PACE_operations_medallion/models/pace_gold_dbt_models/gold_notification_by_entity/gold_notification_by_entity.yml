@@ -1,0 +1,66 @@
+version: 2
+
+models:
+
+  - name: gold_notification_by_entity
+    description: >
+      Gold-layer aggregated dataset providing notification performance metrics
+      grouped by related business entities. This model enables use-case driven
+      analytics across domains such as appointments, clinical visits,
+      transportation, and compliance events.
+
+      It is designed to support ERD-based reporting and KPI tracking by linking
+      notifications to their originating or associated entity.
+
+    config:
+      materialized: table
+      schema: gold_notification_by_entity
+      alias: notification_by_entity
+      tags: ['gold', 'entity', 'analytics']
+
+    columns:
+
+      - name: related_entity_type
+        description: >
+          Standardized type of the business entity associated with the notification.
+          Examples include APPOINTMENT, CLINICAL_VISIT, TRANSPORTATION,
+          MEDICATION, MEAL_DELIVERY, and COMPLIANCE_VIOLATION.
+
+          Used to group notifications by functional domain for analytics and reporting.
+        tests:
+          - not_null
+
+      - name: related_entity_id
+        description: >
+          Unique identifier of the related business entity. Enables joining this
+          dataset with domain-specific tables (e.g., appointment, care plan,
+          transportation logs) for deeper analysis.
+
+      - name: total_notifications
+        description: >
+          Total number of notifications associated with the given entity type
+          and entity identifier. Represents overall communication volume.
+
+      - name: delivered_count
+        description: >
+          Number of notifications successfully delivered for the entity.
+
+      - name: failed_count
+        description: >
+          Number of notifications that failed delivery for the entity,
+          indicating potential communication or system issues.
+
+      - name: delivery_rate
+        description: >
+          Ratio of successfully delivered notifications to total notifications
+          for the entity. Used as a key KPI for communication effectiveness.
+
+      - name: failure_rate
+        description: >
+          Ratio of failed notifications to total notifications for the entity.
+          Helps identify reliability issues in notification delivery.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp indicating when the record was last processed or updated
+          by dbt, useful for auditing and data freshness validation.
