@@ -1,18 +1,3 @@
-/*
-===============================================================================
-Model: gold_caregiver_efficiency
-Purpose:
-  Estimates caregiver efficiency using available visit and task data.
-
-  Note:
-    Since travel/tracking data is unavailable, this model provides
-    a proxy view of caregiver efficiency based on care delivery time.
-
-Grain:
-  caregiver_id
-===============================================================================
-*/
-
 with visits as (
 
     select *
@@ -51,7 +36,7 @@ task_agg as (
         avg(task_duration_minutes) as avg_task_duration
 
     from tasks
-    where caregiver_id is not null
+    where caregiver_id is not null   -- ✅ will fail if column missing
     group by caregiver_id
 
 ),
@@ -65,13 +50,12 @@ final as (
         v.total_visit_minutes,
         v.avg_visit_minutes,
 
-        t.total_tasks,
+        coalesce(t.total_tasks, 0) as total_tasks,
         t.avg_task_duration,
 
-        -- Efficiency proxies
+        -- Safe KPIs
         v.total_visit_minutes / nullif(v.total_visits, 0) as avg_time_per_visit,
-
-        t.total_tasks / nullif(v.total_visits, 0) as tasks_per_visit,
+        coalesce(t.total_tasks, 0) / nullif(v.total_visits, 0) as tasks_per_visit,
 
         current_timestamp() as dbt_updated_timestamp
 
