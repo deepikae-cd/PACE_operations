@@ -1,0 +1,37 @@
+version: 2
+
+models:
+
+  - name: gold_medication_complexity
+    description: >
+      Measures medication complexity at the participant level,
+      supporting automated medication dispenser sizing decisions.
+
+      Higher scores indicate greater medication management complexity.
+
+    config:
+      materialized: table
+      schema: gold_medication_complexity
+      alias: medication_complexity
+      tags: ['gold', 'medication', 'analytics', 'risk']
+
+    columns:
+
+      - name: participant_id
+        tests: [not_null, unique]
+
+      - name: total_medications
+        description: "Total medications prescribed."
+
+      - name: unique_drug_classes
+        description: "Number of distinct drug types."
+
+      - name: controlled_medications
+        description: "Count of controlled medications."
+
+      - name: refill_pressure
+        description: "Number of medications needing refill."
+
+      - name: medication_complexity_score
+        description: >
+          Composite score used to estimate medication management complexity.
