@@ -1,0 +1,39 @@
+version: 2
+
+models:
+
+  - name: gold_provider_performance
+    description: >
+      Aggregated provider metrics at the center level.
+
+      Provides visibility into provider distribution, contract activity,
+      and PACE participation to support network planning and operations.
+
+    config:
+      materialized: table
+      schema: gold_provider_performance
+      alias: provider_performance
+      tags: ['gold', 'provider', 'performance']
+
+    columns:
+
+      - name: center_id
+        tests: [not_null]
+
+      - name: total_providers
+        description: "Total number of providers at the center."
+
+      - name: active_providers
+        description: "Count of currently active providers."
+
+      - name: preferred_providers
+        description: "Number of preferred providers."
+
+      - name: pace_providers
+        description: "Providers accepting PACE participants."
+
+      - name: active_provider_ratio
+        description: "Percentage of active providers."
+
+      - name: dbt_updated_timestamp
+        description: "Processing timestamp."
