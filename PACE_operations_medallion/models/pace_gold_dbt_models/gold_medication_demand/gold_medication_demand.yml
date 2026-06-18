@@ -1,0 +1,34 @@
+version: 2
+
+models:
+
+  - name: gold_medication_demand
+    description: >
+      Aggregated medication demand metrics used for capacity planning,
+      pharmacy management, and dispenser sizing.
+
+    config:
+      materialized: table
+      schema: gold_medication_demand
+      alias: medication_demand
+      tags: ['gold', 'medication', 'demand']
+
+    columns:
+
+      - name: center_id
+        tests: [not_null]
+
+      - name: drug_class
+        tests: [not_null]
+
+      - name: total_prescriptions
+        description: "Total prescriptions count."
+
+      - name: avg_days_supply
+        description: "Average medication duration."
+
+      - name: controlled_count
+        description: "Count of controlled substances."
+
+      - name: refill_needed_count
+        description: "Medications needing refill."

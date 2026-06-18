@@ -1,0 +1,69 @@
+version: 2
+
+models:
+
+  - name: gold_caregiver_efficiency
+    description: >
+      Gold-layer dataset measuring caregiver efficiency based on
+      visit activity and task execution.
+
+      NOTE:
+      This model provides a proxy measurement of caregiver efficiency
+      in the absence of direct travel or tracking data.
+
+      It helps answer:
+      - How much time caregivers spend on visits
+      - Task workload relative to visits
+      - Efficiency and utilization patterns
+
+      Future enhancement:
+      Can be extended to include travel time and true utilization
+      when caregiver tracking or EVV data becomes available.
+
+    config:
+      materialized: table
+      schema: gold_caregiver_efficiency
+      alias: caregiver_efficiency
+      tags: ['gold', 'caregiver', 'efficiency', 'operations']
+
+    columns:
+
+      - name: caregiver_id
+        description: >
+          Unique identifier for the caregiver.
+        tests:
+          - not_null
+          - unique
+
+      - name: total_visits
+        description: >
+          Total number of clinical visits performed by the caregiver.
+
+      - name: total_visit_minutes
+        description: >
+          Total time spent on visits (in minutes).
+
+      - name: avg_visit_minutes
+        description: >
+          Average duration of visits performed.
+
+      - name: total_tasks
+        description: >
+          Total number of tasks performed by the caregiver.
+
+      - name: avg_task_duration
+        description: >
+          Average duration of tasks completed.
+
+      - name: avg_time_per_visit
+        description: >
+          Average time spent per visit.
+
+      - name: tasks_per_visit
+        description: >
+          Ratio of tasks performed per visit,
+          indicating workload density.
+
+      - name: dbt_updated_timestamp
+        description: >
+          Timestamp indicating when the record was last processed.

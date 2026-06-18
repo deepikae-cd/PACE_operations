@@ -1,0 +1,45 @@
+version: 2
+
+models:
+
+  - name: fct_medication
+    description: >
+      Core fact table capturing medication prescriptions and lifecycle details.
+
+      Each record represents a prescribed medication for a participant.
+
+      Supports:
+      - Medication utilization analysis
+      - Prescription tracking
+      - Pharmacy operations
+      - Risk and compliance monitoring
+
+    config:
+      materialized: table
+      schema: gold_marts_facts
+      alias: fct_medication
+      unique_key: medication_id
+      tags: ['fact', 'medication']
+
+    columns:
+
+      - name: medication_id
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: "Participant receiving medication."
+
+      - name: drug_class
+        description: "Therapeutic classification."
+
+      - name: frequency
+        description: "Medication frequency."
+
+      - name: days_supply
+        description: "Number of days medication is prescribed."
+
+      - name: is_controlled_substance
+        description: "Flag for controlled substance."
+
+      - name: is_refill_required_flag
+        description: "Indicates refill is needed."
