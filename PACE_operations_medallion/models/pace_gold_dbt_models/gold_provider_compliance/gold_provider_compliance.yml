@@ -1,0 +1,47 @@
+version: 2
+
+models:
+
+  - name: gold_provider_compliance
+    description: >
+      Tracks provider contract lifecycle and compliance status.
+
+      Helps identify:
+      - Expiring contracts
+      - Inactive providers
+      - Network coverage risks
+
+      Core dataset for provider governance and regulatory reporting.
+
+    config:
+      materialized: table
+      schema: gold_provider_compliance
+      alias: provider_compliance
+      tags: ['gold', 'provider', 'compliance']
+
+    columns:
+
+      - name: provider_id
+        tests: [not_null, unique]
+
+      - name: provider_name
+        description: "Provider name."
+
+      - name: center_id
+        description: "Associated center."
+
+      - name: network_status
+        description: "Network classification."
+
+      - name: is_contract_active_flag
+        description: "Indicates active contract."
+
+      - name: is_contract_expiring_soon_flag
+        description: "Indicates contract expiring within 30 days."
+
+      - name: compliance_status
+        description: >
+          Derived compliance classification (ACTIVE, EXPIRING_SOON, INACTIVE).
+
+      - name: dbt_updated_timestamp
+        description: "Processing timestamp."
