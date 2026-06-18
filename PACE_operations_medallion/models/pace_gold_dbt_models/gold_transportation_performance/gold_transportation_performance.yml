@@ -1,0 +1,39 @@
+version: 2
+
+models:
+
+  - name: gold_transportation_performance
+    description: >
+      Provides daily transportation performance metrics including
+      trip volume, completion rates, and cancellations.
+
+      Supports transportation operations monitoring and service reliability analysis.
+
+    config:
+      materialized: table
+      schema: gold_transportation_performance 
+      alias: transportation_performance 
+      tags: ['gold', 'transportation', 'kpi']
+
+    columns:
+
+      - name: ride_date
+        description: "Date of transportation activity."
+        tests:
+          - not_null
+          - unique
+
+      - name: total_trips
+        description: "Total number of transportation rides scheduled."
+
+      - name: completed_trips
+        description: "Number of successfully completed rides."
+
+      - name: cancelled_trips
+        description: "Number of cancelled rides."
+
+      - name: completion_rate
+        description: "Percentage of rides completed successfully."
+
+      - name: dbt_updated_timestamp
+        description: "Processing timestamp."

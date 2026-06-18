@@ -1,0 +1,48 @@
+version: 2
+
+models:
+
+  - name: fct_clinical_assessment
+    description: >
+      Fact table capturing clinical assessments performed for participants.
+
+      Each record represents a single assessment event including
+      cognitive and functional evaluations.
+
+      Supports:
+      - Patient condition tracking
+      - Clinical trend analysis
+      - Care planning insights
+
+    config:
+      materialized: table
+      alias: fct_clinical_assessment
+      schema: gold_marts_facts
+      unique_key: assessment_id
+      tags: ['fact', 'clinical', 'assessment']
+
+    columns:
+
+      - name: assessment_id
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: "Participant undergoing assessment."
+
+      - name: assessment_day
+        description: "Date of assessment."
+
+      - name: cognitive_score
+        description: "Cognitive ability score."
+
+      - name: functional_score
+        description: "Functional ability score."
+
+      - name: cognitive_band
+        description: "Categorized cognitive level."
+
+      - name: functional_band
+        description: "Categorized functional level."
+
+      - name: dbt_updated_timestamp
+        description: "Processing timestamp."

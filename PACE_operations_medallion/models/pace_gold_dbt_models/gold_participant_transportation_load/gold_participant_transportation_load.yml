@@ -1,0 +1,39 @@
+version: 2
+
+models:
+
+  - name: gold_participant_transportation_load
+    description: >
+      Measures participant dependency on transportation services.
+
+      Helps identify high-utilization participants and supports
+      capacity planning and service optimization.
+
+    config:
+      materialized: table
+      schema: gold_participant_transportation_load
+      alias: participant_transportation_load
+      tags: ['gold', 'transportation', 'analytics']
+
+    columns:
+
+      - name: participant_id
+        description: "Participant using transportation services."
+        tests:
+          - not_null
+          - unique
+
+      - name: total_trips
+        description: "Total trips taken by participant."
+
+      - name: completed_trips
+        description: "Completed transportation trips."
+
+      - name: active_days
+        description: "Number of days with trip activity."
+
+      - name: trips_per_day
+        description: "Average trips per active day."
+
+      - name: dbt_updated_timestamp
+        description: "Processing timestamp."

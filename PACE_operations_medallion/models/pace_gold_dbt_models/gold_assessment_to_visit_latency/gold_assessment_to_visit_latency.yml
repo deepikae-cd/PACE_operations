@@ -1,0 +1,49 @@
+version: 2
+
+models:
+
+  - name: gold_assessment_to_visit_latency
+    description: >
+      Measures time taken to convert a clinical assessment into a follow-up visit.
+
+      This model is critical for:
+      - Care delivery SLA monitoring
+      - Clinical workflow efficiency
+      - Quality and compliance reporting
+      - Hospitalization prevention analytics
+
+    config:
+      materialized: table
+      alias: assessment_to_visit_latency
+      schema: gold_assessment_to_visit_latency
+      tags: ['gold', 'clinical', 'sla', 'quality']
+
+    columns:
+
+      - name: assessment_id
+        tests: [not_null, unique]
+
+      - name: participant_id
+        description: "Participant receiving care."
+
+      - name: assessment_day
+        description: "Date of assessment."
+
+      - name: first_visit_date
+        description: "First visit after assessment."
+
+      - name: days_to_first_visit
+        description: >
+          Number of days between assessment and first visit.
+          Key SLA metric.
+
+      - name: no_follow_up_visit_flag
+        description: >
+          Indicates no visit occurred after assessment.
+
+      - name: delayed_visit_flag
+        description: >
+          Indicates follow-up visit exceeded acceptable timeframe (7 days).
+
+      - name: dbt_updated_timestamp
+        description: "Processing timestamp."
