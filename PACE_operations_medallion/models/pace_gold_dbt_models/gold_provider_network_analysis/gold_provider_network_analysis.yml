@@ -1,0 +1,38 @@
+version: 2
+
+models:
+
+  - name: gold_provider_network_analysis
+    description: >
+      Provides insights into provider network composition and specialization.
+
+      Used for:
+      - Network adequacy analysis
+      - Specialty coverage tracking
+      - Provider distribution planning
+
+    config:
+      materialized: table
+      schema: gold_provider_network_analysis
+      alias: provider_network_analysis
+      tags: ['gold', 'provider', 'network']
+
+    columns:
+
+      - name: center_id
+        tests: [not_null]
+
+      - name: provider_type
+        tests: [not_null]
+
+      - name: provider_count
+        description: "Total providers by type."
+
+      - name: in_network_count
+        description: "Providers in network."
+
+      - name: preferred_count
+        description: "Preferred providers."
+
+      - name: dbt_updated_timestamp
+        description: "Processing timestamp."
