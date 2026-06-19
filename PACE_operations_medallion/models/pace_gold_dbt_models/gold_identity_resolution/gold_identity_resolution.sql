@@ -4,18 +4,22 @@ MODEL NAME  : gold_identity_resolution
 LAYER       : GOLD
 DOMAIN      : IDENTITY / MASTER DATA
 OWNER       : DATA ENGINEERING
-VERSION     : 1.0
+VERSION     : 1.1
 
 -------------------------------------------------------------------------------
 DESCRIPTION:
-  Standardizes and resolves participant identities across multiple source
-  systems (EHR, CareLiva, etc.). Produces unified identity mappings and match
-  confidence scores for downstream reconciliation and analytics.
+  Gold-layer identity resolution model that standardizes and links participant
+  identities across multiple systems (EHR, CareLiva, etc.).
+
+  Provides:
+    - Unified identity mappings
+    - Match confidence scoring
+    - Cross-system linkage indicators
 
   Supports:
     - UC-15: CareLiva and EHR reconciliation
     - Cross-system joins
-    - Deduplication and identity resolution
+    - Deduplication and analytics consistency
 
 GRAIN:
   One row per participant_id per source_system
@@ -25,6 +29,9 @@ DEPENDENCIES:
 -------------------------------------------------------------------------------
 */
 
+-- ============================================================================
+-- STEP 1: SOURCE FROM SILVER (standardized + deduplicated input)
+-- ============================================================================
 
 with base as (
 
@@ -33,46 +40,69 @@ with base as (
 
 ),
 
-cleaned as (
+-- ============================================================================
+-- STEP 2: BUSINESS ENRICHMENT AND STANDARDIZATION
+-- ============================================================================
+
+final as (
 
     select
 
-        -- Surrogate key
+        -- ✅ Surrogate key (stable gold identity key)
         sha2(concat_ws('||', participant_id, source_system), 256)
             as identity_sk,
 
-        -- Keys
-        trim(upper(participant_id)) as participant_id,
-        trim(upper(source_system))  as source_system,
+        -- ✅ Core identifiers
+        participant_id,
+        source_system,
 
-        trim(upper(ehr_id))        as ehr_id,
-        trim(upper(careliva_id))   as careliva_id,
+        -- ✅ Cross-system IDs
+        ehr_id,
+        careliva_id,
 
-        -- Matching logic
+        -- ✅ Matching logic
         match_type,
         match_confidence_score,
 
-        -- ✅ Standard confidence bucket
+        -- ✅ Standardized confidence classification
         case
             when match_confidence_score >= 0.9 then 'HIGH'
             when match_confidence_score >= 0.7 then 'MEDIUM'
             else 'LOW'
         end as match_confidence_level,
 
-        -- ✅ Flags
-        (match_confidence_score >= 0.8) as is_strong_match_flag,
+        -- ✅ Flags from silver (reuse, do NOT recompute unnecessarily)
+        is_strong_match_flag,
+        is_cross_system_link_flag,
 
+        -- ✅ Additional gold-level flags
         case
-            when ehr_id is not null and careliva_id is not null
-            then true else false
-        end as is_cross_system_link_flag,
+            when is_cross_system_link_flag = true and is_strong_match_flag = true
+                then 'STRONG_CROSS_SYSTEM_MATCH'
+            when is_cross_system_link_flag = true
+                then 'WEAK_CROSS_SYSTEM_MATCH'
+            else 'SINGLE_SYSTEM_RECORD'
+        end as identity_link_type,
 
-        -- Metadata
-        _loaded_at as loaded_timestamp,
+        -- ✅ Data quality indicator
+        case
+            when match_confidence_score < 0.7 then true
+            else false
+        end as is_low_confidence_flag,
+
+        -- ✅ Metadata (FIXED: using silver column, NOT _loaded_at)
+        loaded_timestamp,
+
+        -- ✅ Audit metadata
         current_timestamp() as dbt_updated_timestamp
 
     from base
 
 )
 
-select * from cleaned
+-- ============================================================================
+-- FINAL SELECT
+-- ============================================================================
+
+select *
+from final
