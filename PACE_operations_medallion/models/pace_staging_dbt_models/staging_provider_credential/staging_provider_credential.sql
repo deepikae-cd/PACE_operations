@@ -22,10 +22,7 @@ SOURCE:
 -------------------------------------------------------------------------------
 */
 
-{{ config(
-    materialized='view',
-    tags=['staging', 'provider', 'credential']
-) }}
+
 
 select
 
