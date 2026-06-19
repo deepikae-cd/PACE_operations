@@ -1,40 +1,101 @@
 /*
-  MODEL: GOLD_MEDICATION_ADHERENCE
-  ------------------------------------------------------------------------------
-  PURPOSE:
-    Tracks medication adherence patterns using refill and active flags.
+  MODEL NAME  : gold_medication_adherence
+  LAYER       : GOLD
+  DOMAIN      : CLINICAL / MEDICATION ANALYTICS
+  OWNER       : DATA ENGINEERING
+  VERSION     : 1.0
+
+  ──────────────────────────────────────────────────────────────────────────────
+  DESCRIPTION:
+  Aggregated participant-level medication metrics used for operational and
+  analytical decision-making. Produces adherence proxies, refill risk,
+  medication load, and dispenser size recommendations.
+
+  This model supports:
+    - UC-2: Medication dispenser sizing
+    - Risk stratification
+    - Refill management workflows
 
   GRAIN:
-    1 row per participant_id
+    One row per participant_id
+
+  DEPENDENCIES:
+    - gold_medication
+
+  ──────────────────────────────────────────────────────────────────────────────
 */
 
-with adherence_metrics as (
+{{ config(
+    materialized = 'table',
+    tags = ['gold', 'medication', 'analytics'],
+    cluster_by = ['participant_id'],
+    persist_docs = {"relation": true, "columns": true}
+) }}
+
+with active_medications as (
+
+    select *
+    from {{ ref('gold_medication') }}
+    where is_currently_active_flag = true
+
+),
+
+aggregated as (
 
     select
         participant_id,
 
-        count(*) as total_meds,
+        count(*) as total_active_medications,
 
-        -- Active medications
-        sum(case when is_currently_active_flag then 1 else 0 end) as active_meds,
+        sum(case when is_controlled_substance_flag then 1 else 0 end)
+            as controlled_medication_count,
 
-        -- Refill risks
-        sum(case when is_refill_due_soon_flag then 1 else 0 end) as refill_due_soon,
-        sum(case when is_refills_exhausted_flag then 1 else 0 end) as exhausted_refills,
+        sum(case when is_high_risk_controlled_flag then 1 else 0 end)
+            as high_risk_medication_count,
 
-        -- Stale meds
-        sum(case when is_stale_active_flag then 1 else 0 end) as stale_active_meds
+        sum(case when needs_refill_attention_flag then 1 else 0 end)
+            as medications_needing_refill_count,
 
-    from {{ ref('enterprise_silver_medication') }}
+        sum(case when is_prior_auth_at_risk_flag then 1 else 0 end)
+            as prior_auth_risk_count,
+
+        sum(case when has_interaction_alerts_flag then 1 else 0 end)
+            as interaction_alert_count,
+
+        sum(total_cost) as total_medication_cost,
+        avg(total_cost) as avg_medication_cost
+
+    from active_medications
     group by participant_id
+
+),
+
+final as (
+
+    select
+        participant_id,
+
+        total_active_medications,
+
+        case
+            when total_active_medications <= 5 then 'SMALL'
+            when total_active_medications <= 10 then 'MEDIUM'
+            else 'LARGE'
+        end as recommended_dispenser_size,
+
+        case
+            when high_risk_medication_count > 0 then 'HIGH'
+            when interaction_alert_count > 2 then 'HIGH'
+            else 'NORMAL'
+        end as medication_risk_level,
+
+        medications_needing_refill_count,
+        prior_auth_risk_count,
+        total_medication_cost,
+        avg_medication_cost
+
+    from aggregated
 
 )
 
-select
-    *,
-    refill_due_soon / nullif(total_meds, 0) as refill_risk_rate,
-    stale_active_meds / nullif(total_meds, 0) as stale_rate,
-
-    current_timestamp() as dbt_updated_timestamp
-
-from adherence_metrics
+select * from final
