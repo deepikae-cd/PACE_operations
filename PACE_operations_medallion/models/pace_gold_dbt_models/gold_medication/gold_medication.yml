@@ -1,0 +1,81 @@
+version: 2
+
+models:
+  - name: gold_medication
+    description: >
+      Gold-layer curated medication dataset providing standardized,
+      analytics-ready medication records enriched with lifecycle, risk,
+      refill, formulary, and cost indicators.
+      Serves as the foundational medication dataset for clinical analytics,
+      operational workflows, and UC-2 (Medication dispenser sizing).
+
+    config:
+      materialized: table
+      schema: gold_medication
+      alias: medication
+      tags:
+        - gold
+        - medication
+        - clinical
+
+    columns:
+
+      - name: medication_sk
+        description: Surrogate key uniquely identifying a medication record version.
+        tests:
+          - not_null
+          - unique
+
+      - name: medication_id
+        description: Source system medication identifier.
+        tests:
+          - not_null
+
+      - name: participant_id
+        description: Unique participant identifier.
+        tests:
+          - not_null
+
+      - name: provider_id
+        description: Prescribing provider identifier.
+
+      - name: center_id
+        description: PACE center where medication is managed.
+
+      - name: medication_name
+        description: Normalized medication name.
+
+      - name: generic_name
+        description: Generic drug name.
+
+      - name: brand_name
+        description: Brand name of medication.
+
+      - name: drug_class
+        description: Therapeutic drug classification.
+
+      - name: is_currently_active_flag
+        description: Indicates if medication is active and within date window.
+        tests:
+          - not_null
+
+      - name: is_stale_active_flag
+        description: Flag for medications incorrectly marked active but expired.
+
+      - name: needs_refill_attention_flag
+        description: Indicates meds requiring refill attention.
+
+      - name: is_high_risk_controlled_flag
+        description: High-risk DEA Schedule II controlled substance flag.
+
+      - name: is_prior_auth_at_risk_flag
+        description: Indicates pending or denied prior authorization risk.
+
+      - name: total_cost
+        description: Total cost of medication.
+
+      - name: cost_tier
+        description: Categorized cost bucket (LOW, MEDIUM, HIGH, etc.)
+
+      - name: medication_lifecycle_status
+        description: Derived lifecycle category (ACTIVE, STALE, INACTIVE)

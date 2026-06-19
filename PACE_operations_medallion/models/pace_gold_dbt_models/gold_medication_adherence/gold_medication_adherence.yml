@@ -1,50 +1,49 @@
 version: 2
 
 models:
-
   - name: gold_medication_adherence
     description: >
-      Gold-layer aggregated table capturing participant-level medication adherence
-      and continuity metrics. Helps identify refill risks, stale prescriptions,
-      and gaps in medication adherence.
+      Participant-level aggregated medication metrics used for operational
+      and analytical decision-making. Provides medication counts, refill risks,
+      adherence proxies, and recommended dispenser size for UC-2.
 
     config:
       materialized: table
       schema: gold_medication_adherence
       alias: medication_adherence
+      tags:
+        - gold
+        - medication
+        - analytics
 
     columns:
 
       - name: participant_id
-        description: "Unique identifier of the participant."
+        description: Unique participant identifier.
         tests:
           - not_null
+          - unique
 
-      - name: total_meds
-        description: "Total number of medications prescribed."
+      - name: total_active_medications
+        description: Count of currently active medications.
 
-      - name: active_meds
-        description: "Number of medications currently active."
+      - name: recommended_dispenser_size
+        description: Suggested medication dispenser size (SMALL, MEDIUM, LARGE).
 
-      - name: refill_due_soon
-        description: "Count of medications that are approaching refill deadline."
+      - name: medication_risk_level
+        description: Risk level based on medication profile.
 
-      - name: exhausted_refills
-        description: "Count of medications with no remaining refills."
+      - name: medications_needing_refill_count
+        description: Count of medications needing refill attention.
 
-      - name: stale_active_meds
-        description: >
-          Number of medications marked active but already expired,
-          indicating data or adherence issues.
+      - name: prior_auth_risk_count
+        description: Number of medications with prior authorization issues.
 
-      - name: refill_risk_rate
-        description: >
-          Percentage of medications that are at risk of running out soon,
-          based on refill_due_soon.
+      - name: interaction_alert_count
+        description: Count of medications flagged with interaction alerts.
 
-      - name: stale_rate
-        description: >
-          Percentage of stale active medications relative to total medications.
+      - name: total_medication_cost
+        description: Total cost of all medications for the participant.
 
-      - name: dbt_updated_timestamp
-        description: "Timestamp indicating last model refresh."
+      - name: avg_medication_cost
+        description: Average cost per medication.
