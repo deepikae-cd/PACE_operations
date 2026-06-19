@@ -8,29 +8,25 @@ VERSION     : 1.1
 
 -------------------------------------------------------------------------------
 DESCRIPTION:
-  Provides provider-level compliance tracking including contract lifecycle,
-  expiry monitoring, and risk classification.
+  Tracks provider contract lifecycle, compliance status, and risk levels.
+  Provides business-friendly flags for monitoring expiring and inactive contracts.
 
-  This model enriches provider data with business logic to support:
+  Supports:
     - UC-14: Provider lifecycle and credentialing
-    - Compliance reporting
-    - Operational risk monitoring
+    - Compliance monitoring
+    - Risk reporting
 
 GRAIN:
   One row per provider_id
 
 DEPENDENCIES:
   - enterprise_silver_provider
-  - gold_provider_credential (future integration)
 -------------------------------------------------------------------------------
 */
 
-{{ config(
-    materialized='table',
-    tags=['gold', 'provider', 'compliance'],
-    cluster_by=['center_id'],
-    persist_docs={"relation": true, "columns": true}
-) }}
+-- ============================================================================
+-- STEP 1: SOURCE FROM SILVER
+-- ============================================================================
 
 with base as (
 
@@ -39,24 +35,28 @@ with base as (
 
 ),
 
+-- ============================================================================
+-- STEP 2: BUSINESS LOGIC
+-- ============================================================================
+
 final as (
 
     select
 
-        -- Surrogate Key
+        -- ✅ Surrogate key
         sha2(concat_ws('||', provider_id), 256) as provider_sk,
 
-        -- Business keys
+        -- ✅ Core identifiers
         provider_id,
         provider_name,
         center_id,
 
-        -- Network
+        -- ✅ Network info
         network_status,
         is_in_network_flag,
         is_preferred_flag,
 
-        -- Contract
+        -- ✅ Contract lifecycle
         contract_start_date,
         contract_end_date,
 
@@ -64,30 +64,30 @@ final as (
         is_contract_expiring_soon_flag,
         days_until_contract_expiry,
 
-        -- ✅ Compliance classification
+        -- ✅ Compliance status
         case
             when is_contract_active_flag = false then 'INACTIVE'
             when is_contract_expiring_soon_flag then 'EXPIRING_SOON'
             else 'ACTIVE'
         end as compliance_status,
 
-        -- ✅ Risk level (NEW)
+        -- ✅ Risk classification
         case
             when is_contract_active_flag = false then 'HIGH'
             when is_contract_expiring_soon_flag then 'MEDIUM'
             else 'LOW'
         end as compliance_risk_level,
 
-        -- ✅ Flags for BI / filtering
+        -- ✅ BI flags
         (not is_contract_active_flag or is_contract_expiring_soon_flag)
             as is_compliance_at_risk_flag,
 
-        (is_contract_active_flag = true and is_contract_expiring_soon_flag = false)
+        (is_contract_active_flag and not is_contract_expiring_soon_flag)
             as is_fully_compliant_flag,
 
-        -- Metadata
-        upper(trim(source_system)) as source_system,
-        _loaded_at as loaded_timestamp,
+        -- ✅ Metadata (FIXED ✅)
+        source_system,
+        loaded_timestamp,
 
         current_timestamp() as dbt_updated_timestamp
 
@@ -95,4 +95,9 @@ final as (
 
 )
 
-select * from final
+-- ============================================================================
+-- FINAL SELECT
+-- ============================================================================
+
+select *
+from final
