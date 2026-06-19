@@ -142,3 +142,10 @@ sources:
           Family and caregiver support records indicating whether a caregiver
           is available and capable of administering medications or assisting
           participants with daily care needs.
+
+  - name: bronze_identity
+    description: "Raw identity mapping domain"
+    schema: BRONZE_IDENTITY
+    tables:
+      - name: RAW_IDENTITY_LINK
+        description: "Cross-system participant identity mapping records"
