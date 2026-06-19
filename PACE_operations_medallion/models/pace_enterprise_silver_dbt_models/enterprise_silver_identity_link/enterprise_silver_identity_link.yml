@@ -1,0 +1,51 @@
+
+version: 2
+
+models:
+  - name: enterprise_silver_identity_link
+    description: >
+      Silver-layer identity mapping model that standardizes and deduplicates
+      participant mappings across systems.
+
+    config:
+      materialized: incremental
+      schema: enterprise_silver_identity_link
+      alias: silver_identity_link
+      tags:
+        - silver
+        - identity
+      unique_key:
+      - identity_link_sk
+
+
+
+    columns:
+
+      - name: identity_link_sk
+        description: Surrogate key for identity link
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: Unified participant ID
+        tests:
+          - not_null
+
+      - name: ehr_id
+        description: EHR system identifier
+
+      - name: careliva_id
+        description: CareLiva system identifier
+
+      - name: match_confidence_score
+        description: Numerical confidence score
+
+      - name: match_confidence_level
+        description: Bucketed confidence level
+
+      - name: is_strong_match_flag
+        description: Indicates strong match
+
+      - name: is_cross_system_link_flag
+        description: Indicates cross-system mapping

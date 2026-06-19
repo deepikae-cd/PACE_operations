@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: gold_identity_resolution
+    description: >
+      Gold-layer identity resolution model that standardizes and links
+      participant identities across multiple systems such as EHR and CareLiva.
+      Provides match confidence scoring and cross-system linkage flags.
+
+    config:
+      materialized: table
+      schema: gold_identity_resolution
+      alias:  identity_resolution
+      tags:
+        - gold
+        - identity
+
+
+    columns:
+
+      - name: identity_sk
+        description: Surrogate key for identity record.
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: Unified participant identifier.
+        tests:
+          - not_null
+
+      - name: source_system
+        description: Source system of the identity record.
+
+      - name: ehr_id
+        description: Identifier from EHR system.
+
+      - name: careliva_id
+        description: Identifier from CareLiva system.
+
+      - name: match_confidence_score
+        description: Numeric confidence score for identity match.
+
+      - name: match_confidence_level
+        description: Bucketed match confidence (HIGH, MEDIUM, LOW).
+
+      - name: is_strong_match_flag
+        description: Indicates high-confidence identity match.
+
+      - name: is_cross_system_link_flag
+        description: Indicates mapping between multiple systems.

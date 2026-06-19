@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: staging_identity_link
+    description: >
+      Staging model for identity mappings across different systems such as
+      EHR and CareLiva.
+    
+    config:
+      schema:  staging_identity_link
+      alias: identity_link
+      materialized: view
+
+    columns:
+      - name: participant_id
+        description: Participant ID
+
+      - name: ehr_id
+        description: EHR system ID
+
+      - name: careliva_id
+        description: CareLiva system ID
+
+      - name: match_confidence_score
+        description: Confidence score for identity match
+
+      - name: source_system
+        description: Source system
