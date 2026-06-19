@@ -44,4 +44,4 @@ select
     _loaded_at,
     _source_file
 
-from {{ source('raw', 'provider_credential') }}
+from {{ source('bronze_provider', 'RAW_PROVIDER_CREDENTIAL') }}
