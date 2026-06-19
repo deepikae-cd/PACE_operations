@@ -19,29 +19,56 @@ models:
       alias: provider_compliance
       tags: ['gold', 'provider', 'compliance']
 
+
+
     columns:
 
+      - name: provider_sk
+        description: Surrogate key for provider.
+        tests:
+          - not_null
+          - unique
+
       - name: provider_id
-        tests: [not_null, unique]
+        description: Unique provider identifier.
+        tests:
+          - not_null
 
       - name: provider_name
-        description: "Provider name."
+        description: Provider full name.
 
       - name: center_id
-        description: "Associated center."
+        description: Associated PACE center.
 
-      - name: network_status
-        description: "Network classification."
+      - name: contract_start_date
+        description: Contract start date.
+
+      - name: contract_end_date
+        description: Contract end date.
 
       - name: is_contract_active_flag
-        description: "Indicates active contract."
+        description: Indicates if contract is currently active.
 
       - name: is_contract_expiring_soon_flag
-        description: "Indicates contract expiring within 30 days."
+        description: Indicates contracts approaching expiry threshold.
+
+      - name: days_until_contract_expiry
+        description: Number of days remaining until contract expiration.
 
       - name: compliance_status
-        description: >
-          Derived compliance classification (ACTIVE, EXPIRING_SOON, INACTIVE).
+        description: Business-defined compliance state (ACTIVE, EXPIRING_SOON, INACTIVE).
 
-      - name: dbt_updated_timestamp
-        description: "Processing timestamp."
+      - name: compliance_risk_level
+        description: Risk classification (LOW, MEDIUM, HIGH).
+
+      - name: is_compliance_at_risk_flag
+        description: Flag for providers at compliance risk.
+
+      - name: is_fully_compliant_flag
+        description: Indicates fully compliant providers.
+
+      - name: source_system
+        description: Source system of record.
+
+      - name: loaded_timestamp
+        description: Ingestion timestamp from source system.
