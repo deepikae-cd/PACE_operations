@@ -25,12 +25,6 @@ DEPENDENCIES:
 -------------------------------------------------------------------------------
 */
 
-{{ config(
-    materialized='table',
-    tags=['gold', 'identity'],
-    cluster_by=['participant_id'],
-    persist_docs={"relation": true, "columns": true}
-) }}
 
 with base as (
 

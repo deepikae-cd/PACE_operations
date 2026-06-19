@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: gold_cross_system_mapping
+    description: >
+      Gold-layer unified mapping of participants across different systems.
+      Enables consistent reporting and analytics across EHR and CareLiva
+      by consolidating identifiers into a single participant view.
+
+    config:
+      materialized: table
+      schema: gold_cross_system_mapping
+      alias: cross_system_mapping
+      tags:
+        - gold
+        - identity
+
+    columns:
+
+      - name: unified_identity_sk
+        description: Surrogate key for unified identity.
+        tests:
+          - not_null
+          - unique
+
+      - name: participant_id
+        description: Unified participant identifier.
+        tests:
+          - not_null
+
+      - name: ehr_id
+        description: EHR system identifier.
+
+      - name: careliva_id
+        description: CareLiva system identifier.
+
+      - name: mapping_confidence_level
+        description: Aggregated confidence level of mapping.
+
+      - name: max_match_confidence_score
+        description: Highest match confidence score across records.
+
+      - name: is_cross_system_link_flag
+        description: Indicates presence of cross-system mapping.
+
+      - name: is_strong_match_flag
+        description: Indicates strong match exists for participant.
