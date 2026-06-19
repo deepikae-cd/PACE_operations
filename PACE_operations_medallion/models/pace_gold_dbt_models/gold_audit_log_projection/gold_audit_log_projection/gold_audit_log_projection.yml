@@ -16,126 +16,46 @@ models:
       unique_key: audit_log_id
       tags: ['gold', 'audit', 'performance']
 
+
     columns:
 
-      # ─────────────────────────────────────────────
-      # Keys
-      # ─────────────────────────────────────────────
-      - name: audit_log_id
-        description: Unique identifier for audit event
+      - name: audit_projection_sk
+        description: Surrogate key for audit projection.
         tests:
           - not_null
           - unique
 
-      - name: participant_id
-        description: Participant associated with the audit event
+      - name: audit_log_id
+        description: Unique audit event ID.
         tests:
           - not_null
+
+      - name: participant_id
+        description: Participant related to audit event.
 
       - name: actor_id
-        description: Identifier of actor performing the action
-
-      # ─────────────────────────────────────────────
-      # Actor Details
-      # ─────────────────────────────────────────────
-      - name: actor_name
-        description: Full name of actor performing the action
-
-      - name: actor_role
-        description: Role of the actor (NURSE, ADMIN, etc.)
-
-      - name: actor_type
-        description: Type of actor (USER, SYSTEM, API_SERVICE, etc.)
-
-      # ─────────────────────────────────────────────
-      # Event Details
-      # ─────────────────────────────────────────────
-      - name: action
-        description: Standardized action performed
-
-      - name: entity_type
-        description: Type of entity impacted (PARTICIPANT, APPOINTMENT, etc.)
-
-      - name: entity_id
-        description: Identifier of affected entity
-
-      - name: event_category
-        description: Derived category of event (read, write, workflow, other)
+        description: User or system that performed the action.
 
       - name: event_description_ui
-        description: Precomputed human-readable event description for UI rendering
+        description: Precomputed human-readable event description.
 
-      # ─────────────────────────────────────────────
-      # Timestamp + Partitioning
-      # ─────────────────────────────────────────────
       - name: event_timestamp
-        description: Timestamp when audit event occurred
-        tests:
-          - not_null
+        description: Timestamp of event occurrence.
 
       - name: event_date
-        description: Date derived from event_timestamp used for partition pruning
-        tests:
-          - not_null
+        description: Date of event (used for partitioning).
 
-      # ─────────────────────────────────────────────
-      # Change Tracking
-      # ─────────────────────────────────────────────
-      - name: field_changed
-        description: Field that was modified
+      - name: event_hour
+        description: Hour of event for time-based analysis.
 
-      - name: old_value
-        description: Previous value before change
-
-      - name: new_value
-        description: New value after change
-
-      - name: change_reason
-        description: Reason for the change
-
-      # ─────────────────────────────────────────────
-      # Compliance + Flags
-      # ─────────────────────────────────────────────
       - name: is_phi_access
-        description: Indicates whether event involved PHI access
+        description: Indicates PHI access event.
 
       - name: is_sensitive
-        description: Indicates whether event is compliance-sensitive
+        description: Flags sensitive actions.
 
-      # ─────────────────────────────────────────────
-      # Context
-      # ─────────────────────────────────────────────
       - name: module
-        description: Application module generating the event
+        description: Application module generating the event.
 
-      - name: center_id
-        description: PACE center identifier
-
-      # ─────────────────────────────────────────────
-      # Technical Metadata
-      # ─────────────────────────────────────────────
-      - name: ip_address
-        description: IP address of the actor
-
-      - name: user_agent
-        description: User agent string
-
-      - name: session_id
-        description: Session identifier
-
-      - name: request_id
-        description: Request identifier
-
-      # ─────────────────────────────────────────────
-      # Source + Audit
-      # ─────────────────────────────────────────────
       - name: source_system
-        description: Source system generating the audit event
-
-      - name: updated_at
-        description: Last updated timestamp from silver layer
-
-      - name: gold_loaded_at
-        description: Timestamp when record was processed in gold layer
-
-        
+        description: Origin system of audit record.

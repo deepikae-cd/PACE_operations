@@ -1,75 +1,82 @@
 /*
 ===============================================================================
-Model       : gold_audit_log_projection
-Layer       : Gold
-Description : 
-  Read-optimized audit log projection for fast UI queries. Fully denormalized,
-  precomputes event descriptions, and adds partitioning for high-performance
-  filtering by participant and date.
+MODEL NAME  : gold_audit_log_projection
+LAYER       : GOLD
+DOMAIN      : AUDIT / COMPLIANCE
+OWNER       : DATA ENGINEERING
+VERSION     : 1.1
 
-Source:
-  - {{ ref('enterprise_silver_audit_log') }}
+-------------------------------------------------------------------------------
+DESCRIPTION:
+  Read-optimized audit log projection for high-performance UI queries.
 
-Key Features:
-  - No joins required at query time
-  - Precomputed event descriptions for UI
-  - Partition-ready (event_date)
-  - Optimized for participant + date filtering
+  Features:
+    - Fully denormalized (no joins required)
+    - Precomputed event descriptions for UI rendering
+    - Partition-ready using event_date
+    - Optimized for participant and date filtering
+    - Incremental load support
 
--- ============================================================
--- Source: Silver audit log
--- Incremental load using updated_at
--- ============================================================
-===============================================================================
+  Supports:
+    - UC-10: Audit trail UI performance
+    - Compliance monitoring
+    - PHI access tracking
+
+GRAIN:
+  One row per audit_log_id
+
+DEPENDENCIES:
+  - enterprise_silver_audit_log
+-------------------------------------------------------------------------------
 */
 
-with
-source as (
+
+-- ============================================================================
+-- STEP 1: SOURCE
+-- ============================================================================
+
+with source as (
 
     select *
     from {{ ref('enterprise_silver_audit_log') }}
 
     {% if is_incremental() %}
-    where updated_at > (
-        select coalesce(max(updated_at), '1900-01-01')
+    where event_timestamp > (
+        select coalesce(max(event_timestamp), '1900-01-01')
         from {{ this }}
     )
     {% endif %}
 
 ),
 
--- ============================================================
--- Precompute UI-friendly descriptions
--- ============================================================
+-- ============================================================================
+-- STEP 2: ENRICHMENT
+-- ============================================================================
+
 enriched as (
 
     select
 
-        -- ─────────────────────────────────────────────
-        -- Keys
-        -- ─────────────────────────────────────────────
+        -- ✅ Surrogate key
+        sha2(concat_ws('||', audit_log_id), 256) as audit_projection_sk,
+
+        -- ✅ Keys
         audit_log_id,
         participant_id,
         actor_id,
 
-        -- ─────────────────────────────────────────────
-        -- Actor details (already denormalized from bronze)
-        -- ─────────────────────────────────────────────
+        -- ✅ Actor info
         actor_name,
         actor_role,
         actor_type,
 
-        -- ─────────────────────────────────────────────
-        -- Core event attributes
-        -- ─────────────────────────────────────────────
+        -- ✅ Event core
         action,
         entity_type,
         entity_id,
         event_category,
 
-        -- ─────────────────────────────────────────────
-        -- Precomputed event description (UI CRITICAL)
-        -- ─────────────────────────────────────────────
+        -- ✅ UI-friendly description
         case
             when action = 'CREATE'
                 then concat(actor_name, ' created ', entity_type)
@@ -87,52 +94,45 @@ enriched as (
             else concat(actor_name, ' performed action on ', entity_type)
         end as event_description_ui,
 
-        -- ─────────────────────────────────────────────
-        -- Timestamp fields
-        -- ─────────────────────────────────────────────
+        -- ✅ Time
         event_timestamp,
-        event_date,   -- already derived in silver (partition key)
+        event_date,
+        extract(hour from event_timestamp) as event_hour,
 
-        -- ─────────────────────────────────────────────
-        -- Change tracking (optional for UI detail views)
-        -- ─────────────────────────────────────────────
+        -- ✅ Change tracking
         field_changed,
         old_value,
         new_value,
         change_reason,
 
-        -- ─────────────────────────────────────────────
-        -- Flags (important for compliance filtering)
-        -- ─────────────────────────────────────────────
+        -- ✅ Compliance flags
         is_phi_access,
         is_sensitive,
 
-        -- ─────────────────────────────────────────────
-        -- Context
-        -- ─────────────────────────────────────────────
+        -- ✅ Context
         module,
         center_id,
 
-        -- ─────────────────────────────────────────────
-        -- Technical metadata
-        -- ─────────────────────────────────────────────
+        -- ✅ Technical metadata
         ip_address,
         user_agent,
         session_id,
         request_id,
 
-        -- ─────────────────────────────────────────────
-        -- Source lineage
-        -- ─────────────────────────────────────────────
+        -- ✅ Source lineage
         source_system,
         updated_at,
 
-        current_timestamp as gold_loaded_at
+        -- ✅ Metadata
+        current_timestamp() as gold_loaded_at
 
     from source
+
 )
 
--- ============================================================
--- Final Output
--- ============================================================
-select * from enriched
+-- ============================================================================
+-- FINAL OUTPUT
+-- ============================================================================
+
+select *
+from enriched
