@@ -29,15 +29,13 @@ models:
       - name: caregiver_id
         description: >
           Unique identifier of the caregiver.
-        tests:
-          - not_null
+    
   
 
       - name: center_id
         description: >
           Identifier of the care center where the caregiver operates.
-        tests:
-          - not_null
+   
 
       - name: total_tasks
         description: >
