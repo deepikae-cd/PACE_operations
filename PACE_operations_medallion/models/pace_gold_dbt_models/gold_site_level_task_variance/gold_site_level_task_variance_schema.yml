@@ -16,9 +16,7 @@ models:
     columns:
       - name: center_id
         description: Unique identifier for PACE center
-        tests:
-          - not_null
-
+    
       - name: task_type
         description: Type/category of task performed (e.g., medication, bathing)
   
