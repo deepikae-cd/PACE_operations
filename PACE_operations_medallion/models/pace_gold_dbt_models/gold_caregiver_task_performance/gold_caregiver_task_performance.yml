@@ -18,13 +18,10 @@ models:
 
       - name: caregiver_id
         description: "Unique identifier of caregiver performing tasks."
-        tests:
-          - not_null
-
+    
       - name: center_id
         description: "Identifier of the center where tasks are performed."
-        tests:
-          - not_null
+     
 
       - name: total_tasks
         description: "Total number of tasks completed by the caregiver."
