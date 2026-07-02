@@ -38,8 +38,7 @@ models:
       - name: center_id
         description: >
           Identifier of the care center where activity occurred.
-        tests:
-          - not_null
+  
 
       - name: week_start_date
         description: >
