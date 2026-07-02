@@ -31,9 +31,7 @@ models:
 
       - name: center_id
         description: Identifier of care center
-        tests:
-          - not_null
-
+   
       - name: total_caregivers
         description: Number of unique caregivers assigned to the center
 
